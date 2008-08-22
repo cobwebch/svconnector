@@ -1,0 +1,2 @@
+#	cat=basic/enable; type=boolean; label=Enable debugging: Turn on debugging to the dev log in all connector services (unless overridden). Requires devlog or similar extension.
+	debug = 0
