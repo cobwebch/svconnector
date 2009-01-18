@@ -21,6 +21,11 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
+/**
+ * [CLASS/FUNCTION INDEX of SCRIPT]
+ *
+ * Hint: use extdeveval to insert/update function index above.
+ */
 
 require_once(PATH_t3lib.'class.t3lib_svbase.php');
 
@@ -43,10 +48,12 @@ define('T3_ERR_SV_DISTANT_ERROR', -52); // returned response contains an error m
  * @package	TYPO3
  * @subpackage	tx_svconnector
  */
+// TODO: move tx_svconnector_sv1 to tx_svconnector_base, provide wrapper tx_svconnector_sv1 for backwards compatibility
 abstract class tx_svconnector_sv1 extends t3lib_svbase {
-	protected $extKey = 'svconnector';	// The extension key
-	protected $parentExtKey = 'svconnector';	// A copy of the extension key so that it is not overridden by children classes
-	protected $extConfiguration;	// The extension configuration
+	protected $extKey = 'svconnector'; // The extension key
+	protected $parentExtKey = 'svconnector'; // A copy of the extension key so that it is not overridden by children classes
+	protected $extConfiguration; // The extension configuration
+	protected $lang; // Language object
 	
 	/**
 	 * Verifies that the connection is functional
@@ -57,6 +64,12 @@ abstract class tx_svconnector_sv1 extends t3lib_svbase {
 	 */
 	public function init() {
 		$this->extConfiguration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->parentExtKey]);
+		if (isset($GLOBALS['LANG'])) {
+			$this->lang = $GLOBALS['LANG'];
+		}
+		elseif (isset($GLOBALS['TSFE']->lang)) {
+			$this->lang = $GLOBALS['TSFE']->lang;
+		}
 		return false;
 	}
 
@@ -140,6 +153,21 @@ abstract class tx_svconnector_sv1 extends t3lib_svbase {
 			}
 		}
 		// Return the result
+	}
+
+	/**
+	 * This method should be used by all connector services when they encounter a fatal error
+	 * It will write the error in the devlog (if activated) and thrown an exception
+	 *
+	 * @param	string		$message: error message
+	 * @param	integer		$exceptionNumber: number of the exception
+	 * @param	array		$extraData: additional data to be passed to the devlog
+	 */
+	protected function raiseError($message, $exceptionNumber, array $extraData) {
+		if (!empty($this->extConfiguration['debug'])) {
+			t3lib_div::devLog($message, $this->extKey, 3, $extraData);
+		}
+		throw new Exception($message, $exceptionNumber);
 	}
 }
 
