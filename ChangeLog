@@ -1,14 +1,20 @@
-09-01-16 Francois Suter (Cobweb)  <typo3@cobweb.ch>
+2009-10-20 Francois Suter (Cobweb)  <typo3@cobweb.ch>
+
+	* Removed unneeded registration of (empty) base service
+	* Raised status to stable
+	* Released version 1.0.0
+
+2009-01-16 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 
 	* Released version 0.4.0
 
-08-07-20 Francois Suter (Cobweb)  <typo3@cobweb.ch>
+2008-07-20 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 
 	* Added hook examples
 	* Added manual
 	* Completed API
 	* Raised status to beta
 
-08-04-28 Francois Suter (Cobweb)  <typo3@cobweb.ch>
+2008-04-28 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 
 	* First public release
