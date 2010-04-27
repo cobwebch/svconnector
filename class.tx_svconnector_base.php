@@ -181,8 +181,4 @@ abstract class tx_svconnector_base extends t3lib_svbase {
 		throw new Exception($message, $exceptionNumber);
 	}
 }
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/svconnector/sv1/class.tx_svconnector_sv1.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/svconnector/sv1/class.tx_svconnector_sv1.php']);
-}
 ?>

@@ -1,6 +1,7 @@
 2010-04-27 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 
 	* Added a post-processing method to the API
+	* Move sv1 service class to "base" class
 
 2009-10-20 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 
