@@ -21,16 +21,10 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-/**
- * [CLASS/FUNCTION INDEX of SCRIPT]
- *
- * Hint: use extdeveval to insert/update function index above.
- */
 
 require_once(PATH_t3lib.'class.t3lib_svbase.php');
 
-// Define error codes for all Connector services responses
-
+	// Define error codes for all Connector services responses
 define('T3_ERR_SV_CONNECTION_FAILED', -50); // connection to remote server failed
 define('T3_ERR_SV_BAD_RESPONSE', -51); // returned response is malformed or somehow unexpected
 define('T3_ERR_SV_DISTANT_ERROR', -52); // returned response contains an error message
@@ -44,8 +38,8 @@ define('T3_ERR_SV_DISTANT_ERROR', -52); // returned response contains an error m
  * by all specific Connector Services implementations. This class should not be called
  * directly as it is unable to do anything by itself.
  *
- * @author	Francois Suter (Cobweb) <typo3@cobweb.ch>
- * @package	TYPO3
+ * @author		Francois Suter (Cobweb) <typo3@cobweb.ch>
+ * @package		TYPO3
  * @subpackage	tx_svconnector
  */
 // TODO: move tx_svconnector_sv1 to tx_svconnector_base, provide wrapper tx_svconnector_sv1 for backwards compatibility
@@ -70,7 +64,7 @@ abstract class tx_svconnector_sv1 extends t3lib_svbase {
 		elseif (isset($GLOBALS['TSFE']->lang)) {
 			$this->lang = $GLOBALS['TSFE']->lang;
 		}
-		return false;
+		return FALSE;
 	}
 
 	/**
@@ -119,6 +113,24 @@ abstract class tx_svconnector_sv1 extends t3lib_svbase {
 	}
 
 	/**
+	 * This method can be called to perform specific operations at some point after
+	 * any of the fetch methods have been called. It does nothing by itself,
+	 * but provides a hook for custom post-processing
+	 *
+	 * @param	array	$parameters: parameters for the call
+	 * @param	mixed	$status: some form of status can be passed as argument
+	 *					The nature of that status will depend on which process is calling this method
+	 */
+	public function postProcessOperations($parameters, $status) {
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][$this->extKey]['postProcessOperations'])) {
+			foreach($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][$this->extKey]['postProcessOperations'] as $className) {
+				$processor = &t3lib_div::getUserObj($className);
+				$processor->postProcessOperations($parameters, $status, $this);
+			}
+		}
+	}
+
+	/**
 	 * This method queries the distant server given some parameters and returns the server response
 	 * This base implementation just shows how to use the processParameters. It calls on the functions using the hook
 	 * if they are any or else assembles a simple, HTTP-like query string.
@@ -157,7 +169,7 @@ abstract class tx_svconnector_sv1 extends t3lib_svbase {
 
 	/**
 	 * This method should be used by all connector services when they encounter a fatal error
-	 * It will write the error in the devlog (if activated) and thrown an exception
+	 * It will write the error in the devlog (if activated) and throw an exception
 	 *
 	 * @param	string		$message: error message
 	 * @param	integer		$exceptionNumber: number of the exception
