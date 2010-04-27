@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2008 Francois Suter (Cobweb) <typo3@cobweb.ch>
+*  (c) 2007-2010 Francois Suter (Cobweb) <typo3@cobweb.ch>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,7 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(PATH_t3lib.'class.t3lib_svbase.php');
+require_once(PATH_t3lib . 'class.t3lib_svbase.php');
 
 	// Define error codes for all Connector services responses
 define('T3_ERR_SV_CONNECTION_FAILED', -50); // connection to remote server failed
@@ -44,8 +44,7 @@ define('T3_ERR_SV_DISTANT_ERROR', -52); // returned response contains an error m
  *
  * $Id$
  */
-// TODO: move tx_svconnector_sv1 to tx_svconnector_base, provide wrapper tx_svconnector_sv1 for backwards compatibility
-abstract class tx_svconnector_sv1 extends t3lib_svbase {
+abstract class tx_svconnector_base extends t3lib_svbase {
 	protected $extKey = 'svconnector'; // The extension key
 	protected $parentExtKey = 'svconnector'; // A copy of the extension key so that it is not overridden by children classes
 	protected $extConfiguration; // The extension configuration
