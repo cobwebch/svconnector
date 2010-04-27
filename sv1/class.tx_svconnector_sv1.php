@@ -41,6 +41,8 @@ define('T3_ERR_SV_DISTANT_ERROR', -52); // returned response contains an error m
  * @author		Francois Suter (Cobweb) <typo3@cobweb.ch>
  * @package		TYPO3
  * @subpackage	tx_svconnector
+ *
+ * $Id$
  */
 // TODO: move tx_svconnector_sv1 to tx_svconnector_base, provide wrapper tx_svconnector_sv1 for backwards compatibility
 abstract class tx_svconnector_sv1 extends t3lib_svbase {
@@ -60,8 +62,7 @@ abstract class tx_svconnector_sv1 extends t3lib_svbase {
 		$this->extConfiguration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->parentExtKey]);
 		if (isset($GLOBALS['LANG'])) {
 			$this->lang = $GLOBALS['LANG'];
-		}
-		elseif (isset($GLOBALS['TSFE']->lang)) {
+		} elseif (isset($GLOBALS['TSFE']->lang)) {
 			$this->lang = $GLOBALS['TSFE']->lang;
 		}
 		return FALSE;
@@ -148,8 +149,7 @@ abstract class tx_svconnector_sv1 extends t3lib_svbase {
 				$processor = &t3lib_div::getUserObj($className);
 				$queryString = $processor->processParameters($parameters, $this);
 			}
-		}
-		elseif (is_array($parameters)) {
+		} elseif (is_array($parameters)) {
 			foreach ($parameters as $key => $value) {
 				$cleanValue = trim($value);
 				$queryString .= '&'.$key.'='.urlencode($cleanValue);

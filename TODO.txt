@@ -1,1 +1,0 @@
-* Implement loading of language file depending on whether the service is called from FE or BE
