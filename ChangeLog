@@ -2,6 +2,7 @@
 
 	* Added a post-processing method to the API
 	* Move sv1 service class to "base" class
+	* Released version 1.1.0
 
 2009-10-20 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 

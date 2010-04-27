@@ -3,7 +3,7 @@
 ########################################################################
 # Extension Manager/Repository config file for ext: "svconnector"
 #
-# Auto generated 20-10-2009 15:52
+# Auto generated 27-04-2010 17:52
 #
 # Manual updates:
 # Only the data in the array - anything else is removed by next write.
@@ -29,7 +29,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'clearCacheOnLoad' => 1,
 	'lockType' => '',
 	'author_company' => '',
-	'version' => '1.0.0',
+	'version' => '1.1.0',
 	'constraints' => array(
 		'depends' => array(
 		),
@@ -39,7 +39,7 @@ $EM_CONF[$_EXTKEY] = array(
 			'devlog' => '',
 		),
 	),
-	'_md5_values_when_last_written' => 'a:7:{s:9:"ChangeLog";s:4:"8c21";s:10:"README.txt";s:4:"4d6d";s:8:"TODO.txt";s:4:"b799";s:21:"ext_conf_template.txt";s:4:"1a85";s:12:"ext_icon.gif";s:4:"74ea";s:14:"doc/manual.sxw";s:4:"bbe6";s:32:"sv1/class.tx_svconnector_sv1.php";s:4:"3299";}',
+	'_md5_values_when_last_written' => 'a:7:{s:9:"ChangeLog";s:4:"e535";s:10:"README.txt";s:4:"4d6d";s:29:"class.tx_svconnector_base.php";s:4:"e603";s:21:"ext_conf_template.txt";s:4:"1a85";s:12:"ext_icon.gif";s:4:"74ea";s:14:"doc/manual.sxw";s:4:"9196";s:32:"sv1/class.tx_svconnector_sv1.php";s:4:"8855";}',
 	'suggests' => array(
 	),
 );
