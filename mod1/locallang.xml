@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for module &quot;tools_txsvconnectorM1&quot;</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="title">Connector Services Sandbox</label>
+			<label index="function.test_service">Test a service</label>
+			<label index="header.test_service">Connector service test</label>
+			<label index="service">Choose a connector service (only available services are listed):</label>
+			<label index="parameters">Enter parameters appropriate for the service that you want to test:</label>
+			<label index="test">Test!</label>
+		</languageKey>
+	</data>
+</T3locallang>
