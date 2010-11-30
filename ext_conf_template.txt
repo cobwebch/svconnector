@@ -1,2 +1,7 @@
-#	cat=basic/enable; type=boolean; label=Enable debugging: Turn on debugging to the dev log in all connector services (unless overridden). Requires devlog or similar extension.
+# customsubcategory=bemodule=LLL:EXT:svconnector/locallang.xml:bemodule
+
+#	cat=basic/enable; type=boolean; label=LLL:EXT:svconnector/locallang.xml:config_debug
 	debug = 0
+
+#	cat=basic/bemodule; type=integer; label=LLL:EXT:svconnector/locallang.xml:config_test_limit
+	test_limit = 5

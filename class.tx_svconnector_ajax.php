@@ -32,6 +32,14 @@
  * $Id$
  */
 class tx_svconnector_Ajax {
+	public $extKey = 'svconnector';
+	/** @var $extConf array extension configuration */
+	protected $extConf = array();
+
+	public function __construct() {
+		$this->extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->extKey]);
+	}
+
 	/**
 	 * This method fires the requested query via the given connector service
 	 * It loads the results into the response body.
@@ -48,6 +56,8 @@ class tx_svconnector_Ajax {
 			$parametersInput = urldecode(t3lib_div::_GP('parameters'));
 			$parameters = $this->parseParameters($parametersInput);
 			$result = $serviceObject->fetchArray($parameters);
+				// Limit result size so that response is not too large
+			$result = array_slice($result, 0, $this->extConf['test_limit'], TRUE);
 			$ajaxObj->setContentFormat('json');
 			$ajaxObj->setContent($result);
 		}
