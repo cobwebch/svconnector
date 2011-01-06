@@ -95,8 +95,10 @@ abstract class tx_svconnector_base extends t3lib_svbase {
 	 */
 	public function fetchXML($parameters) {
 		$result = $this->query($parameters);
-		// Transform result to XML (if necessary) and return it
-		// Implement processXML hook (see fetchRaw())
+			// Transform result to XML (if necessary) and return it
+//		$result = tx_svconnector_utility::convertXmlToArray($result);
+			// Implement processXML hook (see fetchRaw())
+		return $result;
 	}
 
 	/**
@@ -108,8 +110,10 @@ abstract class tx_svconnector_base extends t3lib_svbase {
 	 */
 	public function fetchArray($parameters) {
 		$result = $this->query($parameters);
-		// Transform result to PHP array and return it
-		// Implement processArray hook (see fetchRaw())
+			// Transform result to PHP array and return it
+//		$result = t3lib_div::array2xml_cs($result);
+			// Implement processArray hook (see fetchRaw())
+		return $result;
 	}
 
 	/**
