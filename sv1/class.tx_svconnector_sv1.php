@@ -22,8 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('svconnector', 'class.tx_svconnector_base.php'));
-
 /**
  * The code in this class was move to tx_svconnector_base
  * This class stays as a wrapper for backward-compatibility

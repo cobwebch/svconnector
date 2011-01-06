@@ -22,8 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(PATH_t3lib . 'class.t3lib_svbase.php');
-
 	// Define error codes for all Connector services responses
 define('T3_ERR_SV_CONNECTION_FAILED', -50); // connection to remote server failed
 define('T3_ERR_SV_BAD_RESPONSE', -51); // returned response is malformed or somehow unexpected
