@@ -53,8 +53,8 @@ class  tx_svconnector_module1 extends t3lib_SCbase {
 	 * @return	void
 	 */
 	public function menuConfig()	{
-		$this->MOD_MENU = Array (
-			'function' => Array (
+		$this->MOD_MENU = array(
+			'function' => array(
 				'test_service' => $GLOBALS['LANG']->getLL('function.test_service'),
 //				'2' => $LANG->getLL('function2'),
 //				'3' => $LANG->getLL('function3'),
