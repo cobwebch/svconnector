@@ -29,7 +29,7 @@
  * @package		TYPO3
  * @subpackage	tx_svconnector
  *
- * $Id: class.tx_svconnector_base.php 32650 2010-04-27 15:50:47Z francois $
+ * $Id$
  */
 class tx_svconnector_utility {
 	/**
@@ -74,6 +74,10 @@ class tx_svconnector_utility {
 	 *			)
 	 *		)
 	 * );
+	 *
+	 * NOTE: this method was written because t3lib_div::xml2array() is much too keyed
+	 * to TYPO3's specifics and produces weird or even outright wrong array structures.
+	 * On the other hand the reverse conversion is fine with t3lib_div::array2xml_cs().
 	 *
 	 * @param	string	$string: XML to parse
 	 * @return	array	PHP array
