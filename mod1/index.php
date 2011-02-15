@@ -56,8 +56,6 @@ class  tx_svconnector_module1 extends t3lib_SCbase {
 		$this->MOD_MENU = array(
 			'function' => array(
 				'test_service' => $GLOBALS['LANG']->getLL('function.test_service'),
-//				'2' => $LANG->getLL('function2'),
-//				'3' => $LANG->getLL('function3'),
 			)
 		);
 		parent::menuConfig();
@@ -84,22 +82,6 @@ class  tx_svconnector_module1 extends t3lib_SCbase {
 
 				// Draw the form
 			$this->doc->form = '<form action="" method="post" enctype="multipart/form-data">';
-
-				// JavaScript
-			$this->doc->JScode = '
-				<script language="javascript" type="text/javascript">
-					script_ended = 0;
-					function jumpToUrl(URL)	{
-						document.location = URL;
-					}
-				</script>
-			';
-			$this->doc->postCode='
-				<script language="javascript" type="text/javascript">
-					script_ended = 1;
-					if (top.fsMod) top.fsMod.recentIds["web"] = 0;
-				</script>
-			';
 				// Render content:
 			$this->moduleContent();
 		} else {
@@ -163,7 +145,6 @@ class  tx_svconnector_module1 extends t3lib_SCbase {
 		$pageRenderer = $this->doc->getPageRenderer();
 		$pageRenderer->loadExtJS();
 		$pageRenderer->addJsFile(t3lib_extMgm::extRelPath('svconnector') . 'res/service_test.js');
- 
  */
 
 		$content = '';
@@ -303,7 +284,7 @@ class  tx_svconnector_module1 extends t3lib_SCbase {
 			'shortcut' => '',
 		);
 			// CSH
-		$buttons['csh'] = t3lib_BEfunc::cshItem('_MOD_web_func', '', $GLOBALS['BACK_PATH']);
+//		$buttons['csh'] = t3lib_BEfunc::cshItem('_MOD_web_func', '', $GLOBALS['BACK_PATH']);
 
 			// Shortcut
 		if ($GLOBALS['BE_USER']->mayMakeShortcut())	{
