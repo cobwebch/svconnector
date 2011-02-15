@@ -2,6 +2,3 @@
 
 #	cat=basic/enable; type=boolean; label=LLL:EXT:svconnector/locallang.xml:config_debug
 	debug = 0
-
-#	cat=basic/bemodule; type=integer; label=LLL:EXT:svconnector/locallang.xml:config_test_limit
-	test_limit = 5

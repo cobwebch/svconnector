@@ -10,9 +10,7 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="bemodule">BE Module</label>
 			<label index="config_debug">Debug: Check to turn on debugging to the Dev Log. Debugging also takes place if TYPO3_DLOG is true. Requires devlog or similar extension.</label>
-			<label index="config_test_limit">Test limit: Maximum number of results to show when testing a service. Showing too many results actually breaks the output of the test, even if successful.</label>
 		</languageKey>
 	</data>
 </T3locallang>

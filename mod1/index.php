@@ -150,38 +150,145 @@ class  tx_svconnector_module1 extends t3lib_SCbase {
 	 * @return	void
 	 */
 	protected function connectorServicesTestScreen() {
+			// Get submitted variables
+		$moduleVariables = t3lib_div::_GPmerged('tx_svconnector_mod1');
+			// Make sure the "service" variable is initialized
+		if (!isset($moduleVariables['service'])) {
+			$moduleVariables['service'] = '';
+		}
+
 			// Load the necessary JavaScript
 			/** @var $pageRenderer t3lib_PageRenderer */
+/*
 		$pageRenderer = $this->doc->getPageRenderer();
 		$pageRenderer->loadExtJS();
 		$pageRenderer->addJsFile(t3lib_extMgm::extRelPath('svconnector') . 'res/service_test.js');
+ 
+ */
 
 		$content = '';
 			// Get a list of all available services
 		$options = array();
 		foreach ($GLOBALS['T3_SERVICES']['connector'] as $serviceKey => $serviceInfo) {
 			$serviceObject = t3lib_div::makeInstance($serviceInfo['className']);
+				// If the service is available, add it to the list
 			if ($serviceObject->init()) {
 				$options[$serviceKey] = $serviceInfo['title'];
+
+				// If not, display a warning
+			} else {
+					/** @var $messageObject t3lib_FlashMessage */
+				$messageObject = t3lib_div::makeInstance(
+					't3lib_FlashMessage',
+					sprintf($GLOBALS['LANG']->getLL('serviceNotAvailable'), $serviceInfo['className']),
+					'',
+					t3lib_FlashMessage::WARNING
+				);
+				t3lib_FlashMessageQueue::addMessage($messageObject);
 			}
 		}
 			// No connector services are available, display error message
 		if (count($options) == 0) {
+				/** @var $messageObject t3lib_FlashMessage */
+			$messageObject = t3lib_div::makeInstance(
+				't3lib_FlashMessage',
+				$GLOBALS['LANG']->getLL('noServices'),
+				'',
+				t3lib_FlashMessage::NOTICE
+			);
+			$content .= $messageObject->render();
 
 			// Assemble the form for choosing a particular service and defining its parameters
 		} else {
 			$content .= '<p>' . $GLOBALS['LANG']->getLL('service') . '</p>';
+			$content .= $this->doc->spacer(5);
 			$content .= '<p><select name="tx_svconnector_mod1[service]" id="tx_svconnector_mod1_service">';
 			foreach ($options as $key => $value) {
-				$content .= '<option value="' . $key . '">' . $value . ' (' . $key . ')' . '</option>';
+				$selected = '';
+				if ($key == $moduleVariables['service']) {
+					$selected = ' selected="selected"';
+				}
+				$content .= '<option value="' . $key . '"' . $selected . '>' . $value . ' (' . $key . ')' . '</option>';
 			}
 			$content .= '</select></p>';
+			$content .= $this->doc->spacer(10);
 			$content .= '<p>' . $GLOBALS['LANG']->getLL('parameters') . '</p>';
-			$content .= '<p><textarea name="tx_svconnector_mod1[parameters]" cols="50" rows="6" id="tx_svconnector_mod1_parameters"></textarea></p>';
-			$content .= '<input type="button" name="submit" value="' . $GLOBALS['LANG']->getLL('test') . '" onclick="testService()" />';
-			$content .= '<div id="tx_svconnector_resultarea"></div>';
+			$content .= $this->doc->spacer(5);
+			$content .= '<p><textarea name="tx_svconnector_mod1[parameters]" cols="50" rows="6" id="tx_svconnector_mod1_parameters">' . ((isset($moduleVariables['parameters'])) ? $moduleVariables['parameters'] : '') . '</textarea></p>';
+			$content .= $this->doc->spacer(10);
+			$content .= '<input type="submit" name="submit" value="' . $GLOBALS['LANG']->getLL('test') . '" />';
+		}
+
+			// If the form was submitted, process the request
+		if (!empty($moduleVariables['service']) && !empty($moduleVariables['parameters'])) {
+			$content .= $this->performServiceTest($moduleVariables);
 		}
 		return $content;
+	}
+
+	/**
+	 * This method fires the requested query via the given connector service
+	 * It loads the results into the response body.
+	 *
+	 * @param	array	$moduleVariables: variables with which the module was called
+	 * @return	void
+	 */
+	public function performServiceTest($moduleVariables) {
+		$resultContent = '';
+
+			/** @var $serviceObject tx_svconnector_base */
+		$serviceObject = t3lib_div::makeInstance($moduleVariables['service']);
+		if ($serviceObject->init()) {
+			$parameters = $this->parseParameters($moduleVariables['parameters']);
+			try {
+				$result = $serviceObject->fetchRaw($parameters);
+				$testResult = '';
+				if (empty($result)) {
+					$testResult = $GLOBALS['LANG']->getLL('noResult');
+				} else {
+					if (is_array($result)) {
+						$testResult = tx_svconnector_utility::dumpArray($result);
+					} else {
+						$testResult = '<pre>' . htmlspecialchars($result) . '</pre>';
+					}
+				}
+			}
+			catch (Exception $e) {
+					/** @var $messageObject t3lib_FlashMessage */
+				$messageObject = t3lib_div::makeInstance(
+					't3lib_FlashMessage',
+					sprintf($GLOBALS['LANG']->getLL('serviceError'), $e->getMessage(), $e->getCode()),
+					'',
+					t3lib_FlashMessage::ERROR
+				);
+				t3lib_FlashMessageQueue::addMessage($messageObject);
+			}
+		}
+		$resultContent = $this->doc->section($GLOBALS['LANG']->getLL('testResult'), $testResult);
+		return $resultContent;
+	}
+
+	/**
+	 * This method parses the parameters input string and transforms it into an array
+	 * of key-value pairs
+	 *
+	 * @param	string	$parametersString: input string from the query variables
+	 * @return	array	Array of key-value pairs
+	 */
+	protected function parseParameters($parametersString) {
+		$parameters = array();
+		$lines = t3lib_div::trimExplode("\n", $parametersString, TRUE);
+		foreach ($lines as $aLine) {
+			$lineParts = t3lib_div::trimExplode('=', $aLine, TRUE);
+			$key = array_shift($lineParts);
+			$value = implode(',', $lineParts);
+				// Handle special case of value "tab"
+			if ($value == '\t') {
+				$value = "\t";
+			}
+			$parameters[$key] = $value;
+		}
+		return $parameters;
 	}
 
 	/**
