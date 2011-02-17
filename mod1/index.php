@@ -225,7 +225,14 @@ class  tx_svconnector_module1 extends t3lib_SCbase {
 				$result = $serviceObject->fetchRaw($parameters);
 				$testResult = '';
 				if (empty($result)) {
-					$testResult = $GLOBALS['LANG']->getLL('noResult');
+						/** @var $messageObject t3lib_FlashMessage */
+					$messageObject = t3lib_div::makeInstance(
+						't3lib_FlashMessage',
+						$GLOBALS['LANG']->getLL('noResult'),
+						'',
+						t3lib_FlashMessage::INFO
+					);
+					$testResult = $messageObject->render();
 				} else {
 					if (is_array($result)) {
 						$testResult = tx_svconnector_utility::dumpArray($result);
