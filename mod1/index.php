@@ -269,7 +269,7 @@ class  tx_svconnector_module1 extends t3lib_SCbase {
 		foreach ($lines as $aLine) {
 			$lineParts = t3lib_div::trimExplode('=', $aLine, TRUE);
 			$key = array_shift($lineParts);
-			$value = implode(',', $lineParts);
+			$value = implode('=', $lineParts);
 				// Handle special case of value "tab"
 			if ($value == '\t') {
 				$value = "\t";
