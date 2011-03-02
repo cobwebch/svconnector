@@ -47,7 +47,7 @@ abstract class tx_svconnector_base extends t3lib_svbase {
 	protected $parentExtKey = 'svconnector'; // A copy of the extension key so that it is not overridden by children classes
 	protected $extConfiguration; // The extension configuration
 	protected $lang; // Language object
-	
+
 	/**
 	 * Verifies that the connection is functional
 	 * Returns false if not. This base implementation always returns false,
@@ -156,16 +156,18 @@ abstract class tx_svconnector_base extends t3lib_svbase {
 				$queryString .= '&'.$key.'='.urlencode($cleanValue);
 			}
 		}
-		// Query the distant source and get the result
-		// Include any necessary error processing
-		// Process the result if any hook is registered
+			// Query the distant source and get the result
+			// Include any necessary error processing
+			// If anything goes wrong, throw an exception
+
+			// Process the result if any hook is registered
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][$this->extKey]['processResponse'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][$this->extKey]['processResponse'] as $className) {
 				$processor = &t3lib_div::getUserObj($className);
 				$result = $processor->processResponse($result, $this);
 			}
 		}
-		// Return the result
+			// Return the result
 	}
 
 	/**
