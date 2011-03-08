@@ -1,3 +1,11 @@
+2011-03-08 Francois Suter (Cobweb)  <typo3@cobweb.ch>
+
+	* Released version 2.0.0
+
+2011-03-02 Francois Suter (Cobweb)  <typo3@cobweb.ch>
+
+	* Added BE module to test connector services
+
 2011-01-06 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 
 	* Added utility method for XML to PHP array conversion, resolves #11794
@@ -5,7 +13,7 @@
 2010-04-27 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 
 	* Added a post-processing method to the API
-	* Move sv1 service class to "base" class
+	* Moved sv1 service class to "base" class
 	* Released version 1.1.0
 
 2009-10-20 Francois Suter (Cobweb)  <typo3@cobweb.ch>

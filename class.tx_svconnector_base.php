@@ -46,7 +46,13 @@ abstract class tx_svconnector_base extends t3lib_svbase {
 	protected $extKey = 'svconnector'; // The extension key
 	protected $parentExtKey = 'svconnector'; // A copy of the extension key so that it is not overridden by children classes
 	protected $extConfiguration; // The extension configuration
-	protected $lang; // Language object
+	/**
+	 * Language object
+	 * Used when performing encoding conversions or to get localized messages
+	 *
+	 * @var language $lang
+	 */
+	protected $lang;
 
 	/**
 	 * Verifies that the connection is functional
