@@ -96,7 +96,7 @@ class tx_svconnector_utility {
 			throw new Exception('XML string is invalid!', 1294325195);
 		}
 
-			// Tranform XML into a PHP array
+			// Transform XML into a PHP array
 		foreach ($xmlObject as $key => $value) {
 			if (!isset($phpArray[$key])) {
 				$phpArray[$key] = array();
