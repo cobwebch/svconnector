@@ -1,7 +1,7 @@
 <f:layout name="Module" />
 
 <f:section name="main">
-	<f:if condition="{services->count()}">
+	<f:if condition="{services->f:count()}">
 		<h2><f:translate key="title" /></h2>
 		<f:form name="testForm" method="post">
 			<p><f:translate key="test.service" /></p>

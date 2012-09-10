@@ -38,7 +38,7 @@
  */
 class Tx_Svconnector_Domain_Repository_ConnectorRepository {
 	/**
-	 * @var array List of available services (with corresponding object)
+	 * @var array List of available services
 	 */
 	protected $availableServices = array();
 
@@ -47,20 +47,25 @@ class Tx_Svconnector_Domain_Repository_ConnectorRepository {
 	 */
 	protected $unavailableServices = array();
 
+	/**
+	 * @var array List of available service objects
+	 */
 	protected $serviceObjects = array();
 
 	public function __construct() {
 			// Assemble list of all available services
-		foreach ($GLOBALS['T3_SERVICES']['connector'] as $serviceKey => $serviceInfo) {
-				/** @var $serviceObject tx_svconnector_base */
-			$serviceObject = t3lib_div::makeInstance($serviceInfo['className']);
-				// If the service is available, add it to the list
-			if ($serviceObject->init()) {
-				$this->availableServices[$serviceKey] = $serviceInfo['title'];
-					// Keep the objects in a separate array
-				$this->serviceObjects[$serviceKey] = $serviceObject;
-			} else {
-				$this->unavailableServices[$serviceKey] = $serviceInfo['title'];
+		if (isset($GLOBALS['T3_SERVICES']['connector'])) {
+			foreach ($GLOBALS['T3_SERVICES']['connector'] as $serviceKey => $serviceInfo) {
+					/** @var $serviceObject tx_svconnector_base */
+				$serviceObject = t3lib_div::makeInstance($serviceInfo['className']);
+					// If the service is available, add it to the list
+				if ($serviceObject->init()) {
+					$this->availableServices[$serviceKey] = $serviceInfo['title'];
+						// Keep the objects in a separate array
+					$this->serviceObjects[$serviceKey] = $serviceObject;
+				} else {
+					$this->unavailableServices[$serviceKey] = $serviceInfo['title'];
+				}
 			}
 		}
 	}

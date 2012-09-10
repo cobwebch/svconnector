@@ -1,6 +1,7 @@
 2012-09-10 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 
 	* Moved BE module to Extbase, resolves #40804
+	* Improved checks when no connector services are installed, resolves #38118
 
 2011-03-08 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 

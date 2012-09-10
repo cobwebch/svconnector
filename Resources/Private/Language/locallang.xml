@@ -9,7 +9,7 @@
 			<label index="mlang_tabs_tab">Connectors test</label>
 			<label index="mlang_labels_tabdescr">BE module for testing connector services</label>
 			<label index="title">Connector Services Sandbox</label>
-			<label index="no.services">No connector services are available. Please install at least one before trying to use this test.</label>
+			<label index="no.services">No connector services are available. Please install at least one before trying to use this test module.</label>
 			<label index="no.services.available">None of the installed connector services are available. You should maybe review your setup.</label>
 			<label index="services.not.available">One or more connector services are installed but not available: %s.</label>
 			<label index="test.service">Choose a connector service (only available services are listed), enter the needed parameter and press the "Test" button:</label>
