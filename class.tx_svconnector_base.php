@@ -80,7 +80,7 @@ abstract class tx_svconnector_base extends t3lib_svbase {
 	 * @return	mixed	server response
 	 */
 	public function fetchRaw($parameters) {
-		$result = $this->query();
+		$result = $this->query($parameters);
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][$this->extKey]['processRaw'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][$this->extKey]['processRaw'] as $className) {
 				$processor = &t3lib_div::getUserObj($className);
@@ -180,9 +180,11 @@ abstract class tx_svconnector_base extends t3lib_svbase {
 	 * This method should be used by all connector services when they encounter a fatal error
 	 * It will write the error in the devlog (if activated) and throw an exception
 	 *
-	 * @param	string		$message: error message
-	 * @param	integer		$exceptionNumber: number of the exception
-	 * @param	array		$extraData: additional data to be passed to the devlog
+	 * @param string $message Error message
+	 * @param integer $exceptionNumber Number (code) of the exception
+	 * @param array $extraData Additional data to be passed to the devlog
+	 * @throws Exception
+	 * @return void
 	 */
 	protected function raiseError($message, $exceptionNumber, array $extraData) {
 		if (!empty($this->extConfiguration['debug'])) {

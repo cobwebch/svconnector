@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2010 Francois Suter (Cobweb) <typo3@cobweb.ch>
+*  (c) 2007-2012 Francois Suter (Cobweb) <typo3@cobweb.ch>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -39,48 +39,49 @@ class tx_svconnector_utility {
 	 * Considering the following XML:
 	 *
 	 * <test>
-	 *		<foo>
-	 *			bar
-	 *			<child rank="#1?>Junior</child>
-	 *			<child rank="#2?>Baby</child>
-	 *		</foo>
+	 *        <foo>
+	 *            bar
+	 *            <child rank="#1?>Junior</child>
+	 *            <child rank="#2?>Baby</child>
+	 *        </foo>
 	 * </test>
 	 *
 	 * the resulting array will look like:
 	 *
 	 * array(
-	 *		'foo' => array(
-	 *			0 => array(
-	 *				'value' => 'bar',
-	 *				'children' => array(
-	 *					'child' => (
-	 *						0 => array(
-	 *							'value' => 'Junior',
-	 *							'children' => array(),
-	 *							'attributes' => array(
-	 *								'rank' => '#1'
-	 *							)
-	 *						),
-	 *						1 => array(
-	 *							'value' => 'Baby',
-	 *							'children' => array(),
-	 *							'attributes' => array(
-	 *								'rank' => '#2'
-	 *							)
-	 *						)
-	 *					)
-	 *				),
-	 *				'attributes' => array()
-	 *			)
-	 *		)
+	 *        'foo' => array(
+	 *            0 => array(
+	 *                'value' => 'bar',
+	 *                'children' => array(
+	 *                    'child' => (
+	 *                        0 => array(
+	 *                            'value' => 'Junior',
+	 *                            'children' => array(),
+	 *                            'attributes' => array(
+	 *                                'rank' => '#1'
+	 *                            )
+	 *                        ),
+	 *                        1 => array(
+	 *                            'value' => 'Baby',
+	 *                            'children' => array(),
+	 *                            'attributes' => array(
+	 *                                'rank' => '#2'
+	 *                            )
+	 *                        )
+	 *                    )
+	 *                ),
+	 *                'attributes' => array()
+	 *            )
+	 *        )
 	 * );
 	 *
 	 * NOTE: this method was written because t3lib_div::xml2array() is much too keyed
 	 * to TYPO3's specifics and produces weird or even outright wrong array structures.
 	 * On the other hand the reverse conversion is fine with t3lib_div::array2xml_cs().
 	 *
-	 * @param	string	$string: XML to parse
-	 * @return	array	PHP array
+	 * @param string $string XML to parse
+	 * @throws Exception
+	 * @return    array    PHP array
 	 */
 	static public function convertXmlToArray($string) {
 		$phpArray = array();

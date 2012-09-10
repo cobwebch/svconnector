@@ -4,8 +4,23 @@ if (!defined('TYPO3_MODE')) {
 }
 
 	// Add module to the BE
-if (TYPO3_MODE == 'BE') {
-	t3lib_extMgm::addModulePath('tools_txsvconnectorM1', t3lib_extMgm::extPath($_EXTKEY) . 'mod1/');
-	t3lib_extMgm::addModule('tools', 'txsvconnectorM1', '', t3lib_extMgm::extPath($_EXTKEY) . 'mod1/');
+	// Avoid loading the module when in the frontend or the Install Tool
+if (TYPO3_MODE == 'BE' && !(TYPO3_REQUESTTYPE & TYPO3_REQUESTTYPE_INSTALL)) {
+		// Register the backend module
+	Tx_Extbase_Utility_Extension::registerModule(
+		$_EXTKEY,
+		'tools', // Make module a submodule of 'tools' (admin)
+		'svconnector', // Submodule key
+		'', // Position
+		array(
+				// An array holding the controller-action-combinations that are accessible
+			'Testing' => 'default'
+		),
+		array(
+			'access' => 'admin',
+			'icon'   => 'EXT:' . $_EXTKEY . '/Resources/Public/Images/moduleIcon.png',
+			'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang.xml'
+		)
+	);
 }
 ?>

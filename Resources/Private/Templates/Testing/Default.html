@@ -1,0 +1,26 @@
+<f:layout name="Module" />
+
+<f:section name="main">
+	<f:if condition="{services->count()}">
+		<h2><f:translate key="title" /></h2>
+		<f:form name="testForm" method="post">
+			<p><f:translate key="test.service" /></p>
+			<div class="section">
+				<f:form.select name="tx_svconnector[service]" options="{services}" id="tx_svconnector_service" value="{selectedService}" />
+			</div>
+			<p><f:translate key="parameters" /></p>
+			<div class="section">
+				<f:form.textarea name="tx_svconnector[parameters]" id="tx_svconnector_parameters" cols="50" rows="6" value="{parameters}" />
+			</div>
+			<div class="section">
+				<f:form.submit name="submit" value="{f:translate(key: 'test')}" />
+			</div>
+		</f:form>
+		<f:if condition="{testResult}">
+			<div class="divider"></div>
+			<h2><f:translate key="test.result" /></h2>
+			<div><f:format.raw value="{testResult}" /></div>
+		</f:if>
+	</f:if>
+
+</f:section>

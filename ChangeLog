@@ -1,3 +1,7 @@
+2012-09-10 Francois Suter (Cobweb)  <typo3@cobweb.ch>
+
+	* Moved BE module to Extbase, resolves #40804
+
 2011-03-08 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 
 	* Released version 2.0.0

@@ -1,0 +1,191 @@
+<?php
+/***************************************************************
+ *  Copyright notice
+ *
+ *  (c) 2012 Francois Suter (typo3@cobweb.ch)
+ *  All rights reserved
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *  A copy is found in the textfile GPL.txt and important notices to the license
+ *  from the author is found in LICENSE.txt distributed with these scripts.
+ *
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
+
+/**
+ * Controller for the backend module
+ *
+ * @author		Francois Suter (Cobweb) <typo3@cobweb.ch>
+ * @package		TYPO3
+ * @subpackage	tx_svconnector
+ *
+ * $Id: ListingController.php 63468 2012-06-15 07:14:01Z francois $
+ */
+class Tx_Svconnector_Controller_TestingController extends Tx_Extbase_MVC_Controller_ActionController {
+	/**
+	 * @var Tx_Svconnector_Domain_Repository_ConnectorRepository
+	 */
+	protected $connectorRepository;
+
+	/**
+	 * Injects an instance of the connector repository
+	 *
+	 * @param Tx_Svconnector_Domain_Repository_ConnectorRepository $connectorRepository
+	 * @return void
+	 */
+	public function injectConfigurationRepository(Tx_Svconnector_Domain_Repository_ConnectorRepository $connectorRepository) {
+		$this->connectorRepository = $connectorRepository;
+	}
+
+	/**
+	 * Renders the form for testing services
+	 *
+	 * @return void
+	 */
+	public function defaultAction() {
+			// Check unavailable services
+			// If there are any, display a warning about it
+		$unavailableServices = $this->connectorRepository->findAllUnavailable();
+		if (count($unavailableServices) > 0) {
+				/** @var $messageObject t3lib_FlashMessage */
+			$messageObject = t3lib_div::makeInstance(
+				't3lib_FlashMessage',
+				Tx_Extbase_Utility_Localization::translate(
+					'services.not.available',
+					'svconnector',
+					array(implode(', ', $unavailableServices))
+				),
+				'',
+				t3lib_FlashMessage::WARNING
+			);
+			t3lib_FlashMessageQueue::addMessage($messageObject);
+		}
+			// Get available services and pass them to the view
+		$availableServices = $this->connectorRepository->findAllAvailable();
+		$this->view->assign('services', $availableServices);
+		if (count($availableServices) == 0) {
+				// If there are no available services, but some are not available, it means all installed connector
+				// services are unavailable. This is a weird situation, we issue a warning.
+			if (count($unavailableServices) > 0) {
+					/** @var $messageObject t3lib_FlashMessage */
+				$messageObject = t3lib_div::makeInstance(
+					't3lib_FlashMessage',
+					Tx_Extbase_Utility_Localization::translate('no.services.available', 'svconnector'),
+					'',
+					t3lib_FlashMessage::WARNING
+				);
+
+				// If there are simply no services, we display a notice
+			} else {
+					/** @var $messageObject t3lib_FlashMessage */
+				$messageObject = t3lib_div::makeInstance(
+					't3lib_FlashMessage',
+					Tx_Extbase_Utility_Localization::translate('no.services', 'svconnector'),
+					'',
+					t3lib_FlashMessage::NOTICE
+				);
+			}
+			t3lib_FlashMessageQueue::addMessage($messageObject);
+		}
+
+			// Check if a request for testing was submitted
+			// If yes, execute the testing and pass both arguments and result to the view
+		if ($this->request->hasArgument('tx_svconnector')) {
+			$arguments = $this->request->getArgument('tx_svconnector');
+			$this->view->assign('selectedService', $arguments['service']);
+			$this->view->assign('parameters', $arguments['parameters']);
+			$this->view->assign('testResult', $this->performTest($arguments['service'], $arguments['parameters']));
+		} else {
+			$this->view->assign('selectedService', '');
+			$this->view->assign('parameters', '');
+			$this->view->assign('testResult', '');
+		}
+	}
+
+	/**
+	 * Performs the connection test for the selected service and passes the appropriate results to the view
+	 *
+	 * @param string $service Key of the service to test
+	 * @param string $parameters Parameters for the service being tested
+	 * @return string Result from the test
+	 */
+	protected function performTest($service, $parameters) {
+		$testResult = '';
+
+			// Get the corresponding service object from the repository
+		$serviceObject = $this->connectorRepository->findServiceByKey($service);
+		if ($serviceObject->init()) {
+			$parameters = $this->parseParameters($parameters);
+			try {
+				$result = $serviceObject->fetchRaw($parameters);
+					// If the result is empty, issue an information message
+				if (empty($result)) {
+						/** @var $messageObject t3lib_FlashMessage */
+					$messageObject = t3lib_div::makeInstance(
+						't3lib_FlashMessage',
+						Tx_Extbase_Utility_Localization::translate('no.result', 'svconnector'),
+						'',
+						t3lib_FlashMessage::INFO
+					);
+					$testResult = $messageObject->render();
+				} else {
+						// If the result is an array, dump it in a formatted display
+						// Otherwise display a preformatted string
+					if (is_array($result)) {
+						$testResult = tx_svconnector_utility::dumpArray($result);
+					} else {
+						$testResult = '<pre>' . htmlspecialchars($result) . '</pre>';
+					}
+				}
+			}
+				// Catch the exception and display an error message
+			catch (Exception $e) {
+					/** @var $messageObject t3lib_FlashMessage */
+				$messageObject = t3lib_div::makeInstance(
+					't3lib_FlashMessage',
+					Tx_Extbase_Utility_Localization::translate('service.error', 'svconnector', array($e->getMessage(), $e->getCode())),
+					'',
+					t3lib_FlashMessage::ERROR
+				);
+				t3lib_FlashMessageQueue::addMessage($messageObject);
+			}
+		}
+		return $testResult;
+	}
+
+	/**
+	 * Parses the parameters input string and transforms it into an array of key-value pairs
+	 *
+	 * @param string $parametersString Input string from the query variables
+	 * @return array Array of key-value pairs
+	 */
+	protected function parseParameters($parametersString) {
+		$parameters = array();
+		$lines = t3lib_div::trimExplode("\n", $parametersString, TRUE);
+		foreach ($lines as $aLine) {
+			$lineParts = t3lib_div::trimExplode('=', $aLine, TRUE);
+			$key = array_shift($lineParts);
+			$value = implode('=', $lineParts);
+				// Handle special case of value "tab"
+			if ($value == '\t') {
+				$value = "\t";
+			}
+			$parameters[$key] = $value;
+		}
+		return $parameters;
+	}
+}
+?>
