@@ -32,7 +32,7 @@
  * @package		TYPO3
  * @subpackage	tx_svconnector
  *
- * $Id: ListingController.php 63468 2012-06-15 07:14:01Z francois $
+ * $Id$
  */
 class Tx_Svconnector_Controller_TestingController extends Tx_Extbase_MVC_Controller_ActionController {
 	/**
