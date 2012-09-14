@@ -1,4 +1,9 @@
+{namespace sv=Tx_Svconnector_ViewHelpers}
 <f:layout name="Module" />
+
+<f:section name="header">
+	<sv:be.header samples="{samples}" />
+</f:section>
 
 <f:section name="main">
 	<f:if condition="{services->f:count()}">

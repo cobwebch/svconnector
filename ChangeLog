@@ -1,3 +1,7 @@
+2012-09-14 Francois Suter (Cobweb)  <typo3@cobweb.ch>
+
+	* Added API for providing configuration samples to BE module, resolves #13548
+
 2012-09-10 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 
 	* Moved BE module to Extbase, resolves #40804

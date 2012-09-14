@@ -102,5 +102,17 @@ class Tx_Svconnector_Domain_Repository_ConnectorRepository {
 			throw new Exception('No service available for key: ' . $key, 1346422543);
 		}
 	}
+
+	public function findAllSampleConfigurations() {
+		$configurationSamples = array();
+		foreach ($this->availableServices as $key => $title) {
+			$extension = $GLOBALS['T3_SERVICES']['connector'][$key]['extKey'];
+			$configurationFile = t3lib_extMgm::extPath($extension, 'Resources/Public/Samples/Configuration.txt');
+			if (file_exists($configurationFile)) {
+				$configurationSamples[$key] = file_get_contents($configurationFile);
+			}
+		}
+		return $configurationSamples;
+	}
 }
 ?>
