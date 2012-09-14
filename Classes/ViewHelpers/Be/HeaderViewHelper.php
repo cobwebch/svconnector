@@ -32,7 +32,7 @@
  * @package		TYPO3
  * @subpackage	tx_svconnector
  *
- * $Id: HeaderViewHelper.php 64729 2012-07-20 16:04:08Z francois $
+ * $Id$
  */
 class Tx_Svconnector_ViewHelpers_Be_HeaderViewHelper extends Tx_Fluid_ViewHelpers_Be_AbstractBackendViewHelper {
 
