@@ -138,7 +138,7 @@ class Tx_Svconnector_Controller_TestingController extends Tx_Extbase_MVC_Control
 	 * @return string Result from the test
 	 */
 	protected function performTest($service, $parameters, $format) {
-		$testResult = '';
+		$result = '';
 
 			// Get the corresponding service object from the repository
 		$serviceObject = $this->connectorRepository->findServiceByKey($service);
@@ -166,15 +166,7 @@ class Tx_Svconnector_Controller_TestingController extends Tx_Extbase_MVC_Control
 						'',
 						t3lib_FlashMessage::INFO
 					);
-					$testResult = $messageObject->render();
-				} else {
-						// If the result is an array, dump it in a formatted display
-						// Otherwise display a preformatted string
-					if (is_array($result)) {
-						$testResult = tx_svconnector_utility::dumpArray($result);
-					} else {
-						$testResult = '<pre>' . htmlspecialchars($result) . '</pre>';
-					}
+					t3lib_FlashMessageQueue::addMessage($messageObject);
 				}
 			}
 				// Catch the exception and display an error message
@@ -189,7 +181,7 @@ class Tx_Svconnector_Controller_TestingController extends Tx_Extbase_MVC_Control
 				t3lib_FlashMessageQueue::addMessage($messageObject);
 			}
 		}
-		return $testResult;
+		return $result;
 	}
 
 	/**

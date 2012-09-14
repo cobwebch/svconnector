@@ -1,4 +1,5 @@
 {namespace sv=Tx_Svconnector_ViewHelpers}
+
 <f:layout name="Module" />
 
 <f:section name="header">
@@ -35,7 +36,7 @@
 		<f:if condition="{testResult}">
 			<div class="divider"></div>
 			<h2><f:translate key="test.result" /></h2>
-			<div><f:format.raw value="{testResult}" /></div>
+			<div><sv:be.result result="{testResult}" /></div>
 		</f:if>
 	</f:if>
 
