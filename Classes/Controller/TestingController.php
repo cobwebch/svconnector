@@ -116,13 +116,15 @@ class Tx_Svconnector_Controller_TestingController extends Tx_Extbase_MVC_Control
 				$parameters = $arguments['parameters'];
 			}
 			$this->view->assign('parameters', $parameters);
-			$this->view->assign('testResult', $this->performTest($arguments['service'], $arguments['parameters']));
+			$this->view->assign('format', $arguments['format']);
+			$this->view->assign('testResult', $this->performTest($arguments['service'], $arguments['parameters'], $arguments['format']));
 		} else {
 				// Select the first service in the list as default and get its sample configuration, if defined
 			$defaultService = key($availableServices);
 			$defaultParameters = (isset($sampleConfigurations[$defaultService])) ? $sampleConfigurations[$defaultService] : '';
 			$this->view->assign('selectedService', $defaultService);
 			$this->view->assign('parameters', $defaultParameters);
+			$this->view->assign('format', 0);
 			$this->view->assign('testResult', '');
 		}
 	}
@@ -132,9 +134,10 @@ class Tx_Svconnector_Controller_TestingController extends Tx_Extbase_MVC_Control
 	 *
 	 * @param string $service Key of the service to test
 	 * @param string $parameters Parameters for the service being tested
+	 * @param integer $format Type of format to use (0 = raw, 1 = array, 2 = xml)
 	 * @return string Result from the test
 	 */
-	protected function performTest($service, $parameters) {
+	protected function performTest($service, $parameters, $format) {
 		$testResult = '';
 
 			// Get the corresponding service object from the repository
@@ -142,7 +145,18 @@ class Tx_Svconnector_Controller_TestingController extends Tx_Extbase_MVC_Control
 		if ($serviceObject->init()) {
 			$parameters = $this->parseParameters($parameters);
 			try {
-				$result = $serviceObject->fetchRaw($parameters);
+					// Call the right "fetcher" dependign on chosen format
+				switch ($format) {
+					case 1:
+						$result = $serviceObject->fetchArray($parameters);
+						break;
+					case 2:
+						$result = $serviceObject->fetchXML($parameters);
+						break;
+					default:
+						$result = $serviceObject->fetchRaw($parameters);
+						break;
+				}
 					// If the result is empty, issue an information message
 				if (empty($result)) {
 						/** @var $messageObject t3lib_FlashMessage */

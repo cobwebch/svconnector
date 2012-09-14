@@ -14,6 +14,10 @@
 			<label index="services.not.available">One or more connector services are installed but not available: %s.</label>
 			<label index="test.service">Choose a connector service (only available services are listed), enter the needed parameter and press the "Test" button:</label>
 			<label index="parameters">Enter parameters appropriate for the service that you want to test:</label>
+			<label index="format">Choose output format</label>
+			<label index="format.raw">Raw</label>
+			<label index="format.array">PHP array</label>
+			<label index="format.xml">XML string</label>
 			<label index="test">Test!</label>
 			<label index="service.error">An error occurred when trying to call the requested service: %1$s (%2$d).</label>
 			<label index="no.result">The connection test returned no result.</label>

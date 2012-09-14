@@ -1,6 +1,7 @@
 2012-09-14 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 
 	* Added API for providing configuration samples to BE module, resolves #13548
+	* Added choice of output format in BE module, resolves #40920
 
 2012-09-10 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 
