@@ -1,3 +1,7 @@
+2012-09-21 Francois Suter (Cobweb)  <typo3@cobweb.ch>
+
+	* Verified compatibility with TYPO3 4.7, performed some code cleanup, resolves #41170
+
 2012-09-14 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 
 	* Added API for providing configuration samples to BE module, resolves #13548

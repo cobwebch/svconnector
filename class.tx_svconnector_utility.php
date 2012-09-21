@@ -123,7 +123,7 @@ class tx_svconnector_utility {
 		$nodeArray['attributes'] = array();
 			// Loop on all children, if any
 		$children = $node->children();
-		if (count($children) > 0) {
+		if ($children->count() > 0) {
 				// If there are child nodes, recursively transform them into arrays too
 			foreach ($children as $key => $subNode) {
 				if (!isset($nodeArray[$key])) {
@@ -134,7 +134,7 @@ class tx_svconnector_utility {
 		}
 			// Handle attributes, if any
 		$attributes = $node->attributes();
-		if (count($attributes) > 0) {
+		if ($attributes->count() > 0) {
 			foreach ($attributes as $key => $value) {
 				$nodeArray['attributes'][$key] = (string)$value;
 			}
