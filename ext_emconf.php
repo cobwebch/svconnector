@@ -3,7 +3,7 @@
 ########################################################################
 # Extension Manager/Repository config file for ext "svconnector".
 #
-# Auto generated 08-03-2011 22:04
+# Auto generated 23-09-2012 18:33
 #
 # Manual updates:
 # Only the data in the array - everything else is removed by next
@@ -29,7 +29,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'clearCacheOnLoad' => 1,
 	'lockType' => '',
 	'author_company' => '',
-	'version' => '2.0.0',
+	'version' => '2.1.0',
 	'constraints' => array(
 		'depends' => array(
 			'typo3' => '4.5.0-4.7.99',
@@ -40,7 +40,7 @@ $EM_CONF[$_EXTKEY] = array(
 			'devlog' => '',
 		),
 	),
-	'_md5_values_when_last_written' => 'a:19:{s:9:"ChangeLog";s:4:"3ee0";s:10:"README.txt";s:4:"4d6d";s:29:"class.tx_svconnector_base.php";s:4:"3578";s:32:"class.tx_svconnector_utility.php";s:4:"f490";s:16:"ext_autoload.php";s:4:"7923";s:21:"ext_conf_template.txt";s:4:"f88e";s:12:"ext_icon.gif";s:4:"b262";s:17:"ext_localconf.php";s:4:"a5bb";s:14:"ext_tables.php";s:4:"aeef";s:13:"locallang.xml";s:4:"b81b";s:14:"doc/manual.pdf";s:4:"9d17";s:14:"doc/manual.sxw";s:4:"c24d";s:13:"mod1/conf.php";s:4:"43b5";s:14:"mod1/index.php";s:4:"2164";s:18:"mod1/locallang.xml";s:4:"174b";s:22:"mod1/locallang_mod.xml";s:4:"f1b7";s:22:"mod1/mod_template.html";s:4:"22c4";s:19:"mod1/moduleicon.gif";s:4:"f36f";s:32:"sv1/class.tx_svconnector_sv1.php";s:4:"bdf3";}',
+	'_md5_values_when_last_written' => 'a:24:{s:9:"ChangeLog";s:4:"8420";s:29:"class.tx_svconnector_base.php";s:4:"3793";s:32:"class.tx_svconnector_utility.php";s:4:"4b63";s:16:"ext_autoload.php";s:4:"7923";s:21:"ext_conf_template.txt";s:4:"f88e";s:12:"ext_icon.gif";s:4:"b262";s:17:"ext_localconf.php";s:4:"a5bb";s:14:"ext_tables.php";s:4:"9ad0";s:13:"locallang.xml";s:4:"b81b";s:10:"README.txt";s:4:"4d6d";s:40:"Classes/Controller/TestingController.php";s:4:"1d77";s:49:"Classes/Domain/Repository/ConnectorRepository.php";s:4:"f2e5";s:43:"Classes/ViewHelpers/Be/HeaderViewHelper.php";s:4:"65d2";s:43:"Classes/ViewHelpers/Be/ResultViewHelper.php";s:4:"56b3";s:40:"Resources/Private/Language/locallang.xml";s:4:"93da";s:37:"Resources/Private/Layouts/Module.html";s:4:"ea11";s:48:"Resources/Private/Templates/Testing/Default.html";s:4:"84c0";s:38:"Resources/Public/Images/moduleIcon.png";s:4:"95d9";s:37:"Resources/Public/JavaScript/Module.js";s:4:"c9d5";s:14:"doc/manual.pdf";s:4:"1c1f";s:14:"doc/manual.sxw";s:4:"2b9e";s:18:"mod1/locallang.xml";s:4:"174b";s:22:"mod1/locallang_mod.xml";s:4:"f1b7";s:32:"sv1/class.tx_svconnector_sv1.php";s:4:"bdf3";}',
 	'suggests' => array(
 	),
 );

@@ -1,3 +1,7 @@
+2012-09-23 Francois Suter (Cobweb)  <typo3@cobweb.ch>
+
+	* Released version 2.1.0
+
 2012-09-21 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 
 	* Verified compatibility with TYPO3 4.7, performed some code cleanup, resolves #41170
