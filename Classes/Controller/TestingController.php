@@ -41,6 +41,12 @@ class Tx_Svconnector_Controller_TestingController extends Tx_Extbase_MVC_Control
 	protected $connectorRepository;
 
 	/**
+	 * List of configuration samples provided by the various connector services
+	 * @var array
+	 */
+	protected $sampleConfigurations = array();
+
+	/**
 	 * Injects an instance of the connector repository
 	 *
 	 * @param Tx_Svconnector_Domain_Repository_ConnectorRepository $connectorRepository
@@ -48,6 +54,22 @@ class Tx_Svconnector_Controller_TestingController extends Tx_Extbase_MVC_Control
 	 */
 	public function injectConfigurationRepository(Tx_Svconnector_Domain_Repository_ConnectorRepository $connectorRepository) {
 		$this->connectorRepository = $connectorRepository;
+	}
+
+	/**
+	 * Initializes the view before invoking an action method.
+	 *
+	 * Override this method to solve assign variables common for all actions
+	 * or prepare the view in another way before the action is called.
+	 *
+	 * @param Tx_Extbase_MVC_View_ViewInterface $view The view to be initialized
+	 * @return void
+	 * @api
+	 */
+	protected function initializeView(Tx_Extbase_MVC_View_ViewInterface $view) {
+			// Get the sample configurations provided by the various connector services
+		$this->sampleConfigurations = $this->connectorRepository->findAllSampleConfigurations();
+		$view->assign('samples', $this->sampleConfigurations);
 	}
 
 	/**
@@ -100,9 +122,6 @@ class Tx_Svconnector_Controller_TestingController extends Tx_Extbase_MVC_Control
 			}
 			t3lib_FlashMessageQueue::addMessage($messageObject);
 		}
-			// Get the sample configurations provided by the various connector services
-		$sampleConfigurations = $this->connectorRepository->findAllSampleConfigurations();
-		$this->view->assign('samples', $sampleConfigurations);
 
 			// Check if a request for testing was submitted
 			// If yes, execute the testing and pass both arguments and result to the view
@@ -111,7 +130,7 @@ class Tx_Svconnector_Controller_TestingController extends Tx_Extbase_MVC_Control
 			$this->view->assign('selectedService', $arguments['service']);
 				// If no parameters were passed, try to fall back on sample configuration, if defined
 			if (empty($arguments['parameters'])) {
-				$parameters = (isset($sampleConfigurations[$arguments['service']])) ? $sampleConfigurations[$arguments['service']] : '';
+				$parameters = (isset($this->sampleConfigurations[$arguments['service']])) ? $this->sampleConfigurations[$arguments['service']] : '';
 			} else {
 				$parameters = $arguments['parameters'];
 			}
@@ -121,7 +140,7 @@ class Tx_Svconnector_Controller_TestingController extends Tx_Extbase_MVC_Control
 		} else {
 				// Select the first service in the list as default and get its sample configuration, if defined
 			$defaultService = key($availableServices);
-			$defaultParameters = (isset($sampleConfigurations[$defaultService])) ? $sampleConfigurations[$defaultService] : '';
+			$defaultParameters = (isset($this->sampleConfigurations[$defaultService])) ? $this->sampleConfigurations[$defaultService] : '';
 			$this->view->assign('selectedService', $defaultService);
 			$this->view->assign('parameters', $defaultParameters);
 			$this->view->assign('format', 0);
@@ -145,7 +164,7 @@ class Tx_Svconnector_Controller_TestingController extends Tx_Extbase_MVC_Control
 		if ($serviceObject->init()) {
 			$parameters = $this->parseParameters($parameters);
 			try {
-					// Call the right "fetcher" dependign on chosen format
+					// Call the right "fetcher" depending on chosen format
 				switch ($format) {
 					case 1:
 						$result = $serviceObject->fetchArray($parameters);

@@ -1,6 +1,8 @@
+{namespace sv=Tx_Svconnector_ViewHelpers}
+
 <f:render section="header" />
 
-<f:be.container pageTitle="" enableJumpToUrl="false" enableClickMenu="false" loadPrototype="false" loadScriptaculous="false" loadExtJs="false" loadExtJsTheme="false" extJsAdapter="" enableExtJsDebug="false">
+<sv:be.container pageTitle="{f:translate(key: 'title')}" enableJumpToUrl="false" enableClickMenu="false" loadPrototype="false" loadExtJsTheme="false" addJsFile="{f:uri.resource(path:'JavaScript/Module.js')}" samples="{samples}">
 	<div class="typo3-fullDoc">
 		<!-- Page header with buttons, path details and csh -->
 		<div id="typo3-docheader">
@@ -23,4 +25,4 @@
 			</div>
 		</div>
 	</div>
-</f:be.container>
+</sv:be.container>
