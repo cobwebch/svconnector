@@ -46,11 +46,14 @@ abstract class tx_svconnector_base extends t3lib_svbase {
 	protected $extKey = 'svconnector'; // The extension key
 	protected $parentExtKey = 'svconnector'; // A copy of the extension key so that it is not overridden by children classes
 	protected $extConfiguration; // The extension configuration
+
 	/**
 	 * Language object
 	 * Used when performing encoding conversions or to get localized messages
 	 *
 	 * @var language $lang
+	 * @deprecated Do not rely on this member variable anymore, use $this->sL() and
+	 * $this->getCharsetConverter() instead. Will be removed in the next major version.
 	 */
 	protected $lang;
 
@@ -63,6 +66,7 @@ abstract class tx_svconnector_base extends t3lib_svbase {
 	 */
 	public function init() {
 		$this->extConfiguration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->parentExtKey]);
+		// Initialisation code left for backwards-compatibility
 		if (isset($GLOBALS['LANG'])) {
 			$this->lang = $GLOBALS['LANG'];
 		} elseif (isset($GLOBALS['TSFE']->lang)) {
@@ -191,6 +195,61 @@ abstract class tx_svconnector_base extends t3lib_svbase {
 			t3lib_div::devLog($message, $this->extKey, 3, $extraData);
 		}
 		throw new Exception($message, $exceptionNumber);
+	}
+
+	/**
+	 * Wrapper around the "sL()" method to abstract context.
+	 *
+	 * If no language object exists, which should not happen, the key
+	 * is returned as.
+	 *
+	 * @param string $key "LLL:" input key
+	 * @return string The translated string
+	 */
+	public function sL($key) {
+		if (TYPO3_MODE == 'FE') {
+			return $GLOBALS['TSFE']->sL($key);
+		} elseif (isset($GLOBALS['LANG'])) {
+			return $GLOBALS['LANG']->sL($key);
+		} else {
+			return $key;
+		}
+	}
+
+	/**
+	 * Gets the currently used character set depending on context.
+	 *
+	 * Defaults to UTF-8 if information is not available.
+	 *
+	 * @return string
+	 */
+	public function getCharset() {
+		if (TYPO3_MODE == 'FE') {
+			return $GLOBALS['TSFE']->renderCharset;
+		} elseif (isset($GLOBALS['LANG'])) {
+			return $GLOBALS['LANG']->charSet;
+		} else {
+			return 'utf-8';
+		}
+	}
+
+	/**
+	 * Get an existing instance of the charset conversion class, depending on context.
+	 *
+	 * @throws Exception
+	 * @return t3lib_cs
+	 */
+	public function getCharsetConverter() {
+		if (TYPO3_MODE == 'FE') {
+			return $GLOBALS['TSFE']->csConvObj;
+		} elseif (isset($GLOBALS['LANG'])) {
+			return $GLOBALS['LANG']->csConvObj;
+		} else {
+			throw new Exception(
+				sprintf('No charset converter available in the current context (%s)', TYPO3_MODE),
+				1396448477
+			);
+		}
 	}
 }
 ?>

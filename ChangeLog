@@ -1,3 +1,9 @@
+2014-04-02 Francois Suter (Cobweb)  <typo3@cobweb.ch>
+
+	* Verified compatibility with TYPO3 CMS 6.2, resolves #57536
+	* Fixed broken debug output in TYPO3 CMS 6.2, resolves #57534
+	* Add API to access language and character set converter instances, resolves #55361
+
 2013-07-21 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 
 	* Verified compatibility with TYPO3 CMS 6.1, resolves #50256
