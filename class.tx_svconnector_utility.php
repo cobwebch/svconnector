@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2012 Francois Suter (Cobweb) <typo3@cobweb.ch>
+*  (c) 2007-2014 Francois Suter (Cobweb) <typo3@cobweb.ch>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -28,8 +28,6 @@
  * @author		Francois Suter (Cobweb) <typo3@cobweb.ch>
  * @package		TYPO3
  * @subpackage	tx_svconnector
- *
- * $Id$
  */
 class tx_svconnector_utility {
 	/**
@@ -144,17 +142,18 @@ class tx_svconnector_utility {
 
 	/**
 	 * Dump a PHP array to a HTML table
-	 * (This is somewhat similar to t3lib_div::view_array() but with styling ;-)
+	 * (This is somewhat similar to \TYPO3\CMS\Core\Utility\DebugUtility::viewArray()
+	 * but with styling ;-)
 	 *
-	 * @param	array	$array: Array to display
-	 * @return	string	HTML table assembled from array
+	 * @param array $array Array to display
+	 * @return string HTML table assembled from array
 	 */
 	static public function dumpArray($array) {
-		$table = '<table border="0" cellpadding="1" cellspacing="1" bgcolor="#8a8a8a">';
+		$table = '<table style="background-color: #dddddd">';
 		foreach ($array as $key => $value) {
-			$table .= '<tr class="bgColor4-20" valign="top">';
-			$table .= '<td>' . $key . '</td>';
-			$table .= '<td>';
+			$table .= '<tr valign="top">';
+			$table .= '<td style="padding: 2px; border: 1px solid white">' . $key . '</td>';
+			$table .= '<td style="padding: 2px; border: 1px solid white">';
 			if (is_array($value)) {
 				$table .= self::dumpArray($value);
 			} else {
