@@ -151,7 +151,7 @@ class tx_svconnector_utility {
 	static public function dumpArray($array) {
 		$table = '<table style="background-color: #dddddd">';
 		foreach ($array as $key => $value) {
-			$table .= '<tr valign="top">';
+			$table .= '<tr style="vertical-align: top">';
 			$table .= '<td style="padding: 2px; border: 1px solid white">' . $key . '</td>';
 			$table .= '<td style="padding: 2px; border: 1px solid white">';
 			if (is_array($value)) {
