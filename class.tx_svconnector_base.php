@@ -76,53 +76,47 @@ abstract class tx_svconnector_base extends t3lib_svbase {
 	}
 
 	/**
-	 * This method calls the query and returns the results from the response as is
-	 * It also implements the processRawData hook for processing the results returned by the distant source
+	 * This method calls the query and returns the results from the response as is.
 	 *
-	 * @param	array	$parameters: parameters for the call
+	 * You need to implement your own fetchRaw() method when creating a connector service.
+	 * It is recommended to place a hook in it, to allow for custom manipulations of the
+	 * received data.
+	 * Look at the existing connector services for examples.
 	 *
-	 * @return	mixed	server response
+	 * @param array $parameters Parameters for the call
+	 * @return mixed Server response
 	 */
-	public function fetchRaw($parameters) {
-		$result = $this->query($parameters);
-		if (is_array($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][$this->extKey]['processRaw'])) {
-			foreach($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][$this->extKey]['processRaw'] as $className) {
-				$processor = &t3lib_div::getUserObj($className);
-				$result = $processor->processRaw($result, $this);
-			}
-		}
-		return $result;
-	}
+	abstract public function fetchRaw($parameters);
 
 	/**
-	 * This method calls the query and returns the results from the response as an XML structure
+	 * This method calls the query and returns the results from the response as an XML structure.
 	 *
-	 * @param	array	$parameters: parameters for the call
+	 * You need to implement your own fetchXML() method when creating a connector service.
+	 * You can rely on \TYPO3\CMS\Core\Utility\GeneralUtility::array2xml_cs() to convert
+	 * an array response to XML.
+	 * It is recommended to place a hook in it, to allow for custom manipulations of the
+	 * received data.
+	 * Look at the existing connector services for examples.
 	 *
-	 * @return	string	XML structure
+	 * @param array $parameters Parameters for the call
+	 * @return string XML structure
 	 */
-	public function fetchXML($parameters) {
-		$result = $this->query($parameters);
-			// Transform result to XML (if necessary) and return it
-//		$result = tx_svconnector_utility::convertXmlToArray($result);
-			// Implement processXML hook (see fetchRaw())
-		return $result;
-	}
+	abstract public function fetchXML($parameters);
 
 	/**
-	 * This method calls the query and returns the results from the response as a PHP array
+	 * This method calls the query and returns the results from the response as a PHP array.
 	 *
-	 * @param	array	$parameters: parameters for the call
+	 * You need to implement your own fetchArray() method when creating a connector service.
+	 * You can rely on \tx_svconnector_utility::convertXmlToArray() to convert
+	 * an XML response to an array.
+	 * It is recommended to place a hook in it, to allow for custom manipulations of the
+	 * received data.
+	 * Look at the existing connector services for examples.
 	 *
-	 * @return	array	PHP array
+	 * @param array $parameters Parameters for the call
+	 * @return array PHP array
 	 */
-	public function fetchArray($parameters) {
-		$result = $this->query($parameters);
-			// Transform result to PHP array and return it
-//		$result = t3lib_div::array2xml_cs($result);
-			// Implement processArray hook (see fetchRaw())
-		return $result;
-	}
+	abstract public function fetchArray($parameters);
 
 	/**
 	 * This method can be called to perform specific operations at some point after
@@ -143,42 +137,20 @@ abstract class tx_svconnector_base extends t3lib_svbase {
 	}
 
 	/**
-	 * This method queries the distant server given some parameters and returns the server response
-	 * This base implementation just shows how to use the processParameters. It calls on the functions using the hook
-	 * if they are any or else assembles a simple, HTTP-like query string.
-	 * It also calls a hook for processing the raw data after getting it from the distant source
-	 * This is just an example and you will need to implement your own query() method.
+	 * This method queries the distant server given some parameters and returns the server response.
 	 *
-	 * @param	array	$parameters: parameters for the call
+	 * You need to implement your own query() method when creating a connector service.
+	 * It is recommended to put some hooks in your code, because actual use cases from users
+	 * may differ from your own. A hook to process parameters and a hook to process the response
+	 * seem useful in general.
 	 *
-	 * @return	mixed	server response
+	 * Look at the existing connector services for implementation examples.
+	 *
+	 * @param array $parameters Parameters for the call
+	 *
+	 * @return mixed Server response
 	 */
-	protected function query($parameters) {
-		$queryString = '';
-		if (is_array($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][$this->extKey]['processParameters'])) {
-			foreach($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][$this->extKey]['processParameters'] as $className) {
-				$processor = &t3lib_div::getUserObj($className);
-				$queryString = $processor->processParameters($parameters, $this);
-			}
-		} elseif (is_array($parameters)) {
-			foreach ($parameters as $key => $value) {
-				$cleanValue = trim($value);
-				$queryString .= '&'.$key.'='.urlencode($cleanValue);
-			}
-		}
-			// Query the distant source and get the result
-			// Include any necessary error processing
-			// If anything goes wrong, throw an exception
-
-			// Process the result if any hook is registered
-		if (is_array($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][$this->extKey]['processResponse'])) {
-			foreach($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][$this->extKey]['processResponse'] as $className) {
-				$processor = &t3lib_div::getUserObj($className);
-				$result = $processor->processResponse($result, $this);
-			}
-		}
-			// Return the result
-	}
+	abstract protected function query($parameters);
 
 	/**
 	 * This method should be used by all connector services when they encounter a fatal error

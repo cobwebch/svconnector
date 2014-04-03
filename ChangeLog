@@ -3,6 +3,7 @@
 	* Verified compatibility with TYPO3 CMS 6.2, resolves #57536
 	* Fixed broken debug output in TYPO3 CMS 6.2, resolves #57534
 	* Add API to access language and character set converter instances, resolves #55361
+	* Removed useless code example in query() method of base connector class, resolves #52100
 
 2013-07-21 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 
