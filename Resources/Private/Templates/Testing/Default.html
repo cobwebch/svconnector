@@ -1,42 +1,36 @@
-{namespace sv=Tx_Svconnector_ViewHelpers}
+<html data-namespace-typo3-fluid="true" xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" xmlns:sv="http://typo3.org/ns/Cobweb/Svconnector/ViewHelpers">
+	<f:flashMessages />
 
-<f:layout name="Module" />
+	<h1><f:translate key="title" /></h1>
 
-<f:section name="header">
-</f:section>
-
-<f:section name="main">
 	<f:if condition="{services->f:count()}">
-		<h2><f:translate key="title" /></h2>
 		<f:form name="testForm" method="post">
 			<p><f:translate key="test.service" /></p>
 			<div class="section">
-				<f:form.select name="tx_svconnector[service]" options="{services}" id="tx_svconnector_service" value="{selectedService}" />
+				<f:form.select name="tx_svconnector[service]" options="{services}" class="form-control form-control-adapt" id="tx_svconnector_service" value="{selectedService}" />
 			</div>
 			<p><f:translate key="parameters" /></p>
 			<div class="section">
-				<f:form.textarea name="tx_svconnector[parameters]" id="tx_svconnector_parameters" cols="50" rows="6" value="{parameters}" />
+				<f:form.textarea name="tx_svconnector[parameters]" class="form-control" id="tx_svconnector_parameters" cols="50" rows="6" value="{parameters}" />
 			</div>
 			<div class="section">
 				<p><f:translate key="format" /></p>
 				<div>
-					<f:form.radio name="tx_svconnector[format]" value="0" checked="{format} == 0" id="tx_svconnector_format_raw" class="radio" />
+					<f:form.radio name="tx_svconnector[format]" value="0" checked="{format} == 0" id="tx_svconnector_format_raw" class="" />
 					<label for="tx_svconnector_format_raw"><f:translate key="format.raw" /></label>
-					<f:form.radio name="tx_svconnector[format]" value="1" checked="{format} == 1" id="tx_svconnector_format_array" class="radio" />
+					<f:form.radio name="tx_svconnector[format]" value="1" checked="{format} == 1" id="tx_svconnector_format_array" class="" />
 					<label for="tx_svconnector_format_array"><f:translate key="format.array" /></label>
-					<f:form.radio name="tx_svconnector[format]" value="2" checked="{format} == 2" id="tx_svconnector_format_xml" class="radio" />
+					<f:form.radio name="tx_svconnector[format]" value="2" checked="{format} == 2" id="tx_svconnector_format_xml" class="" />
 					<label for="tx_svconnector_format_xml"><f:translate key="format.xml" /></label>
 				</div>
 			</div>
 			<div class="section">
-				<f:form.submit name="submit" value="{f:translate(key: 'test')}" />
+				<f:form.submit name="submit" class="btn btn-primary" value="{f:translate(key: 'test')}" />
 			</div>
 		</f:form>
 		<f:if condition="{testResult}">
-			<div class="divider"></div>
 			<h2><f:translate key="test.result" /></h2>
 			<div><sv:be.result result="{testResult}" /></div>
 		</f:if>
 	</f:if>
-
-</f:section>
+</html>

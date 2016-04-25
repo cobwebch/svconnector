@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2016-04-25T15:37:06Z" product-name="svconnector">
+		<header/>
+		<body>
+			<trans-unit id="mlang_tabs_tab" xml:space="preserve">
+				<source>Connectors test</source>
+			</trans-unit>
+			<trans-unit id="mlang_labels_tabdescr" xml:space="preserve">
+				<source>BE module for testing connector services</source>
+			</trans-unit>
+			<trans-unit id="config_debug" xml:space="preserve">
+				<source>Debug: Check to turn on debugging to the Dev Log. Debugging also takes place if TYPO3_DLOG is true. Requires devlog or similar extension.</source>
+			</trans-unit>
+			<trans-unit id="title" xml:space="preserve">
+				<source>Connector Services Sandbox</source>
+			</trans-unit>
+			<trans-unit id="no.services" xml:space="preserve">
+				<source>No connector services are available. Please install at least one before trying to use this test module.</source>
+			</trans-unit>
+			<trans-unit id="no.services.available" xml:space="preserve">
+				<source>None of the installed connector services are available. You should maybe review your setup.</source>
+			</trans-unit>
+			<trans-unit id="services.not.available" xml:space="preserve">
+				<source>One or more connector services are installed but not available: %s.</source>
+			</trans-unit>
+			<trans-unit id="test.service" xml:space="preserve">
+				<source>Choose a connector service (only available services are listed), enter the needed parameter and press the &quot;Test&quot; button:</source>
+			</trans-unit>
+			<trans-unit id="parameters" xml:space="preserve">
+				<source>Enter parameters appropriate for the service that you want to test:</source>
+			</trans-unit>
+			<trans-unit id="format" xml:space="preserve">
+				<source>Choose output format</source>
+			</trans-unit>
+			<trans-unit id="format.raw" xml:space="preserve">
+				<source>Raw</source>
+			</trans-unit>
+			<trans-unit id="format.array" xml:space="preserve">
+				<source>PHP array</source>
+			</trans-unit>
+			<trans-unit id="format.xml" xml:space="preserve">
+				<source>XML string</source>
+			</trans-unit>
+			<trans-unit id="test" xml:space="preserve">
+				<source>Test!</source>
+			</trans-unit>
+			<trans-unit id="service.error" xml:space="preserve">
+				<source>An error occurred when trying to call the requested service: %1$s (%2$d).</source>
+			</trans-unit>
+			<trans-unit id="no.result" xml:space="preserve">
+				<source>The connection test returned no result.</source>
+			</trans-unit>
+			<trans-unit id="test.result" xml:space="preserve">
+				<source>Connection test result</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
