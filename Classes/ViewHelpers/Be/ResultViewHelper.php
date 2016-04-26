@@ -40,7 +40,7 @@ class ResultViewHelper extends AbstractBackendViewHelper
         // If the result is an array, dump it in a formatted display
         // Otherwise display a preformatted string
         if (is_array($result)) {
-            $content = DebuggerUtility::var_dump($result, '', 8, true, false, true);
+            $content = DebuggerUtility::var_dump($result, '', 10, true, false, true);
         } else {
             $content = htmlspecialchars($result);
         }
