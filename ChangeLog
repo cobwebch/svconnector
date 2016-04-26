@@ -1,6 +1,7 @@
 2016-04-26 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 
 	* Added specific exceptions for Connector services, resolves #75923
+	* Changed BE module JavaScript to RequireJS, resolves #75930
 
 2016-04-25 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 

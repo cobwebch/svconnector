@@ -66,12 +66,14 @@ class TestingController extends ActionController
     {
         // Get the sample configurations provided by the various connector services
         $this->sampleConfigurations = $this->connectorRepository->findAllSampleConfigurations();
-        $view->assign(
-                'samples',
-                $this->sampleConfigurations
-        );
         if ($view instanceof BackendTemplateView) {
-            $view->getModuleTemplate();
+            parent::initializeView($view);
+            $template = $view->getModuleTemplate();
+            $template->getPageRenderer()->addInlineSettingArray(
+                    'svconnector',
+                    $this->sampleConfigurations
+            );
+            $template->getPageRenderer()->loadRequireJsModule('TYPO3/CMS/Svconnector/TestingModule');
         }
     }
 
