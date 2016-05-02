@@ -30,3 +30,7 @@ methods in a try/catch block:
 		// Issue error message or log error, whatever...
 	}
 
+.. note::
+
+   Since version 3.0.0, there exists a base exception class which
+   should be used by all connector services (:code:`\Cobweb\Svconnector\Exception\ConnectorException`).

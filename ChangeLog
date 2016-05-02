@@ -1,3 +1,7 @@
+2016-05-02 Francois Suter (Cobweb)  <typo3@cobweb.ch>
+
+	* Updated documentation, resolves #76001
+
 2016-04-26 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 
 	* Added specific exceptions for Connector services, resolves #75923

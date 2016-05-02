@@ -11,7 +11,7 @@
 Initializing the service
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-Every service must have an :code:`init()` method which tells TYPO3 whether the
+Every service must have an :code:`init()` method which tells TYPO3 CMS whether the
 service is available or not. This is where you should test the
 connection to whatever remote application you are connecting to. If
 that test connection fails, the :code:`init()` method should return false.
@@ -23,7 +23,7 @@ still implement the :code:`init()` method and have it return true all the
 time.
 
 The :code:`init()` method of the base connector class
-(:code:`tx_svconnector_base`) performs some initializations,
+(:code:`\Cobweb\Svconnector\Service\ConnectorBase`) performs some initializations,
 including reading its own configuration. So in your own service
 you should always call the parent method and - if reading a specific
 configuration - you should store it in its own member variable

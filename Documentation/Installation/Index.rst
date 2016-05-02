@@ -19,14 +19,12 @@ which all connector services inherit.
 
 .. _installation-updating:
 
-Updating to 1.1.0
+Updating to 3.0.0
 ^^^^^^^^^^^^^^^^^
 
-In version 1.1.0 the “sv1” class was moved to the root of the
-extension and renamed :code:`sv_connector_base` as this made much more
-sense. The backward compatibility was ensured by keeping the “sv1”
-class, which is now just an empty wrapper for the base class.
+The base connector service class was renamed from :code:`sv_connector_base`
+to :code:`\Cobweb\Svconnector\Service\ConnectorBase`. There is
+**no backward compatibility layer**. You need to change your existing services
+to use that new class.
 
-If you designed an extension which extended the “sv1” class, it would
-be good to change it to extend the “base” class instead, although this
-is not necessary.
+Furthermore, the even older "sv1" class was also definitively removed.

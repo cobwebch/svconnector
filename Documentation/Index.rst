@@ -27,7 +27,7 @@ Connector Services
 		  data import, fetch data, services
 
 	:Copyright:
-		2007-2014
+		2007-2016
 
 	:Author:
 		  François Suter (Cobweb)
