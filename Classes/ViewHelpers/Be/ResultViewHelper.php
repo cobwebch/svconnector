@@ -26,6 +26,12 @@ use TYPO3\CMS\Fluid\ViewHelpers\Be\AbstractBackendViewHelper;
  */
 class ResultViewHelper extends AbstractBackendViewHelper
 {
+    /**
+     * Do not escape output of child nodes.
+     *
+     * @var bool
+     */
+    protected $escapeOutput = false;
 
     /**
      * Renders the view helper

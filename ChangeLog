@@ -1,3 +1,7 @@
+2017-04-01 Francois Suter (Cobweb)  <typo3@cobweb.ch>
+
+	* Verified compatibility with TYPO3 CMS 8, resolves #1
+
 2016-05-02 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 
 	* Updated documentation, resolves #76001

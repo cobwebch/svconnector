@@ -20,16 +20,16 @@ $EM_CONF[$_EXTKEY] = array (
   'clearCacheOnLoad' => 1,
   'author_company' => '',
   'version' => '3.0.0',
-  'constraints' => 
+  'constraints' =>
   array (
-    'depends' => 
+    'depends' =>
     array (
-      'typo3' => '7.6.0-7.99.99',
+      'typo3' => '7.6.0-8.99.99',
     ),
-    'conflicts' => 
+    'conflicts' =>
     array (
     ),
-    'suggests' => 
+    'suggests' =>
     array (
       'devlog' => '',
     ),
