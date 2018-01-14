@@ -17,6 +17,7 @@ namespace Cobweb\Svconnector\Service;
 use TYPO3\CMS\Core\Charset\CharsetConverter;
 use TYPO3\CMS\Core\Service\AbstractService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 
 // Define error codes for all Connector services responses
 define('T3_ERR_SV_CONNECTION_FAILED', -50); // connection to remote server failed
@@ -197,15 +198,19 @@ abstract class ConnectorBase extends AbstractService
      */
     public function getCharsetConverter()
     {
-        if (TYPO3_MODE === 'FE') {
-            return $GLOBALS['TSFE']->csConvObj;
-        } elseif (isset($GLOBALS['LANG'])) {
-            return $GLOBALS['LANG']->csConvObj;
+        if (VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) >= VersionNumberUtility::convertVersionNumberToInteger('8.6')) {
+            return GeneralUtility::makeInstance(CharsetConverter::class);
         } else {
-            throw new \Exception(
-                    sprintf('No charset converter available in the current context (%s)', TYPO3_MODE),
-                    1396448477
-            );
+            if (TYPO3_MODE === 'FE') {
+                return $GLOBALS['TSFE']->csConvObj;
+            } elseif (isset($GLOBALS['LANG'])) {
+                return $GLOBALS['LANG']->csConvObj;
+            } else {
+                throw new \Exception(
+                        sprintf('No charset converter available in the current context (%s)', TYPO3_MODE),
+                        1396448477
+                );
+            }
         }
     }
 }
