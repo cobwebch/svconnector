@@ -32,6 +32,16 @@ class FileUtility implements SingletonInterface
     protected $error = '';
 
     /**
+     * Returns the class as a string. Seems to be needed by phpunit when an exception occurs during a test run.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return 'FileUtility';
+    }
+
+    /**
      * Reads data from a file pointed to by a versatile URI.
      *
      * The URI cannot only be the usual fully-qualified URI, but also use a syntax to trigger reading from the FAL

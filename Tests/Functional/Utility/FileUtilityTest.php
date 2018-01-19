@@ -30,12 +30,21 @@ class FileUtilityTest extends FunctionalTestCase
      */
     protected $subject;
 
+    protected $testExtensionsToLoad = [
+        'typo3conf/ext/svconnector'
+    ];
+
     public function setUp()
     {
         parent::setUp();
-        $this->setUpBackendUserFromFixture(1);
-        $this->subject = GeneralUtility::makeInstance(FileUtility::class);
-        $this->importDataSet(__DIR__ . '/Fixtures/Database/sys_file.xml');
+        try {
+            $this->setUpBackendUserFromFixture(1);
+            $this->subject = GeneralUtility::makeInstance(FileUtility::class);
+            $this->importDataSet(__DIR__ . '/Fixtures/Database/sys_file.xml');
+        }
+        catch (\Exception $e) {
+            self::markTestSkipped('Could not load fixtures');
+        }
     }
 
     public function filePathProvider()
@@ -43,15 +52,15 @@ class FileUtilityTest extends FunctionalTestCase
         return [
                 'FAL pointer' => [
                         'FAL:1:test.csv',
-                        "code;name\r\n0x2;Foo\r\n1y7;Bar"
+                        "code;name\n0x2;Foo\n1y7;Bar\n"
                 ],
                 'EXT: syntax' => [
                         'EXT:svconnector/Tests/Functional/Utility/Fixtures/Files/test.csv',
-                        "code;name\r\n0x2;Foo\r\n1y7;Bar"
+                        "code;name\n0x2;Foo\n1y7;Bar\n"
                 ],
                 'Remote URI' => [
-                        'https://raw.githubusercontent.com/fsuter/externalimport_test/master/Resources/Private/ImportData/Test/Orders.csv',
-                        'foo'
+                        'https://raw.githubusercontent.com/cobwebch/svconnector/master/Tests/Functional/Utility/Fixtures/Files/test.csv',
+                        "code;name\n0x2;Foo\n1y7;Bar\n"
                 ]
         ];
     }
