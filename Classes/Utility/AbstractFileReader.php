@@ -25,11 +25,11 @@ abstract class AbstractFileReader
     /**
      * @var FileUtility
      */
-    protected $filUtility;
+    protected $fileUtility;
 
     public function __construct($fileUtility)
     {
-        $this->filUtility = $fileUtility;
+        $this->fileUtility = $fileUtility;
     }
 
     /**

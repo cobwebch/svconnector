@@ -46,7 +46,7 @@ If you have any questions about this extension, please ask them in the
 TYPO3 English mailing list, so that others can benefit from the
 answers. Please use the bug tracker on forge.typo3.org to report
 problem or suggest features
-(http://forge.typo3.org/projects/extension-svconnector/issues).
+(https://github.com/cobwebch/svconnector/issues).
 
 
 .. _happy-developer:

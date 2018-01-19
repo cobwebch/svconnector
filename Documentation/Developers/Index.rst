@@ -28,6 +28,6 @@ indications about how to implement your own connector services.
    Resetting/Index
    Exceptions/Index
    Hooks/Index
-   Conversions/Index
+   Utilities/Index
    Sample/Index
 
