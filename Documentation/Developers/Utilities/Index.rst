@@ -52,7 +52,7 @@ the following syntax for pointing to a file:
 
 - a file path relative to the TYPO3 root, e.g. :file:`fileadmin/import/foo.txt`
 
-- a file reference using the `EXT:` syntax, e.g.  :file:`EXT:foo/Resources/Private/Data/bar.txt`
+- a file reference using the :code:`EXT:` syntax, e.g. :file:`EXT:foo/Resources/Private/Data/bar.txt`
 
 - a fully qualified URL, e.g. :file:`http://www.example.com/foo.txt`
 

@@ -6,7 +6,7 @@
 .. include:: ../../Includes.txt
 
 
-.. _developers-api:
+.. _developers-hooks:
 
 Hooks
 ^^^^^
