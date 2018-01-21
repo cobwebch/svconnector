@@ -50,6 +50,8 @@ The :code:`\Cobweb\Svconnector\Utility\FileUtility` provides a general
 method for reading the content of a file. It will transparently handle
 the following syntax for pointing to a file:
 
+- an absolute file path, e.g. :file:`/var/foo/web/fileadmin/import/bar.csv`
+
 - a file path relative to the TYPO3 root, e.g. :file:`fileadmin/import/foo.txt`
 
 - a file reference using the :code:`EXT:` syntax, e.g. :file:`EXT:foo/Resources/Private/Data/bar.txt`
