@@ -58,6 +58,10 @@ class FileUtilityTest extends FunctionalTestCase
                         'EXT:svconnector/Tests/Functional/Utility/Fixtures/Files/test.csv',
                         "code;name\n0x2;Foo\n1y7;Bar\n"
                 ],
+                'Relative path' => [
+                        'typo3conf/ext/svconnector/Tests/Functional/Utility/Fixtures/Files/test.csv',
+                        "code;name\n0x2;Foo\n1y7;Bar\n"
+                ],
                 'Remote URI' => [
                         'https://raw.githubusercontent.com/cobwebch/svconnector/master/Tests/Functional/Utility/Fixtures/Files/test.csv',
                         "code;name\n0x2;Foo\n1y7;Bar\n"
@@ -71,8 +75,31 @@ class FileUtilityTest extends FunctionalTestCase
      * @param string $uri
      * @param string $expectedContent
      */
-    public function getFileContentReturnsContent($uri, $expectedContent) {
+    public function getFileContentWithValidUriReturnsContent($uri, $expectedContent) {
         $content = $this->subject->getFileContent($uri);
         self::assertSame($expectedContent, $content);
+    }
+
+    public function badFilePathProvider()
+    {
+        return [
+                'Non-existing file' => [
+                        'typo3conf/ext/svconnector/Tests/Functional/Utility/Fixtures/Files/testxxx.csv'
+                ],
+                'Outside root path' => [
+                        ORIGINAL_ROOT . '../foo/test.csv'
+                ]
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider badFilePathProvider
+     * @param string $uri
+     */
+    public function getFileContentWithInvalidUriReturnsFalse($uri) {
+        var_dump($uri);
+        $content = $this->subject->getFileContent($uri);
+        self::assertFalse($content);
     }
 }

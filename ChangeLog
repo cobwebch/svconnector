@@ -1,6 +1,7 @@
 2018-02-06 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 
 	* Removed PHP 7.1 constructs, resolves #6
+	* Fixed accessing files with path relative to web root, resolves #7
 
 2018-01-23 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 

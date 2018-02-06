@@ -92,19 +92,38 @@ class FileUtility implements SingletonInterface
             }
         // In all other cases, fall back to the general TYPO3 file-reading tool
         } else {
-            // If the URI starts with "EXT", use the TYPO3 API to get the full file name
-            if ($key === 'EXT') {
-                $uri = GeneralUtility::getFileAbsFileName($uri);
+            // If the URI looks like a fully qualified URL, use it as is
+            // NOTE: this is the same test that is done by GeneralUtility::getUrl() called below.
+            // However we need to use it here first, in order to continue "interpreting" $uri for
+            // other syntax of file references prior to passing it to GeneralUtility::getUrl().
+            if (preg_match('/^(?:http|ftp)s?|s(?:ftp|cp):/', $uri)) {
+                $finalUri = $uri;
+            } else {
+                // This will resolve "EXT:" syntax, resolve paths relative to the TYPO3 root
+                // and preserve absolute paths that are allowed by the TYPO3 configuration.
+                $finalUri = GeneralUtility::getFileAbsFileName($uri);
             }
+
             $report = [];
-            $data = GeneralUtility::getUrl(
-                    $uri,
-                    0,
-                    $headers,
-                    $report
-            );
-            if ($data === false) {
-                $this->setError($report['message']);
+            // The final URI might be empty, if GeneralUtility::getFileAbsFileName() wasn't happy with it
+            if ($finalUri === '') {
+                $data = false;
+                $this->setError(
+                        sprintf(
+                                'File %s is not a valid or allowed path',
+                                $uri
+                        )
+                );
+            } else {
+                $data = GeneralUtility::getUrl(
+                        $finalUri,
+                        0,
+                        $headers,
+                        $report
+                );
+                if ($data === false) {
+                    $this->setError($report['message']);
+                }
             }
         }
 
