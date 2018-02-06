@@ -122,7 +122,7 @@ class FileUtility implements SingletonInterface
      *
      * @return string
      */
-    public function getError(): string
+    public function getError()
     {
         return $this->error;
     }
@@ -132,7 +132,7 @@ class FileUtility implements SingletonInterface
      *
      * @param string $error
      */
-    public function setError(string $error): void
+    public function setError(string $error)
     {
         $this->error = $error;
     }
