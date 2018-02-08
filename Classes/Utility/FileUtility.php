@@ -49,10 +49,10 @@ class FileUtility implements SingletonInterface
      * (declared as a hook).
      *
      * @param string $uri Address of the file to read
-     * @param array $headers Headers to pass on to the request
+     * @param array|null $headers Headers to pass on to the request
      * @return string|bool
      */
-    public function getFileContent($uri, array $headers = [])
+    public function getFileContent($uri, $headers = null)
     {
         // Reset the error message
         $this->setError('');
