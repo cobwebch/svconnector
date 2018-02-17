@@ -1,3 +1,7 @@
+2018-02-17 Francois Suter (Cobweb)  <typo3@cobweb.ch>
+
+	* Released version 3.2.3
+
 2018-02-06 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 
 	* Removed PHP 7.1 constructs, resolves #6
