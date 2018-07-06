@@ -151,8 +151,8 @@ class FileUtility implements SingletonInterface
      *
      * @param string $error
      */
-    public function setError(string $error)
+    public function setError($error)
     {
-        $this->error = $error;
+        $this->error = (string) $error;
     }
 }
