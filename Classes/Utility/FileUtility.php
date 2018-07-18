@@ -98,6 +98,9 @@ class FileUtility implements SingletonInterface
             // other syntax of file references prior to passing it to GeneralUtility::getUrl().
             if (preg_match('/^(?:http|ftp)s?|s(?:ftp|cp):/', $uri)) {
                 $finalUri = $uri;
+            } elseif (GeneralUtility::isAllowedAbsPath($uri)) {
+                // Keep path as is if allowed absolute path
+                $finalUri = $uri;
             } else {
                 // This will resolve "EXT:" syntax, resolve paths relative to the TYPO3 root
                 // and preserve absolute paths that are allowed by the TYPO3 configuration.
