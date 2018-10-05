@@ -153,7 +153,7 @@ class ConnectorUtility
         $array = [];
         if ($children->count() > 0) {
             // set base of array key in case of a namespace
-            $base = isset($namespace) ? $namespace . ":" : "";
+            $base = isset($namespace) ? $namespace . ':' : '';
             // Go through all child nodes and recursively convert them to arrays
             foreach ($children as $key => $subnode) {
                 $parsed = self::handleXmlNode(
@@ -186,7 +186,7 @@ class ConnectorUtility
         $parsed = [];
         if (isset($attributes) && $attributes->count() > 0) {
             // Define base to be used for the array key
-            $base = isset($namespace) ? $namespace . ":" : "";
+            $base = isset($namespace) ? $namespace . ':' : '';
             // Go through the attributes and add them to the array
             foreach ($attributes as $attribute => $value) {
                 $parsed[$base . $attribute] = trim((string)$value);
