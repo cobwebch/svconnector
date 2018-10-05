@@ -38,28 +38,63 @@ class ConnectorUtilityTest extends UnitTestCase
                             </test>
                         ',
                         'output' => [
-                                'foo' => [
-                                        0 => [
-                                                'value' => 'bar',
-                                                'children' => [
-                                                        'baz' => [
-                                                                0 => [
-                                                                        'value' => 'Junior',
-                                                                        'children' => [],
-                                                                        'attributes' => [
-                                                                                'rank' => '#1'
-                                                                        ]
-                                                                ],
-                                                                1 => [
-                                                                        'value' => 'Baby',
-                                                                        'children' => [],
-                                                                        'attributes' => [
-                                                                                'rank' => '#2'
+                                'children' => [
+                                        'foo' => [
+                                                0 => [
+                                                        'value' => 'bar',
+                                                        'children' => [
+                                                                'baz' => [
+                                                                        0 => [
+                                                                                'value' => 'Junior',
+                                                                                'attributes' => [
+                                                                                        'rank' => '#1'
+                                                                                ]
+                                                                        ],
+                                                                        1 => [
+                                                                                'value' => 'Baby',
+                                                                                'attributes' => [
+                                                                                        'rank' => '#2'
+                                                                                ]
                                                                         ]
                                                                 ]
                                                         ]
-                                                ],
-                                                'attributes' => []
+                                                ]
+                                        ]
+                                ]
+                        ]
+                ],
+                'with namespace' => [
+                        'input' => '
+                            <test xmlns:xx="http://example.org/ns">
+                                   <xx:foo>
+                                       bar
+                                       <xx:baz rank="#1">Junior</xx:baz>
+                                       <xx:baz rank="#2">Baby</xx:baz>
+                                   </xx:foo>
+                            </test>
+                        ',
+                        'output' => [
+                                'children' => [
+                                        'xx:foo' => [
+                                                0 => [
+                                                        'value' => 'bar',
+                                                        'children' => [
+                                                                'xx:baz' => [
+                                                                        0 => [
+                                                                                'value' => 'Junior',
+                                                                                'attributes' => [
+                                                                                        'rank' => '#1'
+                                                                                ]
+                                                                        ],
+                                                                        1 => [
+                                                                                'value' => 'Baby',
+                                                                                'attributes' => [
+                                                                                        'rank' => '#2'
+                                                                                ]
+                                                                        ]
+                                                                ]
+                                                        ]
+                                                ]
                                         ]
                                 ]
                         ]
