@@ -1,6 +1,7 @@
 2018-10-05 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 
 	* Added unit tests for ConnectorUtility
+	* Added possibility to interpret namespaces when converting XML to array
 
 2018-02-18 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 
