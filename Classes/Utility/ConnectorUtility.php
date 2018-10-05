@@ -1,4 +1,5 @@
 <?php
+
 namespace Cobweb\Svconnector\Utility;
 
 /*
@@ -24,47 +25,48 @@ namespace Cobweb\Svconnector\Utility;
 class ConnectorUtility
 {
     /**
-     * This method takes a XML structure and transforms it into a PHP array
-     * This array is rather complicated as the method tries not to loose information from the XML structure
+     * This method takes a XML structure and transforms it into a PHP array.
+     *
+     * The resulting array is rather complicated as the method tries not to loose information from the XML structure.
      *
      * Considering the following XML:
      *
      * <test>
      *        <foo>
      *            bar
-     *            <child rank="#1?>Junior</child>
-     *            <child rank="#2?>Baby</child>
+     *            <child rank="#1">Junior</child>
+     *            <child rank="#2">Baby</child>
      *        </foo>
      * </test>
      *
      * the resulting array will look like:
      *
-     * array(
-     *        'foo' => array(
-     *            0 => array(
-     *                'value' => 'bar',
-     *                'children' => array(
-     *                    'child' => (
-     *                        0 => array(
-     *                            'value' => 'Junior',
-     *                            'children' => array(),
-     *                            'attributes' => array(
-     *                                'rank' => '#1'
-     *                            )
-     *                        ),
-     *                        1 => array(
-     *                            'value' => 'Baby',
-     *                            'children' => array(),
-     *                            'attributes' => array(
-     *                                'rank' => '#2'
-     *                            )
-     *                        )
-     *                    )
-     *                ),
-     *                'attributes' => array()
-     *            )
-     *        )
-     * );
+     * 'output' => [
+     *         'foo' => [
+     *                 0 => [
+     *                         'value' => 'bar',
+     *                         'children' => [
+     *                                 'baz' => [
+     *                                         0 => [
+     *                                                 'value' => 'Junior',
+     *                                                 'children' => [],
+     *                                                 'attributes' => [
+     *                                                         'rank' => '#1'
+     *                                                 ]
+     *                                         ],
+     *                                         1 => [
+     *                                                 'value' => 'Baby',
+     *                                                 'children' => [],
+     *                                                 'attributes' => [
+     *                                                         'rank' => '#2'
+     *                                                 ]
+     *                                         ]
+     *                                 ]
+     *                         ],
+     *                         'attributes' => []
+     *                 ]
+     *         ]
+     * ]
      *
      * NOTE: this method was written because t3lib_div::xml2array() is much too keyed
      * to TYPO3's specifics and produces weird or even outright wrong array structures.
@@ -74,9 +76,9 @@ class ConnectorUtility
      * @throws \Exception
      * @return array PHP array
      */
-    static public function convertXmlToArray($string)
+    public static function convertXmlToArray($string)
     {
-        $phpArray = array();
+        $phpArray = [];
         // If input string is empty, exit with exception
         if (empty($string)) {
             throw new \Exception('XML string is empty!', 1294325109);
@@ -91,8 +93,9 @@ class ConnectorUtility
 
         // Transform XML into a PHP array
         foreach ($xmlObject as $key => $value) {
+            var_dump('outer key: ' .$key);
             if (!isset($phpArray[$key])) {
-                $phpArray[$key] = array();
+                $phpArray[$key] = [];
             }
             $phpArray[$key][] = self::handleXmlNode($value);
         }
@@ -107,20 +110,21 @@ class ConnectorUtility
      * @param \SimpleXMLElement $node XML node to transform
      * @return array Transformed XML node and children
      */
-    static public function handleXmlNode(\SimpleXMLElement $node)
+    public static function handleXmlNode(\SimpleXMLElement $node)
     {
         // Initializations
-        $nodeArray = array();
+        $nodeArray = [];
         $nodeArray['value'] = trim((string)$node);
-        $nodeArray['children'] = array();
-        $nodeArray['attributes'] = array();
+        $nodeArray['children'] = [];
+        $nodeArray['attributes'] = [];
         // Loop on all children, if any
         $children = $node->children();
         if ($children->count() > 0) {
             // If there are child nodes, recursively transform them into arrays too
             foreach ($children as $key => $subNode) {
-                if (!isset($nodeArray[$key])) {
-                    $nodeArray[$key] = array();
+                var_dump($key);
+                if (!isset($nodeArray['children'][$key])) {
+                    $nodeArray['children'][$key] = [];
                 }
                 $nodeArray['children'][$key][] = self::handleXmlNode($subNode);
             }
