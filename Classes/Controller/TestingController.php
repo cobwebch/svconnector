@@ -88,9 +88,11 @@ class TestingController extends ActionController
     }
 
     /**
-     * Renders the form for testing services
+     * Renders the form for testing services.
      *
      * @return void
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
+     * @throws \Exception
      */
     public function defaultAction()
     {
@@ -137,7 +139,7 @@ class TestingController extends ActionController
             $arguments = $this->request->getArgument('tx_svconnector');
             // If no parameters were passed, try to fall back on sample configuration, if defined
             if (empty($arguments['parameters'])) {
-                $parameters = (isset($this->sampleConfigurations[$arguments['service']])) ? $this->sampleConfigurations[$arguments['service']] : '';
+                $parameters = $this->sampleConfigurations[$arguments['service']] ?? '';
             } else {
                 $parameters = $arguments['parameters'];
             }
@@ -156,7 +158,7 @@ class TestingController extends ActionController
         } else {
             // Select the first service in the list as default and get its sample configuration, if defined
             $defaultService = key($availableServices);
-            $defaultParameters = (isset($this->sampleConfigurations[$defaultService])) ? $this->sampleConfigurations[$defaultService] : '';
+            $defaultParameters = $this->sampleConfigurations[$defaultService] ?? '';
             $this->view->assignMultiple(
                     array(
                             'selectedService' => $defaultService,
@@ -169,12 +171,13 @@ class TestingController extends ActionController
     }
 
     /**
-     * Performs the connection test for the selected service and passes the appropriate results to the view
+     * Performs the connection test for the selected service and passes the appropriate results to the view.
      *
      * @param string $service Key of the service to test
      * @param string $parameters Parameters for the service being tested
      * @param integer $format Type of format to use (0 = raw, 1 = array, 2 = xml)
-     * @return string Result from the test
+     * @return mixed Result from the test
+     * @throws \Exception
      */
     protected function performTest($service, $parameters, $format)
     {
@@ -183,18 +186,18 @@ class TestingController extends ActionController
         // Get the corresponding service object from the repository
         $serviceObject = $this->connectorRepository->findServiceByKey($service);
         if ($serviceObject->init()) {
-            $parameters = $this->parseParameters($parameters);
+            $parsedParameters = $this->parseParameters($parameters);
             try {
                 // Call the right "fetcher" depending on chosen format
                 switch ($format) {
                     case 1:
-                        $result = $serviceObject->fetchArray($parameters);
+                        $result = $serviceObject->fetchArray($parsedParameters);
                         break;
                     case 2:
-                        $result = $serviceObject->fetchXML($parameters);
+                        $result = $serviceObject->fetchXML($parsedParameters);
                         break;
                     default:
-                        $result = $serviceObject->fetchRaw($parameters);
+                        $result = $serviceObject->fetchRaw($parsedParameters);
                         break;
                 }
                 // If the result is empty, issue an information message
@@ -226,7 +229,7 @@ class TestingController extends ActionController
      */
     protected function parseParameters($parametersString)
     {
-        $parameters = array();
+        $parameters = [];
         $lines = GeneralUtility::trimExplode(
                 "\n",
                 $parametersString,

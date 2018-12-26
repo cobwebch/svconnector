@@ -10,31 +10,30 @@
  * writing. "version" and "dependencies" must not be touched!
  ***************************************************************/
 
-$EM_CONF[$_EXTKEY] = array (
-  'title' => 'Connector Services',
-  'description' => 'This family of services is used to connect to external data sources and fetch data from them. This is just a base class which cannot be used by itself. Implementations are done for specific subtypes.',
-  'category' => 'services',
-  'author' => 'Francois Suter (Cobweb)',
-  'author_email' => 'typo3@cobweb.ch',
-  'state' => 'stable',
-  'uploadfolder' => 0,
-  'createDirs' => '',
-  'clearCacheOnLoad' => 1,
-  'author_company' => '',
-  'version' => '3.2.4',
-  'constraints' =>
-  array (
-    'depends' =>
-    array (
-      'typo3' => '7.6.0-8.99.99',
-    ),
-    'conflicts' =>
-    array (
-    ),
-    'suggests' =>
-    array (
-      'devlog' => '',
-    ),
-  ),
-);
+$EM_CONF[$_EXTKEY] = [
+        'title' => 'Connector Services',
+        'description' => 'This family of services is used to connect to external data sources and fetch data from them. This is just a base class which cannot be used by itself. Implementations are done for specific subtypes.',
+        'category' => 'services',
+        'author' => 'Francois Suter (Cobweb)',
+        'author_email' => 'typo3@cobweb.ch',
+        'state' => 'stable',
+        'uploadfolder' => 0,
+        'createDirs' => '',
+        'clearCacheOnLoad' => 1,
+        'author_company' => '',
+        'version' => '3.2.4',
+        'constraints' =>
+                [
+                        'depends' =>
+                                [
+                                        'typo3' => '8.7.0-9.99.99',
+                                ],
+                        'conflicts' =>
+                                [
+                                ],
+                        'suggests' =>
+                                [
+                                ],
+                ],
+];
 

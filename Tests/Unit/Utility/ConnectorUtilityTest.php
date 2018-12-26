@@ -24,7 +24,7 @@ use Nimut\TestingFramework\TestCase\UnitTestCase;
  */
 class ConnectorUtilityTest extends UnitTestCase
 {
-    public function xmlProvider()
+    public function xmlProvider(): array
     {
         return [
                 'no namespaces' => [
@@ -139,9 +139,29 @@ class ConnectorUtilityTest extends UnitTestCase
      * @param string $string
      * @test
      * @dataProvider emptyProvider
-     * @expectedException \Exception
+     * @expectedException \Cobweb\Svconnector\Exception\EmptySourceException
      */
     public function convertXmlToArrayThrowsExceptionOnEmptyString($string)
+    {
+        \Cobweb\Svconnector\Utility\ConnectorUtility::convertXmlToArray($string);
+    }
+
+    public function invalidProvider()
+    {
+        return [
+                'malformed XML' => [
+                        '<foo><unclosed_tag></foo>'
+                ]
+        ];
+    }
+
+    /**
+     * @param string $string
+     * @test
+     * @dataProvider invalidProvider
+     * @expectedException \Cobweb\Svconnector\Exception\InvalidSourceException
+     */
+    public function convertXmlToArrayThrowsExceptionOnInvalidString($string)
     {
         \Cobweb\Svconnector\Utility\ConnectorUtility::convertXmlToArray($string);
     }

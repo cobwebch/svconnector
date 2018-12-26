@@ -144,7 +144,7 @@ class FileUtility implements SingletonInterface
      *
      * @return string
      */
-    public function getError()
+    public function getError(): string
     {
         return $this->error;
     }

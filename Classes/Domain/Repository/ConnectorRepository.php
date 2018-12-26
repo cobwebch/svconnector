@@ -15,6 +15,7 @@ namespace Cobweb\Svconnector\Domain\Repository;
  */
 
 use Cobweb\Svconnector\Service\ConnectorBase;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -31,17 +32,17 @@ class ConnectorRepository
     /**
      * @var array List of available services
      */
-    protected $availableServices = array();
+    protected $availableServices = [];
 
     /**
      * @var array List of services that are not available, can be used for reporting
      */
-    protected $unavailableServices = array();
+    protected $unavailableServices = [];
 
     /**
      * @var array List of available service objects
      */
-    protected $serviceObjects = array();
+    protected $serviceObjects = [];
 
     public function __construct()
     {
@@ -67,7 +68,7 @@ class ConnectorRepository
      *
      * @return array
      */
-    public function findAllAvailable()
+    public function findAllAvailable(): array
     {
         return $this->availableServices;
     }
@@ -77,7 +78,7 @@ class ConnectorRepository
      *
      * @return array
      */
-    public function findAllUnavailable()
+    public function findAllUnavailable(): array
     {
         return $this->unavailableServices;
     }
@@ -89,21 +90,31 @@ class ConnectorRepository
      * @return ConnectorBase A connector service object
      * @throws \Exception
      */
-    public function findServiceByKey($key)
+    public function findServiceByKey($key): ConnectorBase
     {
         if (isset($this->serviceObjects[$key])) {
             return $this->serviceObjects[$key];
-        } else {
-            throw new \Exception('No service available for key: ' . $key, 1346422543);
         }
+        throw new \Exception(
+                'No service available for key: ' . $key,
+                1346422543
+        );
     }
 
-    public function findAllSampleConfigurations()
+    /**
+     * Returns the list of all sample configurations.
+     *
+     * @return array
+     */
+    public function findAllSampleConfigurations(): array
     {
-        $configurationSamples = array();
+        $configurationSamples = [];
         foreach ($this->availableServices as $key => $title) {
             $extension = $GLOBALS['T3_SERVICES']['connector'][$key]['extKey'];
-            $configurationFile = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($extension, 'Resources/Public/Samples/Configuration.txt');
+            $configurationFile = ExtensionManagementUtility::extPath(
+                    $extension,
+                    'Resources/Public/Samples/Configuration.txt'
+            );
             if (file_exists($configurationFile)) {
                 $configurationSamples[$key] = file_get_contents($configurationFile);
             }

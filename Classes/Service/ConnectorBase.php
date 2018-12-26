@@ -17,7 +17,6 @@ namespace Cobweb\Svconnector\Service;
 use TYPO3\CMS\Core\Charset\CharsetConverter;
 use TYPO3\CMS\Core\Service\AbstractService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 
 // Define error codes for all Connector services responses
 define('T3_ERR_SV_CONNECTION_FAILED', -50); // connection to remote server failed
@@ -50,9 +49,12 @@ abstract class ConnectorBase extends AbstractService
      *
      * @return boolean TRUE if the service is available
      */
-    public function init()
+    public function init(): bool
     {
-        $this->extConfiguration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->parentExtKey]);
+        $this->extConfiguration = unserialize(
+                $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->parentExtKey],
+                ['allowed_classes' => false]
+        );
         return false;
     }
 
@@ -82,7 +84,7 @@ abstract class ConnectorBase extends AbstractService
      * @param array $parameters Parameters for the call
      * @return string XML structure
      */
-    abstract public function fetchXML($parameters);
+    abstract public function fetchXML($parameters): string;
 
     /**
      * This method calls the query and returns the results from the response as a PHP array.
@@ -97,7 +99,7 @@ abstract class ConnectorBase extends AbstractService
      * @param array $parameters Parameters for the call
      * @return array PHP array
      */
-    abstract public function fetchArray($parameters);
+    abstract public function fetchArray($parameters): array;
 
     /**
      * This method can be called to perform specific operations at some point after
@@ -161,15 +163,15 @@ abstract class ConnectorBase extends AbstractService
      * @param string $key "LLL:" input key
      * @return string The translated string
      */
-    public function sL($key)
+    public function sL($key): string
     {
         if (TYPO3_MODE === 'FE') {
             return $GLOBALS['TSFE']->sL($key);
-        } elseif (isset($GLOBALS['LANG'])) {
-            return $GLOBALS['LANG']->sL($key);
-        } else {
-            return $key;
         }
+        if (isset($GLOBALS['LANG'])) {
+            return $GLOBALS['LANG']->sL($key);
+        }
+        return $key;
     }
 
     /**
@@ -179,15 +181,12 @@ abstract class ConnectorBase extends AbstractService
      *
      * @return string
      */
-    public function getCharset()
+    public function getCharset(): string
     {
-        if (TYPO3_MODE === 'FE') {
-            return $GLOBALS['TSFE']->renderCharset;
-        } elseif (isset($GLOBALS['LANG'])) {
+        if (isset($GLOBALS['LANG'])) {
             return $GLOBALS['LANG']->charSet;
-        } else {
-            return 'utf-8';
         }
+        return 'utf-8';
     }
 
     /**
@@ -196,21 +195,8 @@ abstract class ConnectorBase extends AbstractService
      * @throws \Exception
      * @return CharsetConverter
      */
-    public function getCharsetConverter()
+    public function getCharsetConverter(): CharsetConverter
     {
-        if (VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) >= VersionNumberUtility::convertVersionNumberToInteger('8.6')) {
-            return GeneralUtility::makeInstance(CharsetConverter::class);
-        } else {
-            if (TYPO3_MODE === 'FE') {
-                return $GLOBALS['TSFE']->csConvObj;
-            } elseif (isset($GLOBALS['LANG'])) {
-                return $GLOBALS['LANG']->csConvObj;
-            } else {
-                throw new \Exception(
-                        sprintf('No charset converter available in the current context (%s)', TYPO3_MODE),
-                        1396448477
-                );
-            }
-        }
+        return GeneralUtility::makeInstance(CharsetConverter::class);
     }
 }

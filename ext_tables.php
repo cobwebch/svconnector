@@ -14,14 +14,14 @@ if (TYPO3_MODE === 'BE') {
 			'tx_Svconnector',
             // Position
 			'',
-			array(
+			[
 				// An array holding the controller-action-combinations that are accessible
 				'Testing' => 'default'
-			),
-			array(
+			],
+			[
 					'access' => 'admin',
-					'icon' => 'EXT:svconnector/Resources/Public/Images/ModuleSvconnector.svg',
+					'icon' => 'EXT:svconnector/Resources/Public/Icons/ModuleSvconnector.svg',
 					'labels' => 'LLL:EXT:svconnector/Resources/Private/Language/locallang.xlf'
-			)
+			]
 	);
 }

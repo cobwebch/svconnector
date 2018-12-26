@@ -76,22 +76,27 @@ class ConnectorUtility
      * @throws \Exception
      * @return array PHP array
      */
-    public static function convertXmlToArray($string, $options = null)
+    public static function convertXmlToArray($string, $options = null): array
     {
         // If input string is empty, exit with exception
         if (empty($string)) {
-            throw new \Exception(
+            throw new \Cobweb\Svconnector\Exception\EmptySourceException(
                     'XML string is empty!',
                     1294325109
             );
         }
 
         // Try loading the string into the Simple XML library
-        $xmlObject = simplexml_load_string($string, null, $options);
+        $xmlObject = @simplexml_load_string($string, null, $options);
 
         // Transform XML into a PHP array
+        if ($xmlObject === false) {
+            throw new \Cobweb\Svconnector\Exception\InvalidSourceException(
+                    'XML is invalid!',
+                    1545687481
+            );
+        }
         $phpArray = self::handleXmlNode($xmlObject, array_keys($xmlObject->getDocNamespaces()));
-
         return $phpArray;
     }
 
@@ -109,7 +114,7 @@ class ConnectorUtility
         $nodeArray = [];
 
         // Set value if there is any
-        if (strlen($value = trim((string)$node))) {
+        if (($value = trim((string)$node)) !== '') {
             $nodeArray['value'] = $value;
         }
 

@@ -40,5 +40,5 @@ abstract class AbstractFileReader
      * @param string $uri
      * @return string
      */
-    abstract public function read($uri);
+    abstract public function read($uri): string;
 }

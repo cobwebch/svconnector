@@ -47,7 +47,7 @@ class FileUtilityTest extends FunctionalTestCase
         }
     }
 
-    public function filePathProvider()
+    public function filePathProvider(): array
     {
         return [
                 'FAL pointer' => [

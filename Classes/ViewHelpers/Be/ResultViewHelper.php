@@ -41,7 +41,7 @@ class ResultViewHelper extends AbstractBackendViewHelper
      * @param mixed $result Result of the connection test
      * @return string The rendered result
      */
-    public function render($result)
+    public function render($result): string
     {
         // If the result is an array, dump it in a formatted display
         // Otherwise display a preformatted string
