@@ -93,9 +93,28 @@ is very easy. Here is how it's done in the "svconnector_csv" extension
 	$fileContent =  $fileUtility->getFileContent($parameters['filename']);
 
 
-The :code:`getFileContent()` method will return :code:`false` is some error happened reading
+The :code:`getFileContent()` method will return :code:`false` if some error happened reading
 the file. An error message is available to retrieve using:
 
 .. code-block:: php
 
 	$error =  $fileUtility->getError();
+
+
+If you would rather have the content stored into a (temporary) file rather than returned
+directly, you can use the :code:`getFileAsTemporaryFile()`, which will return the
+full path to the file where the content is stored. It is up to you to read the file
+and delete it once done:
+
+.. code-block:: php
+
+	$fileUtility = GeneralUtility::makeInstance(\Cobweb\Svconnector\Utility\FileUtility::class);
+	// Get the content stored into a temp file
+	$filename =  $fileUtility->getFileAsTemporaryFile($parameters['filename']);
+	// Read from the file
+	$content = file_get_contents($filename);
+	// Remove the file
+	unlink($filename);
+
+Method :code:`getFileAsTemporaryFile()` will also return :code:`false` when something went
+wrong reading the distant data.
