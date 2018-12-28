@@ -1,3 +1,7 @@
+2018-12-28 Francois Suter (Cobweb)  <typo3@cobweb.ch>
+
+	* Ensure compatibility with TYPO3 9, drop devLog usage, resolves #13
+
 2018-12-26 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 
 	* Drop compatibility with TYPO3 7, clean up code and prepare for compatibility with TYPO3 9, resolves #12.

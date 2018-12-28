@@ -98,7 +98,6 @@ class FileUtilityTest extends FunctionalTestCase
      * @param string $uri
      */
     public function getFileContentWithInvalidUriReturnsFalse($uri) {
-        var_dump($uri);
         $content = $this->subject->getFileContent($uri);
         self::assertFalse($content);
     }

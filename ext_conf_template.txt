@@ -1,2 +1,0 @@
-# cat=basic/enable; type=boolean; label=LLL:EXT:svconnector/Resources/Private/Language/locallang.xlf:config_debug
-debug = 0

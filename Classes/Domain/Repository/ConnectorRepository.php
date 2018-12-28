@@ -84,7 +84,7 @@ class ConnectorRepository
     }
 
     /**
-     * Returns the service object given a key, if it exists
+     * Returns the service object given a key, if it exists.
      *
      * @param string $key The key of the service to return
      * @return ConnectorBase A connector service object
@@ -95,7 +95,7 @@ class ConnectorRepository
         if (isset($this->serviceObjects[$key])) {
             return $this->serviceObjects[$key];
         }
-        throw new \Exception(
+        throw new \Cobweb\Svconnector\Exception\UnknownServiceException(
                 'No service available for key: ' . $key,
                 1346422543
         );

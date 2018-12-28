@@ -15,6 +15,7 @@ namespace Cobweb\Svconnector\Service;
  */
 
 use TYPO3\CMS\Core\Charset\CharsetConverter;
+use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Service\AbstractService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -40,7 +41,11 @@ abstract class ConnectorBase extends AbstractService
 {
     protected $extKey = 'svconnector'; // The extension key
     protected $parentExtKey = 'svconnector'; // A copy of the extension key so that it is not overridden by children classes
-    protected $extConfiguration; // The extension configuration
+
+    /**
+     * @var \TYPO3\CMS\Core\Log\Logger
+     */
+    protected $logger;
 
     /**
      * Verifies that the connection is functional
@@ -51,10 +56,7 @@ abstract class ConnectorBase extends AbstractService
      */
     public function init(): bool
     {
-        $this->extConfiguration = unserialize(
-                $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->parentExtKey],
-                ['allowed_classes' => false]
-        );
+        $this->logger = GeneralUtility::makeInstance(LogManager::class)->getLogger(__CLASS__);
         return false;
     }
 
@@ -114,7 +116,7 @@ abstract class ConnectorBase extends AbstractService
     {
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][$this->extKey]['postProcessOperations'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][$this->extKey]['postProcessOperations'] as $className) {
-                $processor = GeneralUtility::getUserObj($className);
+                $processor = GeneralUtility::makeInstance($className);
                 $processor->postProcessOperations($parameters, $status, $this);
             }
         }
@@ -137,21 +139,19 @@ abstract class ConnectorBase extends AbstractService
     abstract protected function query($parameters);
 
     /**
-     * This method should be used by all connector services when they encounter a fatal error
-     * It will write the error in the devlog (if activated) and throw an exception
+     * This method should be used by all connector services when they encounter a fatal error.
+     * It will throw an exception and send the error to the logging API.
      *
      * @param string $message Error message
      * @param integer $exceptionNumber Number (code) of the exception
-     * @param array $extraData Additional data to be passed to the devlog
+     * @param array $extraData Additional data to be passed to the log
      * @throws \Exception
      * @return void
      */
     protected function raiseError($message, $exceptionNumber, array $extraData)
     {
-        if (!empty($this->extConfiguration['debug'])) {
-            GeneralUtility::devLog($message, $this->extKey, 3, $extraData);
-        }
-        throw new \Exception($message, $exceptionNumber);
+        $this->logger->error($message, $extraData);
+        throw new \Cobweb\Svconnector\Exception\ConnectorRuntimeException($message, $exceptionNumber);
     }
 
     /**
