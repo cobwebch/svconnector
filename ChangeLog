@@ -2,6 +2,7 @@
 
 	* Ensure compatibility with TYPO3 9, drop devLog usage, resolves #13
 	* Add API to store content of distant source into temporary file, resolves #14
+	* Release version 3.3.0
 
 2018-12-26 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 

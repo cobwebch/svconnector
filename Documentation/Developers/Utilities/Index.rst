@@ -36,7 +36,7 @@ TYPO3 CMS API. e.g.:
 
 .. code-block:: php
 
-   $xml = \TYPO3\CMS\Core\Utility\GeneralUtility::array2xml_cs($phpArray);
+	$xml = '<?xml version="1.0" encoding="utf-8" standalone="yes" ?>' . "\n" . GeneralUtility::array2xml($result);
 
 Again one's own conversion method may be used if needed.
 
