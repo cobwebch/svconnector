@@ -140,6 +140,43 @@ class FileUtility implements SingletonInterface
     }
 
     /**
+     * Reads a file and stores it locally in the typo3temp folder. Returns false if the operation failed.
+     *
+     * NOTE: if you use this API, it is up to you to clean up the temporary file after use.
+     *
+     * @param string $uri Address of the file to read
+     * @param array|null $headers Headers to pass on to the request
+     * @return string|bool
+     * @see getFileContent
+     */
+    public function getFileAsTemporaryFile($uri, $headers = null)
+    {
+        $fileContent = $this->getFileContent($uri, $headers);
+        // Exit early if file content could not be read
+        if ($fileContent === false) {
+            return false;
+        }
+
+        $filename = GeneralUtility::tempnam('svconnector', '.txt');
+        $result = GeneralUtility::writeFileToTypo3tempDir(
+                $filename,
+                $fileContent
+        );
+        // A null result means that the temporary file was written successfully, return the file name
+        if ($result === null) {
+            return $filename;
+        }
+        // Otherwise, set an error and return false
+        $this->setError(
+                sprintf(
+                        'An error happened generating the temporay file: %s',
+                        $result
+                )
+        );
+        return false;
+    }
+
+    /**
      * Gets the current error message.
      *
      * @return string

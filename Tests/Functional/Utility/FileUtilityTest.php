@@ -80,6 +80,18 @@ class FileUtilityTest extends FunctionalTestCase
         self::assertSame($expectedContent, $content);
     }
 
+    /**
+     * @test
+     * @dataProvider filePathProvider
+     * @param string $uri
+     * @param string $expectedContent
+     */
+    public function getFileAsTemporaryFileWithValidUriReturnsFilename($uri, $expectedContent) {
+        $filename = $this->subject->getFileAsTemporaryFile($uri);
+        $content = file_get_contents($filename);
+        self::assertSame($expectedContent, $content);
+    }
+
     public function badFilePathProvider()
     {
         return [
@@ -100,5 +112,15 @@ class FileUtilityTest extends FunctionalTestCase
     public function getFileContentWithInvalidUriReturnsFalse($uri) {
         $content = $this->subject->getFileContent($uri);
         self::assertFalse($content);
+    }
+
+    /**
+     * @test
+     * @dataProvider badFilePathProvider
+     * @param string $uri
+     */
+    public function getFileAsTemporaryFileWithInvalidUriReturnsFalse($uri) {
+        $filename = $this->subject->getFileAsTemporaryFile($uri);
+        self::assertFalse($filename);
     }
 }
