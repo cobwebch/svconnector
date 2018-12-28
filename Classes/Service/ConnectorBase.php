@@ -185,7 +185,7 @@ abstract class ConnectorBase extends AbstractService
      */
     public function getCharset(): string
     {
-        if (isset($GLOBALS['LANG'])) {
+        if (isset($GLOBALS['LANG']->charSet)) {
             return $GLOBALS['LANG']->charSet;
         }
         return 'utf-8';
