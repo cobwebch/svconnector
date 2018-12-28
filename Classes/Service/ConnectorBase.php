@@ -14,6 +14,7 @@ namespace Cobweb\Svconnector\Service;
  * The TYPO3 project - inspiring people to share!
  */
 
+use Cobweb\Svconnector\Exception\ConnectorRuntimeException;
 use TYPO3\CMS\Core\Charset\CharsetConverter;
 use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Service\AbstractService;
@@ -39,7 +40,7 @@ define('T3_ERR_SV_DISTANT_ERROR', -52); // returned response contains an error m
  */
 abstract class ConnectorBase extends AbstractService
 {
-    protected $extKey = 'svconnector'; // The extension key
+    protected $extensionKey = 'svconnector'; // The extension key
     protected $parentExtKey = 'svconnector'; // A copy of the extension key so that it is not overridden by children classes
 
     /**
@@ -114,8 +115,8 @@ abstract class ConnectorBase extends AbstractService
      */
     public function postProcessOperations($parameters, $status)
     {
-        if (is_array($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][$this->extKey]['postProcessOperations'])) {
-            foreach ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][$this->extKey]['postProcessOperations'] as $className) {
+        if (is_array($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][$this->extensionKey]['postProcessOperations'])) {
+            foreach ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][$this->extensionKey]['postProcessOperations'] as $className) {
                 $processor = GeneralUtility::makeInstance($className);
                 $processor->postProcessOperations($parameters, $status, $this);
             }
@@ -145,13 +146,14 @@ abstract class ConnectorBase extends AbstractService
      * @param string $message Error message
      * @param integer $exceptionNumber Number (code) of the exception
      * @param array $extraData Additional data to be passed to the log
+     * @param string $exceptionClass Name of the class of exception which should be thrown
      * @throws \Exception
      * @return void
      */
-    protected function raiseError($message, $exceptionNumber, array $extraData)
+    protected function raiseError($message, $exceptionNumber, array $extraData = [], $exceptionClass = ConnectorRuntimeException::class)
     {
         $this->logger->error($message, $extraData);
-        throw new \Cobweb\Svconnector\Exception\ConnectorRuntimeException($message, $exceptionNumber);
+        throw new $exceptionClass($message, $exceptionNumber);
     }
 
     /**
