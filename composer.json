@@ -16,7 +16,7 @@
 			"Cobweb\\Svconnector\\": "Classes/"
 		}
 	},
-	"version": "3.3.0",
+	"version": "3.3.1",
 	"require": {
 		"php": ">=7.0.0",
 		"ext-simplexml": "*",
