@@ -45,7 +45,25 @@ class ResultViewHelper extends AbstractBackendViewHelper
     }
 
     /**
-     * Renders the content of the ViewHelper.
+     * Renders whatever result the connection test returned.
+     *
+     * TODO: remove when v8 compatibility is dropped.
+     *
+     * @return string
+     */
+    public function render()
+    {
+        return static::renderStatic(
+                [
+                        'result' => $this->arguments['result']
+                ],
+                $this->buildRenderChildrenClosure(),
+                $this->renderingContext
+        );
+    }
+
+    /**
+     * Renders whatever result the connection test returned.
      *
      * @param array $arguments
      * @param \Closure $renderChildrenClosure
