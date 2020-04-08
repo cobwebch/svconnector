@@ -20,7 +20,7 @@
 	"require": {
 		"php": ">=7.0.0",
 		"ext-simplexml": "*",
-		"typo3/cms-core": ">=8.7.0,<10.0"
+		"typo3/cms-core": ">=8.7.0,<11.0"
 	},
 	"replace": {
 		"svconnector": "self.version",
