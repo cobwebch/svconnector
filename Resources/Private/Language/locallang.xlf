@@ -25,7 +25,7 @@
 				<source>One or more connector services are installed but not available: %s.</source>
 			</trans-unit>
 			<trans-unit id="test.service" xml:space="preserve">
-				<source>Choose a connector service (only available services are listed), enter the needed parameter and press the &quot;Test&quot; button:</source>
+				<source>Choose a connector service (only available services are listed), enter the needed parameters and press the &quot;Test&quot; button:</source>
 			</trans-unit>
 			<trans-unit id="parameters" xml:space="preserve">
 				<source>Enter parameters appropriate for the service that you want to test:</source>
