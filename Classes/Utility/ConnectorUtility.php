@@ -96,8 +96,7 @@ class ConnectorUtility
                     1545687481
             );
         }
-        $phpArray = self::handleXmlNode($xmlObject, array_keys($xmlObject->getDocNamespaces()));
-        return $phpArray;
+        return self::handleXmlNode($xmlObject, array_keys($xmlObject->getDocNamespaces()));
     }
 
     /**
