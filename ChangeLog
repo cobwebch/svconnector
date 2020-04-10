@@ -1,3 +1,7 @@
+2020-04-10 Francois Suter (Idéative)  <typo3@ideative.ch>
+
+	* Ensure compatibility with TYPO3 10
+
 2019-01-04 Francois Suter (Cobweb)  <typo3@cobweb.ch>
 
 	* Restore ViewHelper compatibility with TYPO3 8, resolves #15
