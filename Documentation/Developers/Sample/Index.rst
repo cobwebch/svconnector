@@ -15,9 +15,8 @@ The testing BE module can read configuration samples from existing connector ser
 This makes it easier to enter a configuration for testing, in particular to avoid
 forgetting some important parameter. This sample configuration does
 not have to be declared in any way, but is expected to be strictly
-located in :code:`Resources/Public/Samples/Configuration.txt` .
+located in :code:`Resources/Public/Samples/Configuration.json` .
 
-It consists of a simple text file, with one configuration option per
-line, as you would input it in the BE module. Please check the
+It consists of a simple JSON file. Check the
 existing connector services (Feed, JSON, SQL, CSV) for examples.
 

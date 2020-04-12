@@ -186,7 +186,7 @@ class TestingController extends ActionController
         // Get the corresponding service object from the repository
         $serviceObject = $this->connectorRepository->findServiceByKey($service);
         if ($serviceObject->init()) {
-            $parsedParameters = $this->parseParameters($parameters);
+            $parsedParameters = json_decode($parameters, true);
             try {
                 // Call the right "fetcher" depending on chosen format
                 switch ($format) {
@@ -219,36 +219,5 @@ class TestingController extends ActionController
             }
         }
         return $result;
-    }
-
-    /**
-     * Parses the parameters input string and transforms it into an array of key-value pairs
-     *
-     * @param string $parametersString Input string from the query variables
-     * @return array Array of key-value pairs
-     */
-    protected function parseParameters($parametersString)
-    {
-        $parameters = [];
-        $lines = GeneralUtility::trimExplode(
-                "\n",
-                $parametersString,
-                true
-        );
-        foreach ($lines as $aLine) {
-            $lineParts = GeneralUtility::trimExplode(
-                    '=',
-                    $aLine,
-                    true
-            );
-            $key = array_shift($lineParts);
-            $value = implode('=', $lineParts);
-            // Handle special case of value "tab"
-            if ($value === '\t') {
-                $value = "\t";
-            }
-            $parameters[$key] = $value;
-        }
-        return $parameters;
     }
 }

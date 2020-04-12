@@ -113,7 +113,7 @@ class ConnectorRepository
             $extension = $GLOBALS['T3_SERVICES']['connector'][$key]['extKey'];
             $configurationFile = ExtensionManagementUtility::extPath(
                     $extension,
-                    'Resources/Public/Samples/Configuration.txt'
+                    'Resources/Public/Samples/Configuration.json'
             );
             if (file_exists($configurationFile)) {
                 $configurationSamples[$key] = file_get_contents($configurationFile);

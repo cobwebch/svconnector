@@ -17,14 +17,14 @@ extension must be installed since it provides the base class from
 which all connector services inherit.
 
 
-.. _installation-updating:
+.. _installation-updating-340:
 
-Updating to 3.0.0
+Updating to 3.4.0
 ^^^^^^^^^^^^^^^^^
 
-The base connector service class was renamed from :code:`sv_connector_base`
-to :code:`\Cobweb\Svconnector\Service\ConnectorBase`. There is
-**no backward compatibility layer**. You need to change your existing services
-to use that new class.
-
-Furthermore, the even older "sv1" class was also definitively removed.
+The :ref:`sample configuration files <developers-sample>` have been
+changed to JSON format to easily allow for nested properties. If you
+have developed your own service and have defined a sample configuration
+file, you will need to change it to the new format. As always look at
+other existing connector services for examples (in particular, the
+"svconnector_json" extension uses nested properties.
