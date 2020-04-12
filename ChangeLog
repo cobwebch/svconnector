@@ -1,6 +1,7 @@
 2020-04-12 Francois Suter (Idéative)  <typo3@ideative.ch>
 
 	* Add API for reporting about configuration issues, resolves #18
+	* Update documentation settings, resolves #19
 
 2020-04-10 Francois Suter (Idéative)  <typo3@ideative.ch>
 
