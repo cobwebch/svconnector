@@ -17,6 +17,7 @@ namespace Cobweb\Svconnector\Service;
 use Cobweb\Svconnector\Exception\ConnectorRuntimeException;
 use TYPO3\CMS\Core\Charset\CharsetConverter;
 use TYPO3\CMS\Core\Log\LogManager;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Service\AbstractService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -59,6 +60,47 @@ abstract class ConnectorBase extends AbstractService
     {
         $this->logger = GeneralUtility::makeInstance(LogManager::class)->getLogger(__CLASS__);
         return false;
+    }
+
+    /**
+     * Checks the connector configuration and returns notices, warnings or errors, if any.
+     *
+     * This base method needs to be implemented for each actual service.
+     *
+     * @param array $parameters Connector call parameters
+     * @return array
+     */
+    public function checkConfiguration($parameters): array
+    {
+        return [
+                AbstractMessage::NOTICE => [],
+                AbstractMessage::WARNING => [],
+                AbstractMessage::ERROR => []
+        ];
+    }
+
+    /**
+     * Logs all problems reported by checkConfiguration().
+     *
+     * @param array $problems
+     * @return void
+     */
+    public function logConfigurationCheck(array $problems)
+    {
+        foreach ($problems as $severity => $issues) {
+            foreach ($issues as $issue) {
+                switch ($severity) {
+                    case AbstractMessage::ERROR:
+                        $this->logger->error($issue);
+                        break;
+                    case AbstractMessage::WARNING:
+                        $this->logger->warning($issue);
+                        break;
+                    default:
+                        $this->logger->notice($issue);
+                }
+            }
+        }
     }
 
     /**
