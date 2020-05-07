@@ -67,7 +67,7 @@ Every encouragement keeps the developer ticking, so dont' hesitate
 to send thanks or share your enthusiasm about the extension.
 If you really want to give something
 back, you may consider my Amazon wish list:
-http://www.amazon.co.uk/registry/wishlist/G7DI2AN99Y4F
+https://www.amazon.co.uk/registry/wishlist/G7DI2AN99Y4F
 
 You may also take a step back and reflect about the beauty of sharing.
 Think about how much you are benefiting and how much yourself is

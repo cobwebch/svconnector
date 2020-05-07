@@ -21,7 +21,7 @@ $EM_CONF[$_EXTKEY] = [
         'createDirs' => '',
         'clearCacheOnLoad' => 1,
         'author_company' => '',
-        'version' => '3.3.1',
+        'version' => '3.4.0',
         'constraints' =>
                 [
                         'depends' =>

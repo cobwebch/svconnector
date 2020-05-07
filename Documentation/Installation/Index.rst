@@ -27,4 +27,8 @@ changed to JSON format to easily allow for nested properties. If you
 have developed your own service and have defined a sample configuration
 file, you will need to change it to the new format. As always look at
 other existing connector services for examples (in particular, the
-"svconnector_json" extension uses nested properties.
+"svconnector_json" extension which uses nested properties).
+
+Also a new method was introduced as part of the :ref:`Connector Sevice API <developers-api>`:
+`checkConfiguration()` is expected to parse the connector configuration and return
+errors, warnings or notices as needed.
