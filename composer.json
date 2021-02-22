@@ -16,14 +16,17 @@
 			"Cobweb\\Svconnector\\": "Classes/"
 		}
 	},
-	"version": "3.4.0",
 	"require": {
 		"php": ">=7.0.0",
 		"ext-simplexml": "*",
 		"typo3/cms-core": ">=8.7.0,<11.0"
 	},
 	"replace": {
-		"svconnector": "self.version",
 		"typo3-ter/svconnector": "self.version"
+	},
+	"extra": {
+		"typo3/cms": {
+			"extension-key": "svconnector"
+		}
 	}
 }
