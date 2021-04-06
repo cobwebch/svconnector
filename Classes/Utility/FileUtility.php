@@ -15,6 +15,8 @@ namespace Cobweb\Svconnector\Utility;
  * The TYPO3 project - inspiring people to share!
  */
 
+use GuzzleHttp\Exception\RequestException;
+use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -61,7 +63,10 @@ class FileUtility implements SingletonInterface
         $key = array_shift($uriParts);
         $key = strtoupper($key);
         // Check if a corresponding key exists
-        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['svconnector']['fileReader']) && array_key_exists($key, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['svconnector']['fileReader'])) {
+        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['svconnector']['fileReader']) && array_key_exists(
+                $key,
+                $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['svconnector']['fileReader']
+            )) {
             /** @var AbstractFileReader $readerObject */
             $reader = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['svconnector']['fileReader'][$key];
             $readerObject = GeneralUtility::makeInstance($reader, $this);
@@ -71,62 +76,63 @@ class FileUtility implements SingletonInterface
             } else {
                 $data = false;
                 $this->setError(
-                        sprintf(
-                                'Class %1$s does not inherit from %2$s',
-                                $reader,
-                                AbstractFileReader::class
-                        )
+                    sprintf(
+                        'Class %1$s does not inherit from %2$s',
+                        $reader,
+                        AbstractFileReader::class
+                    )
                 );
             }
-        // If the key is "FAL", read the data using FAL API
+            // If the key is "FAL", read the data using FAL API
         } elseif ($key === 'FAL') {
             $falPath = substr($uri, 4);
-            $resourceFactory = ResourceFactory::getInstance();
+            $resourceFactory = GeneralUtility::makeInstance(ResourceFactory::class);
             try {
                 $file = $resourceFactory->getObjectFromCombinedIdentifier($falPath);
                 $data = $file->getContents();
-            }
-            catch (\Exception $exception) {
+            } catch (\Exception $exception) {
                 $data = false;
                 $this->setError($exception->getMessage());
             }
-        // In all other cases, fall back to the general TYPO3 file-reading tool
-        } else {
             // If the URI looks like a fully qualified URL, use it as is
-            // NOTE: this is the same test that is done by GeneralUtility::getUrl() called below.
-            // However we need to use it here first, in order to continue "interpreting" $uri for
-            // other syntax of file references prior to passing it to GeneralUtility::getUrl().
-            if (preg_match('/^(?:http|ftp)s?|s(?:ftp|cp):/', $uri)) {
-                $finalUri = $uri;
-            } elseif (GeneralUtility::isAllowedAbsPath($uri)) {
-                // Keep path as is if allowed absolute path
-                $finalUri = $uri;
-            } else {
-                // This will resolve "EXT:" syntax, resolve paths relative to the TYPO3 root
-                // and preserve absolute paths that are allowed by the TYPO3 configuration.
-                $finalUri = GeneralUtility::getFileAbsFileName($uri);
+            // NOTE: this is very similar to GeneralUtility::getUrl() but we want to be able to pass headers
+        } elseif (preg_match('/^(?:http|ftp)s?|s(?:ftp|cp):/', $uri)) {
+            $requestFactory = GeneralUtility::makeInstance(RequestFactory::class);
+            try {
+                $response = $requestFactory->request(
+                    $uri,
+                    'GET',
+                    is_array($headers) ? ['headers' => $headers] : []
+                );
+                $data = $response->getBody()->getContents();
+            } catch (RequestException $exception) {
+                $data = false;
+                $this->setError(
+                    sprintf(
+                        'URI %s could not be fetched (code: %d, reason: %s)',
+                        $uri,
+                        $exception->getCode(),
+                        $exception->getMessage()
+                    )
+                );
             }
-
-            $report = [];
+            // Keep path as is if allowed absolute path
+        } elseif (GeneralUtility::isAllowedAbsPath($uri)) {
+            $data = @file_get_contents($uri);
+            // As a last resort, resolve "EXT:" syntax and paths relative to the TYPO3 root
+        } else {
+            $finalUri = GeneralUtility::getFileAbsFileName($uri);
             // The final URI might be empty, if GeneralUtility::getFileAbsFileName() wasn't happy with it
             if ($finalUri === '') {
                 $data = false;
                 $this->setError(
-                        sprintf(
-                                'File %s is not a valid or allowed path',
-                                $uri
-                        )
+                    sprintf(
+                        'File %s is not a valid or allowed path',
+                        $uri
+                    )
                 );
             } else {
-                $data = GeneralUtility::getUrl(
-                        $finalUri,
-                        0,
-                        $headers,
-                        $report
-                );
-                if ($data === false) {
-                    $this->setError($report['message']);
-                }
+                $data = @file_get_contents($finalUri);
             }
         }
 
@@ -159,8 +165,8 @@ class FileUtility implements SingletonInterface
 
         $filename = GeneralUtility::tempnam('svconnector', '.txt');
         $result = GeneralUtility::writeFileToTypo3tempDir(
-                $filename,
-                $fileContent
+            $filename,
+            $fileContent
         );
         // A null result means that the temporary file was written successfully, return the file name
         if ($result === null) {
@@ -168,10 +174,10 @@ class FileUtility implements SingletonInterface
         }
         // Otherwise, set an error and return false
         $this->setError(
-                sprintf(
-                        'An error happened generating the temporay file: %s',
-                        $result
-                )
+            sprintf(
+                'An error happened generating the temporay file: %s',
+                $result
+            )
         );
         return false;
     }
@@ -193,6 +199,6 @@ class FileUtility implements SingletonInterface
      */
     public function setError($error)
     {
-        $this->error = (string) $error;
+        $this->error = (string)$error;
     }
 }
