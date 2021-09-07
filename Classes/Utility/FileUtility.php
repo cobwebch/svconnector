@@ -63,12 +63,9 @@ class FileUtility implements SingletonInterface
         $key = array_shift($uriParts);
         $key = strtoupper($key);
         // Check if a corresponding key exists
-        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['svconnector']['fileReader']) && array_key_exists(
-                $key,
-                $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['svconnector']['fileReader']
-            )) {
+        $reader = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['svconnector']['fileReader'][$key] ?? null;
+        if ($reader) {
             /** @var AbstractFileReader $readerObject */
-            $reader = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['svconnector']['fileReader'][$key];
             $readerObject = GeneralUtility::makeInstance($reader, $this);
             // Check inheritance and read data if okay
             if ($readerObject instanceof AbstractFileReader) {

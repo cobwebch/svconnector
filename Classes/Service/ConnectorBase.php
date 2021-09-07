@@ -157,7 +157,8 @@ abstract class ConnectorBase extends AbstractService
      */
     public function postProcessOperations($parameters, $status)
     {
-        if (is_array($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][$this->extensionKey]['postProcessOperations'])) {
+        $hooks = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][$this->extensionKey]['postProcessOperations'] ?? null;
+        if (is_array($hooks)) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][$this->extensionKey]['postProcessOperations'] as $className) {
                 $processor = GeneralUtility::makeInstance($className);
                 $processor->postProcessOperations($parameters, $status, $this);
