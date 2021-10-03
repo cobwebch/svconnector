@@ -17,6 +17,16 @@ extension must be installed since it provides the base class from
 which all connector services inherit.
 
 
+.. _installation-updating-400:
+
+Updating to 4.0.0
+^^^^^^^^^^^^^^^^^
+
+Version 4.0.0 adds support for TYPO3 11 and PHP 8.0, while dropping support
+for TYPO3 9. Apart from that it does not contain other changes and
+the update process should be smooth.
+
+
 .. _installation-updating-340:
 
 Updating to 3.4.0
