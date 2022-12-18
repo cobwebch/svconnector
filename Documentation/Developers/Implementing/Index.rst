@@ -19,39 +19,26 @@ class declaration should look something like:
 
    namespace MyName\MyExt\Service;
    class ConnectorSpecialThingy extends \Cobweb\Svconnector\Service\ConnectorBase {
-      ...
+       protected string $extensionKey = 'my_ext';
+       ...
    }
 
 It is considered a best practice to place your class file in the
-:file:`Classes/Services` folder of your extension.
+:file:`Classes/Services` folder of your extension. It must declare an
+:code:`$extensionKey` member variable, as this is used by the API to fetch
+the sample configuration.
 
-You must then register your service with the TYPO3 CMS service API. This
-goes into your extension's :file:`ext_localconf.php` file and will look like
-that:
+You must then register your service with the connector registry. This goes
+into the :file:`Configuration/Services.yaml` file. Example:
 
-.. code-block:: php
+.. code-block:: yaml
 
-   \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addService(
-      $_EXTKEY,
-      // Service type
-      'connector',
-      // Service key
-      'tx_svconnectorspecial_sv1',
-      array(
-         'title' => 'Special Connector',
-         'description' => 'Connect to a special server',
-         'subtype' => 'special',
-         'available' => true,
-         'priority' => 50,
-         'quality' => 50,
-         'os' => '',
-         'exec' => '',
-         'className' => \MyName\MyExt\Service\ConnectorSpecialThingy::class,
-      )
-   );
+     Cobweb\SvconnectorCsv\Service\ConnectorCsv:
+       public: true
+       arguments:
+         - !tagged_iterator connector.service
 
 The base service provides several utility methods to access method or
 properties of the :code:`\TYPO3\CMS\Lang\LanguageService` class and of
 the :code:`\TYPO3\CMS\Core\Charset\CharsetConverter` class
 independently of context (FE or BE).
-

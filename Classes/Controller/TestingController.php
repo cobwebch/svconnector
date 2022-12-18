@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Cobweb\Svconnector\Controller;
 
 /*
@@ -14,9 +17,11 @@ namespace Cobweb\Svconnector\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Cobweb\Svconnector\Domain\Repository\ConnectorRepository;
+use Cobweb\Svconnector\Registry\ConnectorRegistry;
+use Cobweb\Svconnector\Service\ConnectorBase;
 use TYPO3\CMS\Backend\View\BackendTemplateView;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Http\HtmlResponse;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
@@ -24,33 +29,27 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Controller for the backend module
- *
- * @author Francois Suter (Cobweb) <typo3@cobweb.ch>
- * @package TYPO3
- * @subpackage tx_svconnector
  */
 class TestingController extends ActionController
 {
     /**
-     * @var ConnectorRepository
+     * @var array List of registered connector services
      */
-    protected $connectorRepository;
+    protected array $services = [];
 
     /**
-     * List of configuration samples provided by the various connector services
-     * @var array
+     * @var array List of configuration samples provided by the various connector services
      */
-    protected $sampleConfigurations = array();
+    protected array $sampleConfigurations = [];
 
-    /**
-     * Injects an instance of the connector repository
-     *
-     * @param ConnectorRepository $connectorRepository
-     * @return void
-     */
-    public function injectConfigurationRepository(ConnectorRepository $connectorRepository)
+    public function __construct()
     {
-        $this->connectorRepository = $connectorRepository;
+        $this->services = GeneralUtility::makeInstance(ConnectorRegistry::class)->getAllServices();
+        // Get the sample configurations provided by the various connector services
+        /** @var ConnectorBase $service */
+        foreach ($this->services as $type => $service) {
+            $this->sampleConfigurations[$type] = $service->getSampleConfiguration();
+        }
     }
 
     /**
@@ -64,14 +63,12 @@ class TestingController extends ActionController
      */
     protected function initializeView(ViewInterface $view)
     {
-        // Get the sample configurations provided by the various connector services
-        $this->sampleConfigurations = $this->connectorRepository->findAllSampleConfigurations();
         if ($view instanceof BackendTemplateView) {
             parent::initializeView($view);
             $template = $view->getModuleTemplate();
             $template->getPageRenderer()->addInlineSettingArray(
-                    'svconnector',
-                    $this->sampleConfigurations
+                'svconnector',
+                $this->sampleConfigurations
             );
             $template->getPageRenderer()->loadRequireJsModule('TYPO3/CMS/Svconnector/TestingModule');
         }
@@ -90,45 +87,58 @@ class TestingController extends ActionController
     /**
      * Renders the form for testing services.
      *
-     * @return void
+     * @return HtmlResponse
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
      * @throws \Exception
      */
-    public function defaultAction()
+    public function defaultAction(): HtmlResponse
     {
-        // Check unavailable services
-        // If there are any, display a warning about it
-        $unavailableServices = $this->connectorRepository->findAllUnavailable();
-        if (count($unavailableServices) > 0) {
-            $this->addFlashMessage(
-                    LocalizationUtility::translate(
-                            'services.not.available',
-                            'svconnector',
-                            array(implode(', ', $unavailableServices))
-                    ),
-                    '',
-                    FlashMessage::WARNING
-            );
-        }
-        // Get available services and pass them to the view
-        $availableServices = $this->connectorRepository->findAllAvailable();
-        $this->view->assign('services', $availableServices);
-        if (count($availableServices) === 0) {
-            // If there are no available services, but some are not available, it means all installed connector
-            // services are unavailable. This is a weird situation, we issue a warning.
-            if (count($unavailableServices) > 0) {
-                $this->addFlashMessage(
-                        LocalizationUtility::translate('no.services.available', 'svconnector'),
-                        '',
-                        FlashMessage::WARNING
-                );
+        $availableServices = [];
+        $unAvailableServices = [];
 
-                // If there are simply no services, we display a notice
+        // Check unavailable services
+        // If there are any, display a warning about it and remove it from the list of services
+        // All other services are assigned to the view
+        $hasUnavailableServices = false;
+        /** @var ConnectorBase $service */
+        foreach ($this->services as $type => $service) {
+            if ($service->isAvailable()) {
+                $availableServices[$type] = sprintf(
+                    '%s (type: %s)',
+                    $service->getName(),
+                    $type
+                );
             } else {
                 $this->addFlashMessage(
-                        LocalizationUtility::translate('no.services', 'svconnector'),
-                        '',
-                        FlashMessage::NOTICE
+                    LocalizationUtility::translate(
+                        'service.not.available',
+                        'svconnector',
+                        [
+                            get_class($service)
+                        ]
+                    ),
+                    '',
+                    AbstractMessage::WARNING
+                );
+                $unAvailableServices[] = $service;
+            }
+        }
+        $this->view->assign('services', $availableServices);
+        if (count($availableServices) === 0) {
+            // If all registered services were unavailable, issue a warning
+            if (count($unAvailableServices) > 0) {
+                $this->addFlashMessage(
+                    LocalizationUtility::translate('no.services.available', 'svconnector'),
+                    '',
+                    AbstractMessage::WARNING
+                );
+
+            // If there are simply no registered services, display a notice
+            } else {
+                $this->addFlashMessage(
+                    LocalizationUtility::translate('no.services', 'svconnector'),
+                    '',
+                    AbstractMessage::NOTICE
                 );
             }
         }
@@ -144,79 +154,114 @@ class TestingController extends ActionController
                 $parameters = $arguments['parameters'];
             }
             $this->view->assignMultiple(
-                    array(
-                            'selectedService' => $arguments['service'],
-                            'parameters' => $parameters,
-                            'format' => $arguments['format'],
-                            'testResult' => $this->performTest(
-                                    $arguments['service'],
-                                    $arguments['parameters'],
-                                    $arguments['format']
-                            )
+                [
+                    'selectedService' => $arguments['service'],
+                    'parameters' => $parameters,
+                    'format' => $arguments['format'],
+                    'testResult' => $this->performTest(
+                        $arguments['service'],
+                        $arguments['parameters'],
+                        (int)$arguments['format']
                     )
+                ]
             );
         } else {
             // Select the first service in the list as default and get its sample configuration, if defined
             $defaultService = key($availableServices);
             $defaultParameters = $this->sampleConfigurations[$defaultService] ?? '';
             $this->view->assignMultiple(
-                    array(
-                            'selectedService' => $defaultService,
-                            'parameters' => $defaultParameters,
-                            'format' => 0,
-                            'testResult' => ''
-                    )
+                [
+                    'selectedService' => $defaultService,
+                    'parameters' => $defaultParameters,
+                    'format' => 0,
+                    'testResult' => ''
+                ]
             );
         }
+
+        return new HtmlResponse(
+            $this->view->render()
+        );
     }
 
     /**
      * Performs the connection test for the selected service and passes the appropriate results to the view.
      *
-     * @param string $service Key of the service to test
+     * @param string $type Key of the service to test
      * @param string $parameters Parameters for the service being tested
-     * @param integer $format Type of format to use (0 = raw, 1 = array, 2 = xml)
+     * @param int $format Type of format to use (0 = raw, 1 = array, 2 = xml)
      * @return mixed Result from the test
      * @throws \Exception
      */
-    protected function performTest($service, $parameters, $format)
+    protected function performTest(string $type, string $parameters = '', int $format = 0)
     {
         $result = '';
 
-        // Get the corresponding service object from the repository
-        $serviceObject = $this->connectorRepository->findServiceByKey($service);
-        if ($serviceObject->init()) {
-            $parsedParameters = json_decode($parameters, true);
-            try {
-                // Call the right "fetcher" depending on chosen format
-                switch ($format) {
-                    case 1:
-                        $result = $serviceObject->fetchArray($parsedParameters);
-                        break;
-                    case 2:
-                        $result = $serviceObject->fetchXML($parsedParameters);
-                        break;
-                    default:
-                        $result = $serviceObject->fetchRaw($parsedParameters);
-                        break;
-                }
-                // If the result is empty, issue an information message
-                if (empty($result)) {
-                    $this->addFlashMessage(
+        if (isset($this->services[$type])) {
+            $service = $this->services[$type];
+            if ($service->isAvailable()) {
+                try {
+                    $parsedParameters = json_decode($parameters, true, 512, JSON_THROW_ON_ERROR);
+                    // Call the right "fetcher" depending on chosen format
+                    switch ($format) {
+                        case 1:
+                            $result = $service->fetchArray($parsedParameters);
+                            break;
+                        case 2:
+                            $result = $service->fetchXML($parsedParameters);
+                            break;
+                        default:
+                            $result = $service->fetchRaw($parsedParameters);
+                            break;
+                    }
+                    // If the result is empty, issue an information message
+                    if (empty($result)) {
+                        $this->addFlashMessage(
                             LocalizationUtility::translate('no.result', 'svconnector'),
                             '',
-                            FlashMessage::INFO
+                            AbstractMessage::INFO
+                        );
+                    }
+                } // Catch the exception and display an error message
+                catch (\Exception $e) {
+                    $this->addFlashMessage(
+                        LocalizationUtility::translate(
+                            'service.error',
+                            'svconnector',
+                            [
+                                $e->getMessage(),
+                                $e->getCode()
+                            ]
+                        ),
+                        '',
+                        AbstractMessage::ERROR
                     );
                 }
-            } // Catch the exception and display an error message
-            catch (\Exception $e) {
+            } else {
                 $this->addFlashMessage(
-                        LocalizationUtility::translate('service.error', 'svconnector',
-                                array($e->getMessage(), $e->getCode())),
-                        '',
-                        FlashMessage::ERROR
+                    LocalizationUtility::translate(
+                        'service.not.available',
+                        'svconnector',
+                        [
+                            get_class($service)
+                        ]
+                    ),
+                    '',
+                    AbstractMessage::ERROR
                 );
             }
+        } else {
+            $this->addFlashMessage(
+                LocalizationUtility::translate(
+                    'no.service.type',
+                    'svconnector',
+                    [
+                        $type
+                    ]
+                ),
+                '',
+                AbstractMessage::ERROR
+            );
         }
         return $result;
     }

@@ -16,16 +16,49 @@ These are the methods that you must absolutely implement in your own
 connector services if you want to make them usable by extensions that
 rely on such services.
 
-init()
-  This method is called when the connector is instantiated by the TYPO3
-  service API. It is expected to return a boolean value: true if the
-  distant source is available, false otherwise.
+getType()
+  This method returns the type of the connector service. The type is
+  representative of this kind of data it can handle, e.g. :code:`csv`
+  for the "svconnector_csv" service.
+
+  Input
+    none
+
+  Output
+    string
+
+
+getName()
+  This method returns a human-readable name for the service.
+
+  Input
+    none
+
+  Output
+    string
+
+
+isAvailable()
+  This method can be called when a connector service is about to be used
+  to check if it is available or not. It is expected to return a boolean value
+  accordiningly.
 
   Input
     none
 
   Output
     boolean
+
+
+getSampleConfiguration()
+  This method returns the sample configuration that gets loaded in the service
+  testing backend module (see :ref:`Configuration sample <developers-sample>`.
+
+  Input
+    none
+
+  Output
+    string
 
 
 checkConfiguration()

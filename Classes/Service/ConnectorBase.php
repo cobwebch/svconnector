@@ -15,10 +15,11 @@ namespace Cobweb\Svconnector\Service;
  */
 
 use Cobweb\Svconnector\Exception\ConnectorRuntimeException;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 use TYPO3\CMS\Core\Charset\CharsetConverter;
-use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
-use TYPO3\CMS\Core\Service\AbstractService;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 // Define error codes for all Connector services responses
@@ -34,20 +35,29 @@ define('T3_ERR_SV_DISTANT_ERROR', -52); // returned response contains an error m
  * This class is a base class for all Connector Services. It should be inherited
  * by all specific Connector Services implementations. This class should not be called
  * directly as it is unable to do anything by itself.
- *
- * @author Francois Suter (Cobweb) <typo3@cobweb.ch>
- * @package TYPO3
- * @subpackage tx_svconnector
  */
-abstract class ConnectorBase extends AbstractService
+abstract class ConnectorBase implements LoggerAwareInterface
 {
-    protected $extensionKey = 'svconnector'; // The extension key
-    protected $parentExtKey = 'svconnector'; // A copy of the extension key so that it is not overridden by children classes
+    use LoggerAwareTrait;
 
     /**
-     * @var \TYPO3\CMS\Core\Log\Logger
+     * @var string Extension key
      */
-    protected $logger;
+    protected string $extensionKey = 'svconnector';
+
+    /**
+     * Returns the type of data handled by the connector service
+     *
+     * @return string
+     */
+    abstract public function getType(): string;
+
+    /**
+     * Returns a descriptive name of the connector service
+     *
+     * @return string
+     */
+    abstract public function getName(): string;
 
     /**
      * Verifies that the connection is functional
@@ -56,10 +66,23 @@ abstract class ConnectorBase extends AbstractService
      *
      * @return boolean TRUE if the service is available
      */
-    public function init(): bool
+    abstract public function isAvailable(): bool;
+
+    /**
+     * Returns the sample configuration for the service, if any
+     *
+     * @return string
+     */
+    public function getSampleConfiguration(): string
     {
-        $this->logger = GeneralUtility::makeInstance(LogManager::class)->getLogger(__CLASS__);
-        return false;
+        $configurationFile = ExtensionManagementUtility::extPath(
+            $this->extensionKey,
+            'Resources/Public/Samples/Configuration.json'
+        );
+        if (file_exists($configurationFile)) {
+            return file_get_contents($configurationFile);
+        }
+        return '';
     }
 
     /**
@@ -70,12 +93,12 @@ abstract class ConnectorBase extends AbstractService
      * @param array $parameters Connector call parameters
      * @return array
      */
-    public function checkConfiguration($parameters): array
+    public function checkConfiguration(array $parameters = []): array
     {
         return [
-                AbstractMessage::NOTICE => [],
-                AbstractMessage::WARNING => [],
-                AbstractMessage::ERROR => []
+            AbstractMessage::NOTICE => [],
+            AbstractMessage::WARNING => [],
+            AbstractMessage::ERROR => []
         ];
     }
 
@@ -85,7 +108,7 @@ abstract class ConnectorBase extends AbstractService
      * @param array $problems
      * @return void
      */
-    public function logConfigurationCheck(array $problems)
+    public function logConfigurationCheck(array $problems): void
     {
         foreach ($problems as $severity => $issues) {
             foreach ($issues as $issue) {
@@ -114,7 +137,7 @@ abstract class ConnectorBase extends AbstractService
      * @param array $parameters Parameters for the call
      * @return mixed Server response
      */
-    abstract public function fetchRaw($parameters);
+    abstract public function fetchRaw(array $parameters = []);
 
     /**
      * This method calls the query and returns the results from the response as an XML structure.
@@ -129,7 +152,7 @@ abstract class ConnectorBase extends AbstractService
      * @param array $parameters Parameters for the call
      * @return string XML structure
      */
-    abstract public function fetchXML($parameters): string;
+    abstract public function fetchXML(array $parameters = []): string;
 
     /**
      * This method calls the query and returns the results from the response as a PHP array.
@@ -144,7 +167,7 @@ abstract class ConnectorBase extends AbstractService
      * @param array $parameters Parameters for the call
      * @return array PHP array
      */
-    abstract public function fetchArray($parameters): array;
+    abstract public function fetchArray(array $parameters = []): array;
 
     /**
      * This method can be called to perform specific operations at some point after
@@ -180,7 +203,7 @@ abstract class ConnectorBase extends AbstractService
      *
      * @return mixed Server response
      */
-    abstract protected function query($parameters);
+    abstract protected function query(array $parameters = []);
 
     /**
      * This method should be used by all connector services when they encounter a fatal error.

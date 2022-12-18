@@ -13,9 +13,10 @@ Introduction
 
 The main idea of Connector services is to have a basic framework for
 developing scripts that connect to third-party applications and
-retrieve data from them. The new type for these services is
-"connector" and every third-party application is represented by a
-distinct sub-type.
+retrieve data from them. These services are specifically tagged
+(:code:`connector.service`) and each service has a type corresponding
+to a third-party application. Detailed information is provided in the
+:ref:`Developer's manual <developers>`.
 
 This structure makes connection scripts reusable. It also makes them
 easier to use thanks to a general API. Connector services can be
@@ -63,11 +64,12 @@ sponsored by `h_da - Hochschule Darmstadt, University of Applied Sciences <https
 Keeping the developer happy
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Every encouragement keeps the developer ticking, so dont' hesitate
-to send thanks or share your enthusiasm about the extension.
-If you really want to give something
-back, you may consider my Amazon wish list:
-https://www.amazon.co.uk/registry/wishlist/G7DI2AN99Y4F
+Every encouragement keeps the developer ticking, so don't hesitate
+to send thanks or share your enthusiasm about the extension (like it in the
+Extension Repository).
+
+If you appreciate this work and want to show some support, please
+check https://www.monpetitcoin.com/en/support-me/.
 
 You may also take a step back and reflect about the beauty of sharing.
 Think about how much you are benefiting and how much yourself is

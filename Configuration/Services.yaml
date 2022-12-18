@@ -10,3 +10,9 @@ services:
 
   Cobweb\Svconnector\Utility\FileUtility:
     public: true
+
+  # Linktype registry
+  Cobweb\Svconnector\Registry\ConnectorRegistry:
+    public: true
+    arguments:
+      - !tagged_iterator connector.service

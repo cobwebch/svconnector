@@ -18,11 +18,17 @@
 			<trans-unit id="no.services" xml:space="preserve">
 				<source>No connector services are available. Please install at least one before trying to use this test module.</source>
 			</trans-unit>
+			<trans-unit id="no.service.type" xml:space="preserve">
+				<source>No service is registered for type %s.</source>
+			</trans-unit>
 			<trans-unit id="no.services.available" xml:space="preserve">
 				<source>None of the installed connector services are available. You should maybe review your setup.</source>
 			</trans-unit>
 			<trans-unit id="services.not.available" xml:space="preserve">
 				<source>One or more connector services are installed but not available: %s.</source>
+			</trans-unit>
+			<trans-unit id="service.not.available" xml:space="preserve">
+				<source>Connector service %s is not available.</source>
 			</trans-unit>
 			<trans-unit id="test.service" xml:space="preserve">
 				<source>Choose a connector service (only available services are listed), enter the needed parameters and press the &quot;Test&quot; button:</source>
