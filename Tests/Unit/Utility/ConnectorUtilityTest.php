@@ -15,6 +15,7 @@ namespace Cobweb\Svconnector\Tests\Utility;
  * The TYPO3 project - inspiring people to share!
  */
 
+use Cobweb\Svconnector\Utility\ConnectorUtility;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 
 /**
@@ -27,8 +28,8 @@ class ConnectorUtilityTest extends UnitTestCase
     public function xmlProvider(): array
     {
         return [
-                'no namespaces' => [
-                        'input' => '
+            'no namespaces' => [
+                'input' => '
                             <test>
                                    <foo>
                                        bar
@@ -37,34 +38,34 @@ class ConnectorUtilityTest extends UnitTestCase
                                    </foo>
                             </test>
                         ',
-                        'output' => [
+                'output' => [
+                    'children' => [
+                        'foo' => [
+                            0 => [
+                                'value' => 'bar',
                                 'children' => [
-                                        'foo' => [
-                                                0 => [
-                                                        'value' => 'bar',
-                                                        'children' => [
-                                                                'baz' => [
-                                                                        0 => [
-                                                                                'value' => 'Junior',
-                                                                                'attributes' => [
-                                                                                        'rank' => '#1'
-                                                                                ]
-                                                                        ],
-                                                                        1 => [
-                                                                                'value' => 'Baby',
-                                                                                'attributes' => [
-                                                                                        'rank' => '#2'
-                                                                                ]
-                                                                        ]
-                                                                ]
-                                                        ]
-                                                ]
+                                    'baz' => [
+                                        0 => [
+                                            'value' => 'Junior',
+                                            'attributes' => [
+                                                'rank' => '#1'
+                                            ]
+                                        ],
+                                        1 => [
+                                            'value' => 'Baby',
+                                            'attributes' => [
+                                                'rank' => '#2'
+                                            ]
                                         ]
+                                    ]
                                 ]
+                            ]
                         ]
-                ],
-                'with namespace' => [
-                        'input' => '
+                    ]
+                ]
+            ],
+            'with namespace' => [
+                'input' => '
                             <test xmlns:xx="http://example.org/ns">
                                    <xx:foo>
                                        bar
@@ -73,32 +74,32 @@ class ConnectorUtilityTest extends UnitTestCase
                                    </xx:foo>
                             </test>
                         ',
-                        'output' => [
+                'output' => [
+                    'children' => [
+                        'xx:foo' => [
+                            0 => [
+                                'value' => 'bar',
                                 'children' => [
-                                        'xx:foo' => [
-                                                0 => [
-                                                        'value' => 'bar',
-                                                        'children' => [
-                                                                'xx:baz' => [
-                                                                        0 => [
-                                                                                'value' => 'Junior',
-                                                                                'attributes' => [
-                                                                                        'rank' => '#1'
-                                                                                ]
-                                                                        ],
-                                                                        1 => [
-                                                                                'value' => 'Baby',
-                                                                                'attributes' => [
-                                                                                        'rank' => '#2'
-                                                                                ]
-                                                                        ]
-                                                                ]
-                                                        ]
-                                                ]
+                                    'xx:baz' => [
+                                        0 => [
+                                            'value' => 'Junior',
+                                            'attributes' => [
+                                                'rank' => '#1'
+                                            ]
+                                        ],
+                                        1 => [
+                                            'value' => 'Baby',
+                                            'attributes' => [
+                                                'rank' => '#2'
+                                            ]
                                         ]
+                                    ]
                                 ]
+                            ]
                         ]
+                    ]
                 ]
+            ]
         ];
     }
 
@@ -108,30 +109,21 @@ class ConnectorUtilityTest extends UnitTestCase
      * @test
      * @dataProvider xmlProvider
      */
-    public function convertXmlToArrayReturnsStructuredArray($input, $output)
+    public function convertXmlToArrayReturnsStructuredArray(string $input, array $output): void
     {
-        $result = \Cobweb\Svconnector\Utility\ConnectorUtility::convertXmlToArray($input);
+        $result = ConnectorUtility::convertXmlToArray($input);
         self::assertSame(
-                $output,
-                $result
+            $output,
+            $result
         );
     }
 
-    public function emptyProvider()
+    public function emptyProvider(): array
     {
         return [
-                'empty string' => [
-                        ''
-                ],
-                'null' => [
-                        null
-                ],
-                'false' => [
-                        false
-                ],
-                'zero' => [
-                        0
-                ]
+            'empty string' => [
+                ''
+            ]
         ];
     }
 
@@ -139,19 +131,19 @@ class ConnectorUtilityTest extends UnitTestCase
      * @param string $string
      * @test
      * @dataProvider emptyProvider
-     * @expectedException \Cobweb\Svconnector\Exception\EmptySourceException
      */
-    public function convertXmlToArrayThrowsExceptionOnEmptyString($string)
+    public function convertXmlToArrayThrowsExceptionOnEmptyString(string $string): void
     {
-        \Cobweb\Svconnector\Utility\ConnectorUtility::convertXmlToArray($string);
+        $this->expectException(\Cobweb\Svconnector\Exception\EmptySourceException::class);
+        ConnectorUtility::convertXmlToArray($string);
     }
 
     public function invalidProvider()
     {
         return [
-                'malformed XML' => [
-                        '<foo><unclosed_tag></foo>'
-                ]
+            'malformed XML' => [
+                '<foo><unclosed_tag></foo>'
+            ]
         ];
     }
 
@@ -159,10 +151,10 @@ class ConnectorUtilityTest extends UnitTestCase
      * @param string $string
      * @test
      * @dataProvider invalidProvider
-     * @expectedException \Cobweb\Svconnector\Exception\InvalidSourceException
      */
-    public function convertXmlToArrayThrowsExceptionOnInvalidString($string)
+    public function convertXmlToArrayThrowsExceptionOnInvalidString(string $string): void
     {
-        \Cobweb\Svconnector\Utility\ConnectorUtility::convertXmlToArray($string);
+        $this->expectException(\Cobweb\Svconnector\Exception\InvalidSourceException::class);
+        ConnectorUtility::convertXmlToArray($string);
     }
 }

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Cobweb\Svconnector\Tests\Utility;
 
 /*
@@ -25,24 +28,20 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class FileUtilityTest extends FunctionalTestCase
 {
-    /**
-     * @var FileUtility
-     */
-    protected $subject;
+    protected FileUtility $subject;
 
     protected $testExtensionsToLoad = [
         'typo3conf/ext/svconnector'
     ];
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         try {
             $this->setUpBackendUserFromFixture(1);
             $this->subject = GeneralUtility::makeInstance(FileUtility::class);
             $this->importDataSet(__DIR__ . '/Fixtures/Database/sys_file.xml');
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             self::markTestSkipped('Could not load fixtures');
         }
     }
@@ -50,22 +49,22 @@ class FileUtilityTest extends FunctionalTestCase
     public function filePathProvider(): array
     {
         return [
-                'FAL pointer' => [
-                        'FAL:1:test.csv',
-                        "code;name\n0x2;Foo\n1y7;Bar\n"
-                ],
-                'EXT: syntax' => [
-                        'EXT:svconnector/Tests/Functional/Utility/Fixtures/Files/test.csv',
-                        "code;name\n0x2;Foo\n1y7;Bar\n"
-                ],
-                'Relative path' => [
-                        'typo3conf/ext/svconnector/Tests/Functional/Utility/Fixtures/Files/test.csv',
-                        "code;name\n0x2;Foo\n1y7;Bar\n"
-                ],
-                'Remote URI' => [
-                        'https://raw.githubusercontent.com/cobwebch/svconnector/master/Tests/Functional/Utility/Fixtures/Files/test.csv',
-                        "code;name\n0x2;Foo\n1y7;Bar\n"
-                ]
+            'FAL pointer' => [
+                'FAL:1:test.csv',
+                "code;name\n0x2;Foo\n1y7;Bar\n"
+            ],
+            'EXT: syntax' => [
+                'EXT:svconnector/Tests/Functional/Utility/Fixtures/Files/test.csv',
+                "code;name\n0x2;Foo\n1y7;Bar\n"
+            ],
+            'Relative path' => [
+                'typo3conf/ext/svconnector/Tests/Functional/Utility/Fixtures/Files/test.csv',
+                "code;name\n0x2;Foo\n1y7;Bar\n"
+            ],
+            'Remote URI' => [
+                'https://raw.githubusercontent.com/cobwebch/svconnector/master/Tests/Functional/Utility/Fixtures/Files/test.csv',
+                "code;name\n0x2;Foo\n1y7;Bar\n"
+            ]
         ];
     }
 
@@ -75,7 +74,8 @@ class FileUtilityTest extends FunctionalTestCase
      * @param string $uri
      * @param string $expectedContent
      */
-    public function getFileContentWithValidUriReturnsContent($uri, $expectedContent) {
+    public function getFileContentWithValidUriReturnsContent(string $uri, string $expectedContent): void
+    {
         $content = $this->subject->getFileContent($uri);
         self::assertSame($expectedContent, $content);
     }
@@ -86,21 +86,22 @@ class FileUtilityTest extends FunctionalTestCase
      * @param string $uri
      * @param string $expectedContent
      */
-    public function getFileAsTemporaryFileWithValidUriReturnsFilename($uri, $expectedContent) {
+    public function getFileAsTemporaryFileWithValidUriReturnsFilename(string $uri, string $expectedContent): void
+    {
         $filename = $this->subject->getFileAsTemporaryFile($uri);
         $content = file_get_contents($filename);
         self::assertSame($expectedContent, $content);
     }
 
-    public function badFilePathProvider()
+    public function badFilePathProvider(): array
     {
         return [
-                'Non-existing file' => [
-                        'typo3conf/ext/svconnector/Tests/Functional/Utility/Fixtures/Files/testxxx.csv'
-                ],
-                'Outside root path' => [
-                        ORIGINAL_ROOT . '../foo/test.csv'
-                ]
+            'Non-existing file' => [
+                'typo3conf/ext/svconnector/Tests/Functional/Utility/Fixtures/Files/testxxx.csv'
+            ],
+            'Outside root path' => [
+                ORIGINAL_ROOT . '../foo/test.csv'
+            ]
         ];
     }
 
@@ -109,7 +110,8 @@ class FileUtilityTest extends FunctionalTestCase
      * @dataProvider badFilePathProvider
      * @param string $uri
      */
-    public function getFileContentWithInvalidUriReturnsFalse($uri) {
+    public function getFileContentWithInvalidUriReturnsFalse(string $uri): void
+    {
         $content = $this->subject->getFileContent($uri);
         self::assertFalse($content);
     }
@@ -119,7 +121,8 @@ class FileUtilityTest extends FunctionalTestCase
      * @dataProvider badFilePathProvider
      * @param string $uri
      */
-    public function getFileAsTemporaryFileWithInvalidUriReturnsFalse($uri) {
+    public function getFileAsTemporaryFileWithInvalidUriReturnsFalse(string $uri): void
+    {
         $filename = $this->subject->getFileAsTemporaryFile($uri);
         self::assertFalse($filename);
     }
