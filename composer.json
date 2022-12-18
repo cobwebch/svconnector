@@ -17,9 +17,9 @@
 		}
 	},
 	"require": {
-		"php": ">=7.2.0",
+		"php": ">=7.4.0",
 		"ext-simplexml": "*",
-		"typo3/cms-core": ">=10.4.0,<12.0"
+		"typo3/cms-core": "^11.5 || ^12.0"
 	},
 	"replace": {
 		"typo3-ter/svconnector": "self.version"
