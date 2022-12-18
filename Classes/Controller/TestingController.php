@@ -19,19 +19,23 @@ namespace Cobweb\Svconnector\Controller;
 
 use Cobweb\Svconnector\Registry\ConnectorRegistry;
 use Cobweb\Svconnector\Service\ConnectorBase;
-use TYPO3\CMS\Backend\View\BackendTemplateView;
-use TYPO3\CMS\Core\Http\HtmlResponse;
+use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
+use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
-use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Controller for the backend module
  */
 class TestingController extends ActionController
 {
+    protected ModuleTemplateFactory $moduleTemplateFactory;
+
+    protected PageRenderer $pageRenderer;
+
     /**
      * @var array List of registered connector services
      */
@@ -42,8 +46,11 @@ class TestingController extends ActionController
      */
     protected array $sampleConfigurations = [];
 
-    public function __construct()
+    public function __construct(ModuleTemplateFactory $moduleTemplateFactory, PageRenderer $pageRenderer)
     {
+        $this->moduleTemplateFactory = $moduleTemplateFactory;
+        $this->pageRenderer = $pageRenderer;
+
         $this->services = GeneralUtility::makeInstance(ConnectorRegistry::class)->getAllServices();
         // Get the sample configurations provided by the various connector services
         /** @var ConnectorBase $service */
@@ -53,45 +60,13 @@ class TestingController extends ActionController
     }
 
     /**
-     * Initializes the view before invoking an action method.
-     *
-     * Override this method to solve assign variables common for all actions
-     * or prepare the view in another way before the action is called.
-     *
-     * @param ViewInterface $view The view to be initialized
-     * @return void
-     */
-    protected function initializeView(ViewInterface $view)
-    {
-        if ($view instanceof BackendTemplateView) {
-            parent::initializeView($view);
-            $template = $view->getModuleTemplate();
-            $template->getPageRenderer()->addInlineSettingArray(
-                'svconnector',
-                $this->sampleConfigurations
-            );
-            $template->getPageRenderer()->loadRequireJsModule('TYPO3/CMS/Svconnector/TestingModule');
-        }
-    }
-
-    /**
-     * Initializes the template to use for all actions.
-     *
-     * @return void
-     */
-    protected function initializeAction()
-    {
-        $this->defaultViewObjectName = BackendTemplateView::class;
-    }
-
-    /**
      * Renders the form for testing services.
      *
-     * @return HtmlResponse
+     * @return ResponseInterface
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
      * @throws \Exception
      */
-    public function defaultAction(): HtmlResponse
+    public function defaultAction(): ResponseInterface
     {
         $availableServices = [];
         $unAvailableServices = [];
@@ -99,7 +74,6 @@ class TestingController extends ActionController
         // Check unavailable services
         // If there are any, display a warning about it and remove it from the list of services
         // All other services are assigned to the view
-        $hasUnavailableServices = false;
         /** @var ConnectorBase $service */
         foreach ($this->services as $type => $service) {
             if ($service->isAvailable()) {
@@ -110,12 +84,9 @@ class TestingController extends ActionController
                 );
             } else {
                 $this->addFlashMessage(
-                    LocalizationUtility::translate(
-                        'service.not.available',
-                        'svconnector',
-                        [
-                            get_class($service)
-                        ]
+                    sprintf(
+                        $this->getLanguageService()->sL('LLL:EXT:svconnector/Resources/Private/Language/locallang.xlf:service.not.available'),
+                        get_class($service)
                     ),
                     '',
                     AbstractMessage::WARNING
@@ -128,7 +99,7 @@ class TestingController extends ActionController
             // If all registered services were unavailable, issue a warning
             if (count($unAvailableServices) > 0) {
                 $this->addFlashMessage(
-                    LocalizationUtility::translate('no.services.available', 'svconnector'),
+                    $this->getLanguageService()->sL('LLL:EXT:svconnector/Resources/Private/Language/locallang.xlf:no.services.available'),
                     '',
                     AbstractMessage::WARNING
                 );
@@ -136,7 +107,7 @@ class TestingController extends ActionController
             // If there are simply no registered services, display a notice
             } else {
                 $this->addFlashMessage(
-                    LocalizationUtility::translate('no.services', 'svconnector'),
+                    $this->getLanguageService()->sL('LLL:EXT:svconnector/Resources/Private/Language/locallang.xlf:no.services'),
                     '',
                     AbstractMessage::NOTICE
                 );
@@ -179,8 +150,18 @@ class TestingController extends ActionController
             );
         }
 
-        return new HtmlResponse(
-            $this->view->render()
+        $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/Svconnector/TestingModule');
+        $this->pageRenderer->addInlineSettingArray(
+            'svconnector',
+            $this->sampleConfigurations
+        );
+
+        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+        $moduleTemplate->setModuleClass($this->request->getPluginName() . '_' . $this->request->getControllerName());
+        $moduleTemplate->setFlashMessageQueue($this->getFlashMessageQueue());
+        $moduleTemplate->setContent($this->view->render());
+        return $this->htmlResponse(
+            $moduleTemplate->renderContent()
         );
     }
 
@@ -217,7 +198,7 @@ class TestingController extends ActionController
                     // If the result is empty, issue an information message
                     if (empty($result)) {
                         $this->addFlashMessage(
-                            LocalizationUtility::translate('no.result', 'svconnector'),
+                            $this->getLanguageService()->sL('LLL:EXT:svconnector/Resources/Private/Language/locallang.xlf:no.result'),
                             '',
                             AbstractMessage::INFO
                         );
@@ -225,13 +206,10 @@ class TestingController extends ActionController
                 } // Catch the exception and display an error message
                 catch (\Exception $e) {
                     $this->addFlashMessage(
-                        LocalizationUtility::translate(
-                            'service.error',
-                            'svconnector',
-                            [
-                                $e->getMessage(),
-                                $e->getCode()
-                            ]
+                        sprintf(
+                            $this->getLanguageService()->sL('LLL:EXT:svconnector/Resources/Private/Language/locallang.xlf:service.error'),
+                            $e->getMessage(),
+                            $e->getCode()
                         ),
                         '',
                         AbstractMessage::ERROR
@@ -239,12 +217,9 @@ class TestingController extends ActionController
                 }
             } else {
                 $this->addFlashMessage(
-                    LocalizationUtility::translate(
-                        'service.not.available',
-                        'svconnector',
-                        [
-                            get_class($service)
-                        ]
+                    sprintf(
+                        $this->getLanguageService()->sL('LLL:EXT:svconnector/Resources/Private/Language/locallang.xlf:service.not.available'),
+                        get_class($service)
                     ),
                     '',
                     AbstractMessage::ERROR
@@ -252,17 +227,24 @@ class TestingController extends ActionController
             }
         } else {
             $this->addFlashMessage(
-                LocalizationUtility::translate(
-                    'no.service.type',
-                    'svconnector',
-                    [
-                        $type
-                    ]
+                sprintf(
+                    $this->getLanguageService()->sL('LLL:EXT:svconnector/Resources/Private/Language/locallang.xlf:no.service.type'),
+                    $type
                 ),
                 '',
                 AbstractMessage::ERROR
             );
         }
         return $result;
+    }
+
+    /**
+     * Returns the language service
+     *
+     * @return LanguageService
+     */
+    protected function getLanguageService(): LanguageService
+    {
+        return $GLOBALS['LANG'];
     }
 }

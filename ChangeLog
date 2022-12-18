@@ -1,6 +1,7 @@
 2022-12-18 Francois Suter (Idéative)  <typo3@ideative.ch>
 
 	* Implement new connector service registration API, resolves #23
+	* Adapt to new backend modules templating, resolves #25
 
 2021-10-05 Francois Suter (Idéative)  <typo3@ideative.ch>
 
