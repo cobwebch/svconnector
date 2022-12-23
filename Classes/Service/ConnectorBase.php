@@ -31,11 +31,6 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
-// Define error codes for all Connector services responses
-define('T3_ERR_SV_CONNECTION_FAILED', -50); // connection to remote server failed
-define('T3_ERR_SV_BAD_RESPONSE', -51); // returned response is malformed or somehow unexpected
-define('T3_ERR_SV_DISTANT_ERROR', -52); // returned response contains an error message
-
 /**
  * The "Connector Services" family of services is designed to handle connections
  * to external servers and pass request to and from those servers, using whatever
