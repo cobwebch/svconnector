@@ -15,12 +15,18 @@ namespace Cobweb\Svconnector\Service;
  */
 
 use Cobweb\Svconnector\Exception\ConnectorRuntimeException;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
+use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Charset\CharsetConverter;
+use TYPO3\CMS\Core\Http\ApplicationType;
+use TYPO3\CMS\Core\Localization\LanguageService;
+use TYPO3\CMS\Core\Localization\LanguageServiceFactory;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 // Define error codes for all Connector services responses
 define('T3_ERR_SV_CONNECTION_FAILED', -50); // connection to remote server failed
@@ -44,6 +50,13 @@ abstract class ConnectorBase implements LoggerAwareInterface
      * @var string Extension key
      */
     protected string $extensionKey = 'svconnector';
+
+    protected LanguageService $languageService;
+
+    public function __construct()
+    {
+        $this->initializeLanguageService();
+    }
 
     /**
      * Returns the type of data handled by the connector service
@@ -231,29 +244,18 @@ abstract class ConnectorBase implements LoggerAwareInterface
      * @param string $key "LLL:" input key
      * @return string The translated string
      */
-    public function sL($key): string
+    public function sL(string $key): string
     {
-        if (TYPO3_MODE === 'FE') {
-            return $GLOBALS['TSFE']->sL($key);
-        }
-        if (isset($GLOBALS['LANG'])) {
-            return $GLOBALS['LANG']->sL($key);
-        }
-        return $key;
+        return $this->languageService->sL($key);
     }
 
     /**
-     * Gets the currently used character set depending on context.
-     *
-     * Defaults to UTF-8 if information is not available.
+     * Gets the currently used character set depending on context. TYPO3 always runs with UTF-8.
      *
      * @return string
      */
     public function getCharset(): string
     {
-        if (isset($GLOBALS['LANG']->charSet)) {
-            return $GLOBALS['LANG']->charSet;
-        }
         return 'utf-8';
     }
 
@@ -266,5 +268,67 @@ abstract class ConnectorBase implements LoggerAwareInterface
     public function getCharsetConverter(): CharsetConverter
     {
         return GeneralUtility::makeInstance(CharsetConverter::class);
+    }
+
+    /**
+     * Initializes the LanguageService depending on context, falling back to default language if all else fails
+     *
+     * @return void
+     */
+    protected function initializeLanguageService(): void
+    {
+        try {
+            $applicationType = ApplicationType::fromRequest(
+                $this->getTypo3Request()
+            );
+            if ($applicationType->isFrontend()) {
+                $this->languageService = GeneralUtility::makeInstance(LanguageServiceFactory::class)
+                    ->createFromSiteLanguage(
+                        $this->getTyposcriptFrontendController()->getLanguage()
+                    );
+            } else {
+                $this->languageService = GeneralUtility::makeInstance(LanguageServiceFactory::class)
+                    ->createFromUserPreferences(
+                        $this->getBackendUser()
+                    );
+            }
+        } catch (\Exception $e) {
+            $this->languageService = GeneralUtility::makeInstance(LanguageServiceFactory::class)->create('en');
+        }
+    }
+
+    /**
+     * Wrapper around the global TYPO3 request object
+     *
+     * Throws an exception if none is found (seems to happen depending on context)
+     *
+     * @return ServerRequestInterface
+     */
+    protected function getTypo3Request(): ServerRequestInterface
+    {
+        if (isset($GLOBALS['TYPO3_REQUEST']) && $GLOBALS['TYPO3_REQUEST'] instanceof ServerRequestInterface) {
+            return $GLOBALS['TYPO3_REQUEST'];
+        }
+        throw new \InvalidArgumentException('Global request object not found');
+    }
+
+    /**
+     * Wrapper around the global frontend controller object
+     *
+     * @return TypoScriptFrontendController
+     */
+    protected function getTyposcriptFrontendController(): TypoScriptFrontendController
+    {
+        return $GLOBALS['TSFE'];
+    }
+
+    /**
+     * Wrapper around the global BE user object
+     *
+     * @return BackendUserAuthentication
+     */
+    protected function getBackendUser(): BackendUserAuthentication
+    {
+        return $GLOBALS['BE_USER'];
     }
 }

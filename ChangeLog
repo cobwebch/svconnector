@@ -2,6 +2,7 @@
 
 	* Implement new connector service registration API, resolves #23
 	* Adapt to new backend modules templating, resolves #25
+	* Streamline retrieval of language service, resolves #26
 
 2021-10-05 Francois Suter (Idéative)  <typo3@ideative.ch>
 

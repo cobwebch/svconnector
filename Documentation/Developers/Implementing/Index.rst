@@ -42,3 +42,6 @@ The base service provides several utility methods to access method or
 properties of the :code:`\TYPO3\CMS\Lang\LanguageService` class and of
 the :code:`\TYPO3\CMS\Core\Charset\CharsetConverter` class
 independently of context (FE or BE).
+
+If you need to implement the :code:`__construct()` method, make sure to call
+:code:`parent::__construct()` within it.
