@@ -11,10 +11,14 @@
 Connector API
 ^^^^^^^^^^^^^
 
-The list below describes the methods that make up the connector API.
-These are the methods that you must absolutely implement in your own
-connector services if you want to make them usable by extensions that
-rely on such services.
+The Connector Service API is described by interface :php:`\Cobweb\Svconnector\Service\ConnectorServiceInterface`.
+
+This interface is implented in class :php:`\Cobweb\Svconnector\Service\ConnectorBase`,
+which also contains a number of convenience methods. Among the methods described below,
+some go beyond the public interfance and belong to the connector base. It is
+recommended that all custom connector services extend the connector base rather
+than reimplementing boilerplate code.
+
 
 getType()
   This method returns the type of the connector service. The type is
@@ -147,7 +151,7 @@ postProcessOperations()
   indicating the status of the process (typically this could be an
   indication of success or failure).
 
-  It doesn't do anything by itself, but just calls hooks.
+  It doesn't do anything by itself, but just calls events (or hooks).
 
   Input
     array of parameters and a status

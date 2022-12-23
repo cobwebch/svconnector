@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Cobweb\Svconnector\Service;
 
 /*
@@ -42,7 +45,7 @@ define('T3_ERR_SV_DISTANT_ERROR', -52); // returned response contains an error m
  * by all specific Connector Services implementations. This class should not be called
  * directly as it is unable to do anything by itself.
  */
-abstract class ConnectorBase implements LoggerAwareInterface
+abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceInterface
 {
     use LoggerAwareTrait;
 
@@ -191,7 +194,7 @@ abstract class ConnectorBase implements LoggerAwareInterface
      * @param mixed $status Some form of status can be passed as argument
      *                      The nature of that status will depend on which process is calling this method
      */
-    public function postProcessOperations($parameters, $status)
+    public function postProcessOperations(array $parameters, $status)
     {
         $hooks = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][$this->extensionKey]['postProcessOperations'] ?? null;
         if (is_array($hooks)) {
@@ -203,11 +206,13 @@ abstract class ConnectorBase implements LoggerAwareInterface
     }
 
     /**
-     * This method queries the distant server given some parameters and returns the server response.
+     * Queries the distant server given some parameters and returns the server response.
      *
-     * You need to implement your own query() method when creating a connector service.
-     * It is recommended to put some hooks in your code, because actual use cases from users
-     * may differ from your own. A hook to process parameters and a hook to process the response
+     * You need to implement your own query() method when creating a connector service. It will be called
+     * by all fetch*() methods.
+     *
+     * It is recommended to put some events in your code, because actual use cases from users
+     * may differ from your own. An event to process parameters and an event to process the response
      * seem useful in general.
      *
      * Look at the existing connector services for implementation examples.

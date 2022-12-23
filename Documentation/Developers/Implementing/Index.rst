@@ -11,9 +11,11 @@
 Implementing a connector service
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The first step is to create a class derived from the base connector
-service and implement all the methods described in the API above. Your
-class declaration should look something like:
+A custom connector service must implement the interface :php:`\Cobweb\Svconnector\Service\ConnectorServiceInterface`.
+However, there is an abstract base class (:php:`\Cobweb\Svconnector\Service\ConnectorBase`)
+which contains some base implementations and some useful helper methods, it is thus
+recommended to extend that class rather than implementing the interface from scratch.
+
 
 .. code-block:: php
 
