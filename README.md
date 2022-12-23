@@ -1,3 +1,9 @@
+[![Latest Stable Version](https://poser.pugx.org/cobweb/svconnector/v)](https://packagist.org/packages/cobweb/svconnector)
+[![Total Downloads](http://poser.pugx.org/cobweb/svconnector/downloads)](https://packagist.org/packages/cobweb/svconnector)
+[![Monthly Downloads](http://poser.pugx.org/cobweb/svconnector/d/monthly)](https://packagist.org/packages/cobweb/svconnector)
+[![Daily Downloads](http://poser.pugx.org/cobweb/svconnector/d/daily)](https://packagist.org/packages/cobweb/svconnector)
+[![PHP Version Require](http://poser.pugx.org/cobweb/svconnector/require/php)](https://packagist.org/packages/cobweb/svconnector)
+
 # Connector Services
 
 Connector services are designed to provide a standard way of connecting to remote data source.
