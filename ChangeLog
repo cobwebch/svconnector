@@ -1,6 +1,6 @@
-2022-12-18 Francois Suter (Idéative)  <typo3@ideative.ch>
+2022-12-25 Francois Suter (Idéative)  <typo3@ideative.ch>
 
-    * Ensure compatibility with TYPO3 12, resolves #24
+	* Ensure compatibility with TYPO3 12, resolves #24
 	* Ensure compatibility with PHP 8.1
 
 2022-12-18 Francois Suter (Idéative)  <typo3@ideative.ch>
@@ -19,9 +19,9 @@
 
 2021-04-06 Francois Suter (Idéative)  <typo3@ideative.ch>
 
-    * Ensure compatibility with TYPO3 11, drop support for TYPO3 8 and 9
-    * Drop usage of GeneralUtility::getUrl()
-    * Update module icon and fix viewport issue
+	* Ensure compatibility with TYPO3 11, drop support for TYPO3 8 and 9
+	* Drop usage of GeneralUtility::getUrl()
+	* Update module icon and fix viewport issue
 
 2021-02-22 Francois Suter (Idéative)  <typo3@ideative.ch>
 
