@@ -76,6 +76,9 @@ class FileUtilityTest extends FunctionalTestCase
      */
     public function getFileContentWithValidUriReturnsContent(string $uri, string $expectedContent): void
     {
+        if (strpos($uri, 'FAL:') === 0) {
+            $this->markTestSkipped('FAL support not implemented in tests yet.');
+        }
         $content = $this->subject->getFileContent($uri);
         self::assertSame($expectedContent, $content);
     }
@@ -88,6 +91,9 @@ class FileUtilityTest extends FunctionalTestCase
      */
     public function getFileAsTemporaryFileWithValidUriReturnsFilename(string $uri, string $expectedContent): void
     {
+        if (strpos($uri, 'FAL:') === 0) {
+            $this->markTestSkipped('FAL support not implemented in tests yet.');
+        }
         $filename = $this->subject->getFileAsTemporaryFile($uri);
         $content = file_get_contents($filename);
         self::assertSame($expectedContent, $content);
