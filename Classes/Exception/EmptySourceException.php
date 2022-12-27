@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Cobweb\Svconnector\Exception;
 
 /*
@@ -16,8 +19,6 @@ namespace Cobweb\Svconnector\Exception;
 
 /**
  * Exception to throw when the source of data is empty.
- *
- * @package Cobweb\Svconnector\Exception
  */
 class EmptySourceException extends ConnectorException
 {

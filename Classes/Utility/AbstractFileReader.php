@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Cobweb\Svconnector\Utility;
 
 /*
@@ -17,15 +19,13 @@ namespace Cobweb\Svconnector\Utility;
 
 /**
  * Abstract base class for classes used in the $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['svconnector']['fileReader'] hook.
- *
- * @package Cobweb\Svconnector\Utility
  */
 abstract class AbstractFileReader
 {
     /**
      * @var FileUtility
      */
-    protected $fileUtility;
+    protected FileUtility $fileUtility;
 
     public function __construct($fileUtility)
     {
@@ -40,5 +40,5 @@ abstract class AbstractFileReader
      * @param string $uri
      * @return string
      */
-    abstract public function read($uri): string;
+    abstract public function read(string $uri): string;
 }

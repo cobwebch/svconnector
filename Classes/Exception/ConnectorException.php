@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Cobweb\Svconnector\Exception;
 
 /*
@@ -16,8 +19,6 @@ namespace Cobweb\Svconnector\Exception;
 
 /**
  * Base class for all Connector-related exceptions.
- * 
- * @package Cobweb\Svconnector\Exception
  */
 class ConnectorException extends \Exception
 {

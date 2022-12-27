@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Cobweb\Svconnector\Exception;
 
 /*
@@ -17,8 +20,6 @@ namespace Cobweb\Svconnector\Exception;
 /**
  * Exception to throw when an error happens while performing
  * a non-specific connector operation.
- *
- * @package Cobweb\Svconnector\Exception
  */
 class ConnectorRuntimeException extends ConnectorException
 {

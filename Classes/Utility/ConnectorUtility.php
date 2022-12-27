@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Cobweb\Svconnector\Utility;
 
 /*
@@ -17,10 +19,6 @@ namespace Cobweb\Svconnector\Utility;
 
 /**
  * Utility class for the Connector family of services
- *
- * @author Francois Suter (Cobweb) <typo3@cobweb.ch>
- * @package TYPO3
- * @subpackage tx_svconnector
  */
 class ConnectorUtility
 {
@@ -73,10 +71,10 @@ class ConnectorUtility
      *
      * @param string $string XML to parse
      * @param int $options LIBXML options for XML parsing (optional)
-     * @throws \Exception
      * @return array PHP array
+     *@throws \Exception
      */
-    public static function convertXmlToArray($string, $options = null): array
+    public static function convertXmlToArray(string $string, int $options = 0): array
     {
         // If input string is empty, exit with exception
         if (empty($string)) {
@@ -107,7 +105,7 @@ class ConnectorUtility
      * @param array $namespaces List of namespaces used (optional)
      * @return array Transformed XML node and children
      */
-    public static function handleXmlNode(\SimpleXMLElement $node, $namespaces = [])
+    public static function handleXmlNode(\SimpleXMLElement $node, array $namespaces = [])
     {
         // Init
         $nodeArray = [];
@@ -152,7 +150,7 @@ class ConnectorUtility
      * @param string $namespace Namespace to be parsed (optional)
      * @return array
      */
-    public static function handleChildren(\SimpleXMLElement $node, $namespaces = [], $namespace = null) {
+    public static function handleChildren(\SimpleXMLElement $node, array $namespaces = [], $namespace = null) {
         $children = $node->children($namespace, true);
         $array = [];
         if ($children->count() > 0) {

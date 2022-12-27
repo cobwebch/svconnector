@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Cobweb\Svconnector\ViewHelpers\Be;
 
 /*
@@ -20,10 +23,6 @@ use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 
 /**
  * This view helper is designed to output the result of the connection test appropriately, depending on its format
- *
- * @author Francois Suter (Cobweb) <typo3@cobweb.ch>
- * @package TYPO3
- * @subpackage tx_svconnector
  */
 class ResultViewHelper extends AbstractBackendViewHelper
 {
@@ -42,24 +41,6 @@ class ResultViewHelper extends AbstractBackendViewHelper
     public function initializeArguments()
     {
         $this->registerArgument('result', 'mixed', 'Result of the connection test', true);
-    }
-
-    /**
-     * Renders whatever result the connection test returned.
-     *
-     * TODO: remove when v8 compatibility is dropped.
-     *
-     * @return string
-     */
-    public function render()
-    {
-        return static::renderStatic(
-                [
-                        'result' => $this->arguments['result']
-                ],
-                $this->buildRenderChildrenClosure(),
-                $this->renderingContext
-        );
     }
 
     /**

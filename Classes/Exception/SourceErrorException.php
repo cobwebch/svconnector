@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Cobweb\Svconnector\Exception;
 
 /*
@@ -17,8 +20,6 @@ namespace Cobweb\Svconnector\Exception;
 /**
  * Exception to throw when an error occurs when trying to access a source of data
  * (e.g. a file is not found, a database cannot be accessed, etc.).
- *
- * @package Cobweb\Svconnector\Exception
  */
 class SourceErrorException extends ConnectorException
 {

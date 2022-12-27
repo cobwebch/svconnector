@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Cobweb\Svconnector\Utility;
 
 /*
@@ -23,8 +25,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class for opening either local or remote files.
- *
- * @package Cobweb\Svconnector\Utility
  */
 class FileUtility implements SingletonInterface
 {
@@ -54,7 +54,7 @@ class FileUtility implements SingletonInterface
      * @param array|null $headers Headers to pass on to the request
      * @return string|bool
      */
-    public function getFileContent($uri, $headers = null)
+    public function getFileContent(string $uri, $headers = null)
     {
         // Reset the error message
         $this->setError('');
@@ -152,7 +152,7 @@ class FileUtility implements SingletonInterface
      * @return string|bool
      * @see getFileContent
      */
-    public function getFileAsTemporaryFile($uri, $headers = null)
+    public function getFileAsTemporaryFile(string $uri, $headers = null)
     {
         $fileContent = $this->getFileContent($uri, $headers);
         // Exit early if file content could not be read
@@ -194,7 +194,7 @@ class FileUtility implements SingletonInterface
      *
      * @param string $error
      */
-    public function setError($error)
+    public function setError(string $error): void
     {
         $this->error = (string)$error;
     }
