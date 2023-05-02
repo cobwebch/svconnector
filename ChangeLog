@@ -1,3 +1,9 @@
+2023-05-02 Francois Suter (Idéative)  <typo3@ideative.ch>
+
+	* Add missing module title
+	* Verify compatibility with TYPO3 12 LTS
+	* Release version 5.0.1
+
 2022-12-27 Francois Suter (Idéative)  <typo3@ideative.ch>
 
 	* Release version 5.0.0
