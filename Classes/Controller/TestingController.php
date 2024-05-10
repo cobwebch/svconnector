@@ -22,8 +22,8 @@ use Cobweb\Svconnector\Service\ConnectorBase;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Localization\LanguageService;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 
@@ -70,6 +70,7 @@ class TestingController extends ActionController
     {
         $availableServices = [];
         $unAvailableServices = [];
+        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
 
         // Check unavailable services
         // If there are any, display a warning about it and remove it from the list of services
@@ -89,19 +90,19 @@ class TestingController extends ActionController
                         get_class($service)
                     ),
                     '',
-                    AbstractMessage::WARNING
+                    ContextualFeedbackSeverity::WARNING
                 );
                 $unAvailableServices[] = $service;
             }
         }
-        $this->view->assign('services', $availableServices);
+        $moduleTemplate->assign('services', $availableServices);
         if (count($availableServices) === 0) {
             // If all registered services were unavailable, issue a warning
             if (count($unAvailableServices) > 0) {
                 $this->addFlashMessage(
                     $this->getLanguageService()->sL('LLL:EXT:svconnector/Resources/Private/Language/locallang.xlf:no.services.available'),
                     '',
-                    AbstractMessage::WARNING
+                    ContextualFeedbackSeverity::WARNING
                 );
 
             // If there are simply no registered services, display a notice
@@ -109,7 +110,7 @@ class TestingController extends ActionController
                 $this->addFlashMessage(
                     $this->getLanguageService()->sL('LLL:EXT:svconnector/Resources/Private/Language/locallang.xlf:no.services'),
                     '',
-                    AbstractMessage::NOTICE
+                    ContextualFeedbackSeverity::NOTICE
                 );
             }
         }
@@ -124,7 +125,7 @@ class TestingController extends ActionController
             } else {
                 $parameters = $arguments['parameters'];
             }
-            $this->view->assignMultiple(
+            $moduleTemplate->assignMultiple(
                 [
                     'selectedService' => $arguments['service'],
                     'parameters' => $parameters,
@@ -140,7 +141,7 @@ class TestingController extends ActionController
             // Select the first service in the list as default and get its sample configuration, if defined
             $defaultService = key($availableServices);
             $defaultParameters = $this->sampleConfigurations[$defaultService] ?? '';
-            $this->view->assignMultiple(
+            $moduleTemplate->assignMultiple(
                 [
                     'selectedService' => $defaultService,
                     'parameters' => $defaultParameters,
@@ -150,22 +151,18 @@ class TestingController extends ActionController
             );
         }
 
-        $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/Svconnector/TestingModule');
+        $this->pageRenderer->loadJavaScriptModule('@cobweb/svconnector/TestingModule.js');
         $this->pageRenderer->addInlineSettingArray(
             'svconnector',
             $this->sampleConfigurations
         );
 
-        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
         $moduleTemplate->setTitle(
             $this->getLanguageService()->sL('LLL:EXT:svconnector/Resources/Private/Language/locallang.xlf:title')
         );
         $moduleTemplate->setModuleClass($this->request->getPluginName() . '_' . $this->request->getControllerName());
         $moduleTemplate->setFlashMessageQueue($this->getFlashMessageQueue());
-        $moduleTemplate->setContent($this->view->render());
-        return $this->htmlResponse(
-            $moduleTemplate->renderContent()
-        );
+        return $moduleTemplate->renderResponse('Testing/Default');
     }
 
     /**
@@ -203,7 +200,7 @@ class TestingController extends ActionController
                         $this->addFlashMessage(
                             $this->getLanguageService()->sL('LLL:EXT:svconnector/Resources/Private/Language/locallang.xlf:no.result'),
                             '',
-                            AbstractMessage::INFO
+                            ContextualFeedbackSeverity::INFO
                         );
                     }
                 } // Catch the exception and display an error message
@@ -215,7 +212,7 @@ class TestingController extends ActionController
                             $e->getCode()
                         ),
                         '',
-                        AbstractMessage::ERROR
+                        ContextualFeedbackSeverity::ERROR
                     );
                 }
             } else {
@@ -225,7 +222,7 @@ class TestingController extends ActionController
                         get_class($service)
                     ),
                     '',
-                    AbstractMessage::ERROR
+                    ContextualFeedbackSeverity::ERROR
                 );
             }
         } else {
@@ -235,7 +232,7 @@ class TestingController extends ActionController
                     $type
                 ),
                 '',
-                AbstractMessage::ERROR
+                ContextualFeedbackSeverity::ERROR
             );
         }
         return $result;

@@ -11,28 +11,23 @@
  * The TYPO3 project - inspiring people to share!
  */
 
-define('TYPO3/CMS/Svconnector/TestingModule', ['jquery'], function ($) {
-	'use strict';
+import DocumentService from"@typo3/core/document-service.js";
 
-	/**
-	 * @exports TYPO3/CMS/Svconnector/TestingModule
-	 */
-	var TestingModule = {
-	};
+class TestingModule {
+	constructor() {
+		this.initialize();
+	}
 
-	/**
-	 * Updates the configuration sample based on the current connector selection.
-	 * 
-	 * @param event
-	 */
-	TestingModule.updateConfiguration = function(event) {
-		var configuration = TYPO3.settings.svconnector[$(this).val()];
-		$('#tx_svconnector_parameters').val(configuration);
-	};
+	async initialize(){
+		DocumentService.ready().then((document) => {
+			document.getElementById('tx_svconnector_service').addEventListener("change", (event) => {
+				console.log('triggered');
+				console.log(event.currentTarget.value);
+				const configuration = TYPO3.settings.svconnector[event.currentTarget.value];
+				document.getElementById('tx_svconnector_parameters').value = configuration;
+			});
+		});
+	}
+}
 
-	$(function () {
-		$('#tx_svconnector_service').on('change', TestingModule.updateConfiguration);
-	});
-
-	return TestingModule;
-});
+export default new TestingModule();

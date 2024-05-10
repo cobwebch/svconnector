@@ -26,7 +26,7 @@ use TYPO3\CMS\Core\Charset\CharsetConverter;
 use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Localization\LanguageServiceFactory;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
@@ -107,9 +107,9 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
     public function checkConfiguration(array $parameters = []): array
     {
         return [
-            AbstractMessage::NOTICE => [],
-            AbstractMessage::WARNING => [],
-            AbstractMessage::ERROR => []
+            ContextualFeedbackSeverity::NOTICE->value => [],
+            ContextualFeedbackSeverity::WARNING->value => [],
+            ContextualFeedbackSeverity::ERROR->value => []
         ];
     }
 
@@ -124,10 +124,10 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
         foreach ($problems as $severity => $issues) {
             foreach ($issues as $issue) {
                 switch ($severity) {
-                    case AbstractMessage::ERROR:
+                    case ContextualFeedbackSeverity::ERROR->value:
                         $this->logger->error($issue);
                         break;
-                    case AbstractMessage::WARNING:
+                    case ContextualFeedbackSeverity::WARNING->value:
                         $this->logger->warning($issue);
                         break;
                     default:
