@@ -11,7 +11,7 @@
  * The TYPO3 project - inspiring people to share!
  */
 
-import DocumentService from"@typo3/core/document-service.js";
+import DocumentService from "@typo3/core/document-service.js";
 
 class TestingModule {
 	constructor() {
@@ -20,11 +20,8 @@ class TestingModule {
 
 	async initialize(){
 		DocumentService.ready().then((document) => {
-			document.getElementById('tx_svconnector_service').addEventListener("change", (event) => {
-				console.log('triggered');
-				console.log(event.currentTarget.value);
-				const configuration = TYPO3.settings.svconnector[event.currentTarget.value];
-				document.getElementById('tx_svconnector_parameters').value = configuration;
+			document.getElementById('tx_svconnector_service').addEventListener('change', (event) => {
+				document.getElementById('tx_svconnector_parameters').value = TYPO3.settings.svconnector[event.currentTarget.value];
 			});
 		});
 	}
