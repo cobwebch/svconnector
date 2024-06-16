@@ -1,6 +1,6 @@
 <?php
 
-namespace Cobweb\Svconnector\Tests\Utility;
+declare(strict_types=1);
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -14,10 +14,15 @@ namespace Cobweb\Svconnector\Tests\Utility;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
+namespace Cobweb\Svconnector\Tests\Utility;
+
 use Cobweb\Svconnector\Exception\EmptySourceException;
 use Cobweb\Svconnector\Exception\InvalidSourceException;
 use Cobweb\Svconnector\Utility\ConnectorUtility;
-use Nimut\TestingFramework\TestCase\UnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 /**
  * Test suite for the ConnectorUtility class.
@@ -26,7 +31,7 @@ use Nimut\TestingFramework\TestCase\UnitTestCase;
  */
 class ConnectorUtilityTest extends UnitTestCase
 {
-    public function xmlProvider(): array
+    public static function xmlProvider(): array
     {
         return [
             'no namespaces' => [
@@ -104,12 +109,7 @@ class ConnectorUtilityTest extends UnitTestCase
         ];
     }
 
-    /**
-     * @param string $input
-     * @param array $output
-     * @test
-     * @dataProvider xmlProvider
-     */
+    #[Test] #[DataProvider('xmlProvider')]
     public function convertXmlToArrayReturnsStructuredArray(string $input, array $output): void
     {
         $result = ConnectorUtility::convertXmlToArray($input);
@@ -119,7 +119,7 @@ class ConnectorUtilityTest extends UnitTestCase
         );
     }
 
-    public function emptyProvider(): array
+    public static function emptyProvider(): array
     {
         return [
             'empty string' => [
@@ -128,18 +128,13 @@ class ConnectorUtilityTest extends UnitTestCase
         ];
     }
 
-    /**
-     * @param string $string
-     * @test
-     * @dataProvider emptyProvider
-     */
-    public function convertXmlToArrayThrowsExceptionOnEmptyString(string $string): void
+    #[Test] #[DataProvider('emptyProvider')] public function convertXmlToArrayThrowsExceptionOnEmptyString(string $string): void
     {
         $this->expectException(EmptySourceException::class);
         ConnectorUtility::convertXmlToArray($string);
     }
 
-    public function invalidProvider()
+    public static function invalidProvider(): array
     {
         return [
             'malformed XML' => [
@@ -148,12 +143,7 @@ class ConnectorUtilityTest extends UnitTestCase
         ];
     }
 
-    /**
-     * @param string $string
-     * @test
-     * @dataProvider invalidProvider
-     */
-    public function convertXmlToArrayThrowsExceptionOnInvalidString(string $string): void
+    #[Test] #[DataProvider('invalidProvider')] public function convertXmlToArrayThrowsExceptionOnInvalidString(string $string): void
     {
         $this->expectException(InvalidSourceException::class);
         ConnectorUtility::convertXmlToArray($string);

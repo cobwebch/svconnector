@@ -18,8 +18,10 @@ namespace Cobweb\Svconnector\Tests\Utility;
  */
 
 use Cobweb\Svconnector\Utility\FileUtility;
-use Nimut\TestingFramework\TestCase\FunctionalTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 /**
  * Test case for FileUtility class.
@@ -30,22 +32,22 @@ class FileUtilityTest extends FunctionalTestCase
 {
     protected FileUtility $subject;
 
-    protected $testExtensionsToLoad = [
-        'typo3conf/ext/svconnector'
+    protected array $testExtensionsToLoad = [
+        'typo3conf/ext/svconnector',
     ];
 
     public function setUp(): void
     {
         try {
-            $this->setUpBackendUserFromFixture(1);
+//            $this->setUpBackendUserFromFixture(1);
             $this->subject = GeneralUtility::makeInstance(FileUtility::class);
-            $this->importDataSet(__DIR__ . '/Fixtures/Database/sys_file.xml');
-        } catch (\Exception) {
-            self::markTestSkipped('Could not load fixtures');
+            $this->importCSVDataSet(__DIR__ . '/Fixtures/Database/sys_file.csv');
+        } catch (\Exception $e) {
+            self::markTestSkipped('Could not load fixtures: ' . $e->getMessage());
         }
     }
 
-    public function filePathProvider(): array
+    public static function filePathProvider(): array
     {
         return [
             'FAL pointer' => [
@@ -67,12 +69,7 @@ class FileUtilityTest extends FunctionalTestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider filePathProvider
-     * @param string $uri
-     * @param string $expectedContent
-     */
+    #[Test] #[DataProvider('filePathProvider')]
     public function getFileContentWithValidUriReturnsContent(string $uri, string $expectedContent): void
     {
         if (str_starts_with($uri, 'FAL:')) {
@@ -82,12 +79,7 @@ class FileUtilityTest extends FunctionalTestCase
         self::assertSame($expectedContent, $content);
     }
 
-    /**
-     * @test
-     * @dataProvider filePathProvider
-     * @param string $uri
-     * @param string $expectedContent
-     */
+    #[Test] #[DataProvider('filePathProvider')]
     public function getFileAsTemporaryFileWithValidUriReturnsFilename(string $uri, string $expectedContent): void
     {
         if (str_starts_with($uri, 'FAL:')) {
@@ -98,34 +90,26 @@ class FileUtilityTest extends FunctionalTestCase
         self::assertSame($expectedContent, $content);
     }
 
-    public function badFilePathProvider(): array
+    public static function badFilePathProvider(): array
     {
         return [
             'Non-existing file' => [
                 'typo3conf/ext/svconnector/Tests/Functional/Utility/Fixtures/Files/testxxx.csv'
             ],
             'Outside root path' => [
-                ORIGINAL_ROOT . '../foo/test.csv'
+                self::getInstancePath() . '../foo/test.csv'
             ]
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider badFilePathProvider
-     * @param string $uri
-     */
+    #[Test] #[DataProvider('badFilePathProvider')]
     public function getFileContentWithInvalidUriReturnsFalse(string $uri): void
     {
         $content = $this->subject->getFileContent($uri);
         self::assertFalse($content);
     }
 
-    /**
-     * @test
-     * @dataProvider badFilePathProvider
-     * @param string $uri
-     */
+    #[Test] #[DataProvider('badFilePathProvider')]
     public function getFileAsTemporaryFileWithInvalidUriReturnsFalse(string $uri): void
     {
         $filename = $this->subject->getFileAsTemporaryFile($uri);
