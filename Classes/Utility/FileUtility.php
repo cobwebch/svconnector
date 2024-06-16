@@ -26,23 +26,22 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * Class for opening either local or remote files.
  */
-class FileUtility implements SingletonInterface
+class FileUtility implements SingletonInterface, \Stringable
 {
     /**
      * @var string Error message from reading the URI
      */
-    protected $error = '';
+    protected string $error = '';
 
     /**
      * Returns the class as a string. Seems to be needed by phpunit when an exception occurs during a test run.
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return 'FileUtility';
     }
-
     /**
      * Reads data from a file pointed to by a versatile URI.
      *
@@ -54,7 +53,7 @@ class FileUtility implements SingletonInterface
      * @param array|null $headers Headers to pass on to the request
      * @return string|bool
      */
-    public function getFileContent(string $uri, $headers = null)
+    public function getFileContent(string $uri, ?array $headers = null): bool|string
     {
         // Reset the error message
         $this->setError('');
@@ -160,7 +159,7 @@ class FileUtility implements SingletonInterface
      * @return string|bool
      * @see getFileContent
      */
-    public function getFileAsTemporaryFile(string $uri, $headers = null)
+    public function getFileAsTemporaryFile(string $uri, ?array $headers = null): bool|string
     {
         $fileContent = $this->getFileContent($uri, $headers);
         // Exit early if file content could not be read
@@ -189,8 +188,6 @@ class FileUtility implements SingletonInterface
 
     /**
      * Gets the current error message.
-     *
-     * @return string
      */
     public function getError(): string
     {
@@ -199,8 +196,6 @@ class FileUtility implements SingletonInterface
 
     /**
      * Sets the error message.
-     *
-     * @param string $error
      */
     public function setError(string $error): void
     {

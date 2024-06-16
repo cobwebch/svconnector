@@ -38,7 +38,7 @@ class ResultViewHelper extends AbstractBackendViewHelper
      *
      * @return void
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         $this->registerArgument('result', 'mixed', 'Result of the connection test', true);
     }
@@ -59,7 +59,7 @@ class ResultViewHelper extends AbstractBackendViewHelper
         if (is_array($result)) {
             $content = DebuggerUtility::var_dump($result, '', 10, true, false, true);
         } else {
-            $content = htmlspecialchars($result);
+            $content = htmlspecialchars((string) $result);
         }
         return '<pre>' . $content . '</pre>';
     }

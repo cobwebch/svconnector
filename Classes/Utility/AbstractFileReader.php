@@ -23,13 +23,10 @@ namespace Cobweb\Svconnector\Utility;
 abstract class AbstractFileReader
 {
     /**
-     * @var FileUtility
+     * @param FileUtility $fileUtility
      */
-    protected FileUtility $fileUtility;
-
-    public function __construct($fileUtility)
+    public function __construct(protected FileUtility $fileUtility)
     {
-        $this->fileUtility = $fileUtility;
     }
 
     /**

@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-namespace Cobweb\Svconnector\Utility;
-
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -16,6 +14,11 @@ namespace Cobweb\Svconnector\Utility;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
+namespace Cobweb\Svconnector\Utility;
+
+use Cobweb\Svconnector\Exception\EmptySourceException;
+use Cobweb\Svconnector\Exception\InvalidSourceException;
 
 /**
  * Utility class for the Connector family of services
@@ -78,7 +81,7 @@ class ConnectorUtility
     {
         // If input string is empty, exit with exception
         if (empty($string)) {
-            throw new \Cobweb\Svconnector\Exception\EmptySourceException(
+            throw new EmptySourceException(
                     'XML string is empty!',
                     1294325109
             );
@@ -89,7 +92,7 @@ class ConnectorUtility
 
         // Transform XML into a PHP array
         if ($xmlObject === false) {
-            throw new \Cobweb\Svconnector\Exception\InvalidSourceException(
+            throw new InvalidSourceException(
                     'XML is invalid!',
                     1545687481
             );

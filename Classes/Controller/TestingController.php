@@ -17,6 +17,7 @@ namespace Cobweb\Svconnector\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
 use Cobweb\Svconnector\Registry\ConnectorRegistry;
 use Cobweb\Svconnector\Service\ConnectorBase;
 use Psr\Http\Message\ResponseInterface;
@@ -32,10 +33,6 @@ use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
  */
 class TestingController extends ActionController
 {
-    protected ModuleTemplateFactory $moduleTemplateFactory;
-
-    protected PageRenderer $pageRenderer;
-
     /**
      * @var array List of registered connector services
      */
@@ -46,11 +43,8 @@ class TestingController extends ActionController
      */
     protected array $sampleConfigurations = [];
 
-    public function __construct(ModuleTemplateFactory $moduleTemplateFactory, PageRenderer $pageRenderer)
+    public function __construct(protected ModuleTemplateFactory $moduleTemplateFactory, protected PageRenderer $pageRenderer)
     {
-        $this->moduleTemplateFactory = $moduleTemplateFactory;
-        $this->pageRenderer = $pageRenderer;
-
         $this->services = GeneralUtility::makeInstance(ConnectorRegistry::class)->getAllServices();
         // Get the sample configurations provided by the various connector services
         /** @var ConnectorBase $service */
@@ -63,7 +57,7 @@ class TestingController extends ActionController
      * Renders the form for testing services.
      *
      * @return ResponseInterface
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
+     * @throws NoSuchArgumentException
      * @throws \Exception
      */
     public function defaultAction(): ResponseInterface
@@ -87,7 +81,7 @@ class TestingController extends ActionController
                 $this->addFlashMessage(
                     sprintf(
                         $this->getLanguageService()->sL('LLL:EXT:svconnector/Resources/Private/Language/locallang.xlf:service.not.available'),
-                        get_class($service)
+                        $service::class
                     ),
                     '',
                     ContextualFeedbackSeverity::WARNING
@@ -184,17 +178,11 @@ class TestingController extends ActionController
                 try {
                     $parsedParameters = json_decode($parameters, true, 512, JSON_THROW_ON_ERROR);
                     // Call the right "fetcher" depending on chosen format
-                    switch ($format) {
-                        case 1:
-                            $result = $service->fetchArray($parsedParameters);
-                            break;
-                        case 2:
-                            $result = $service->fetchXML($parsedParameters);
-                            break;
-                        default:
-                            $result = $service->fetchRaw($parsedParameters);
-                            break;
-                    }
+                    $result = match ($format) {
+                        1 => $service->fetchArray($parsedParameters),
+                        2 => $service->fetchXML($parsedParameters),
+                        default => $service->fetchRaw($parsedParameters),
+                    };
                     // If the result is empty, issue an information message
                     if (empty($result)) {
                         $this->addFlashMessage(
@@ -219,7 +207,7 @@ class TestingController extends ActionController
                 $this->addFlashMessage(
                     sprintf(
                         $this->getLanguageService()->sL('LLL:EXT:svconnector/Resources/Private/Language/locallang.xlf:service.not.available'),
-                        get_class($service)
+                        $service::class
                     ),
                     '',
                     ContextualFeedbackSeverity::ERROR

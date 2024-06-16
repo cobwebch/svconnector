@@ -38,7 +38,7 @@ class ConnectorRegistry
                 throw new \InvalidArgumentException(
                     sprintf(
                         'Type for connector %s is empty.',
-                        get_class($connector)
+                        $connector::class
                     ),
                     1671361235
                 );

@@ -189,7 +189,7 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
      * @param mixed $status Some form of status can be passed as argument
      *                      The nature of that status will depend on which process is calling this method
      */
-    public function postProcessOperations(array $parameters, $status)
+    public function postProcessOperations(array $parameters, $status): void
     {
         $hooks = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][$this->extensionKey]['postProcessOperations'] ?? null;
         if (is_array($hooks)) {
@@ -227,9 +227,8 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
      * @param array $extraData Additional data to be passed to the log
      * @param string $exceptionClass Name of the class of exception which should be thrown
      * @throws \Exception
-     * @return void
      */
-    protected function raiseError($message, $exceptionNumber, array $extraData = [], $exceptionClass = ConnectorRuntimeException::class)
+    protected function raiseError($message, $exceptionNumber, array $extraData = [], $exceptionClass = ConnectorRuntimeException::class): never
     {
         $this->logger->error($message, $extraData);
         throw new $exceptionClass($message, $exceptionNumber);
@@ -292,7 +291,7 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
                         $this->getBackendUser()
                     );
             }
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             $this->languageService = GeneralUtility::makeInstance(LanguageServiceFactory::class)->create('en');
         }
     }

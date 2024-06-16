@@ -87,8 +87,6 @@ interface ConnectorServiceInterface
      * Performs post-process operations using events
      *
      * @param array $parameters Parameters for the call
-     * @param mixed $status Some form of status can be passed as argument
-     *                      The nature of that status will depend on which process is calling this method
      */
-    public function postProcessOperations(array $parameters, $status);
+    public function postProcessOperations(array $parameters, mixed $status);
 }

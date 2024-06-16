@@ -14,7 +14,8 @@ namespace Cobweb\Svconnector\Tests\Utility;
  *
  * The TYPO3 project - inspiring people to share!
  */
-
+use Cobweb\Svconnector\Exception\EmptySourceException;
+use Cobweb\Svconnector\Exception\InvalidSourceException;
 use Cobweb\Svconnector\Utility\ConnectorUtility;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 
@@ -134,7 +135,7 @@ class ConnectorUtilityTest extends UnitTestCase
      */
     public function convertXmlToArrayThrowsExceptionOnEmptyString(string $string): void
     {
-        $this->expectException(\Cobweb\Svconnector\Exception\EmptySourceException::class);
+        $this->expectException(EmptySourceException::class);
         ConnectorUtility::convertXmlToArray($string);
     }
 
@@ -154,7 +155,7 @@ class ConnectorUtilityTest extends UnitTestCase
      */
     public function convertXmlToArrayThrowsExceptionOnInvalidString(string $string): void
     {
-        $this->expectException(\Cobweb\Svconnector\Exception\InvalidSourceException::class);
+        $this->expectException(InvalidSourceException::class);
         ConnectorUtility::convertXmlToArray($string);
     }
 }

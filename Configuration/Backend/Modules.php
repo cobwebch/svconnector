@@ -1,5 +1,6 @@
 <?php
 
+use Cobweb\Svconnector\Controller\TestingController;
 return [
     'Svconnector' => [
         'parent' => 'tools',
@@ -11,7 +12,7 @@ return [
         'labels' => 'LLL:EXT:svconnector/Resources/Private/Language/locallang.xlf',
         'extensionName' => 'svconnector',
         'controllerActions' => [
-            \Cobweb\Svconnector\Controller\TestingController::class => [
+            TestingController::class => [
                 'default'
             ],
         ],

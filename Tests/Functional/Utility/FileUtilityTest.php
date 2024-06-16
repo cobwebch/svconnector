@@ -36,12 +36,11 @@ class FileUtilityTest extends FunctionalTestCase
 
     public function setUp(): void
     {
-        parent::setUp();
         try {
             $this->setUpBackendUserFromFixture(1);
             $this->subject = GeneralUtility::makeInstance(FileUtility::class);
             $this->importDataSet(__DIR__ . '/Fixtures/Database/sys_file.xml');
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             self::markTestSkipped('Could not load fixtures');
         }
     }
@@ -76,7 +75,7 @@ class FileUtilityTest extends FunctionalTestCase
      */
     public function getFileContentWithValidUriReturnsContent(string $uri, string $expectedContent): void
     {
-        if (strpos($uri, 'FAL:') === 0) {
+        if (str_starts_with($uri, 'FAL:')) {
             $this->markTestSkipped('FAL support not implemented in tests yet.');
         }
         $content = $this->subject->getFileContent($uri);
@@ -91,7 +90,7 @@ class FileUtilityTest extends FunctionalTestCase
      */
     public function getFileAsTemporaryFileWithValidUriReturnsFilename(string $uri, string $expectedContent): void
     {
-        if (strpos($uri, 'FAL:') === 0) {
+        if (str_starts_with($uri, 'FAL:')) {
             $this->markTestSkipped('FAL support not implemented in tests yet.');
         }
         $filename = $this->subject->getFileAsTemporaryFile($uri);

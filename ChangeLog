@@ -1,3 +1,11 @@
+2024-06-16 Francois Suter (Idéative)  <typo3@ideative.ch>
+
+    * Clean up code with Rector, drop compatibility with PHP 7.4 and 8.0, references #28
+
+2024-05-10 Francois Suter (Idéative)  <typo3@ideative.ch>
+
+    * Ensure base compatibility with TYPO3 13, references #28
+
 2023-08-07 Francois Suter (Idéative)  <typo3@ideative.ch>
 
 	* Verify compatibility with PHP 8.2
