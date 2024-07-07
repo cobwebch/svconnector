@@ -1,1 +1,5 @@
 /Documentation-GENERATED-temp/
+/.Build/
+composer.json.testing
+composer.lock
+/public/

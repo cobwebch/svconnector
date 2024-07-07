@@ -8,7 +8,34 @@ You can render the documentation locally by calling:
     make docs
 ```
 
-The result is displayed in folder Documentation-GENERATED-temp
+The result is displayed in folder Documentation-GENERATED-temp.
+
+## Run tests and apply coding guidelines
+
+Install the requirements:
+
+```
+    make install
+```
+
+Apply automatic coding guideline fixes:
+
+```
+    make fix-cgl
+```
+
+Run tests:
+
+```
+    make test
+```
+
+If you don't have `make` installed or wish for finer control, you can run the tests directly:
+
+```
+    Build/Scripts/runTests.sh -s h
+```
+
 
 # General TYPO3 Support
 
