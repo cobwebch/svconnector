@@ -25,9 +25,7 @@ abstract class AbstractFileReader
     /**
      * @param FileUtility $fileUtility
      */
-    public function __construct(protected FileUtility $fileUtility)
-    {
-    }
+    public function __construct(protected FileUtility $fileUtility) {}
 
     /**
      * Reads the data from given URI and returns it as a string.

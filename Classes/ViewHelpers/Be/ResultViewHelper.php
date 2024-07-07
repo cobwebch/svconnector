@@ -35,8 +35,6 @@ class ResultViewHelper extends AbstractBackendViewHelper
 
     /**
      * Initialize the arguments of the ViewHelper.
-     *
-     * @return void
      */
     public function initializeArguments(): void
     {
@@ -59,7 +57,7 @@ class ResultViewHelper extends AbstractBackendViewHelper
         if (is_array($result)) {
             $content = DebuggerUtility::var_dump($result, '', 10, true, false, true);
         } else {
-            $content = htmlspecialchars((string) $result);
+            $content = htmlspecialchars((string)$result);
         }
         return '<pre>' . $content . '</pre>';
     }

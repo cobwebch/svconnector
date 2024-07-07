@@ -26,8 +26,6 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 /**
  * Test suite for the ConnectorUtility class.
- *
- * @package Cobweb\Svconnector\Tests\Utility
  */
 class ConnectorUtilityTest extends UnitTestCase
 {
@@ -54,21 +52,21 @@ class ConnectorUtilityTest extends UnitTestCase
                                         0 => [
                                             'value' => 'Junior',
                                             'attributes' => [
-                                                'rank' => '#1'
-                                            ]
+                                                'rank' => '#1',
+                                            ],
                                         ],
                                         1 => [
                                             'value' => 'Baby',
                                             'attributes' => [
-                                                'rank' => '#2'
-                                            ]
-                                        ]
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
+                                                'rank' => '#2',
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
             ],
             'with namespace' => [
                 'input' => '
@@ -90,22 +88,22 @@ class ConnectorUtilityTest extends UnitTestCase
                                         0 => [
                                             'value' => 'Junior',
                                             'attributes' => [
-                                                'rank' => '#1'
-                                            ]
+                                                'rank' => '#1',
+                                            ],
                                         ],
                                         1 => [
                                             'value' => 'Baby',
                                             'attributes' => [
-                                                'rank' => '#2'
-                                            ]
-                                        ]
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
-            ]
+                                                'rank' => '#2',
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -123,8 +121,8 @@ class ConnectorUtilityTest extends UnitTestCase
     {
         return [
             'empty string' => [
-                ''
-            ]
+                '',
+            ],
         ];
     }
 
@@ -138,8 +136,8 @@ class ConnectorUtilityTest extends UnitTestCase
     {
         return [
             'malformed XML' => [
-                '<foo><unclosed_tag></foo>'
-            ]
+                '<foo><unclosed_tag></foo>',
+            ],
         ];
     }
 

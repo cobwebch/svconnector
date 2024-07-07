@@ -22,7 +22,6 @@ namespace Cobweb\Svconnector\Service;
  */
 interface ConnectorServiceInterface
 {
-
     /**
      * Returns the type of data handled by the connector service
      *
@@ -40,7 +39,7 @@ interface ConnectorServiceInterface
     /**
      * Verifies that the connection is functional, returns false if not.
      *
-     * @return boolean TRUE if the service is available
+     * @return bool TRUE if the service is available
      */
     public function isAvailable(): bool;
 

@@ -25,8 +25,6 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 /**
  * Test case for FileUtility class.
- *
- * @package Cobweb\Svconnector\Tests\Utility
  */
 class FileUtilityTest extends FunctionalTestCase
 {
@@ -39,7 +37,7 @@ class FileUtilityTest extends FunctionalTestCase
     public function setUp(): void
     {
         try {
-//            $this->setUpBackendUserFromFixture(1);
+            //            $this->setUpBackendUserFromFixture(1);
             $this->subject = GeneralUtility::makeInstance(FileUtility::class);
             $this->importCSVDataSet(__DIR__ . '/Fixtures/Database/sys_file.csv');
         } catch (\Exception $e) {
@@ -52,20 +50,20 @@ class FileUtilityTest extends FunctionalTestCase
         return [
             'FAL pointer' => [
                 'FAL:1:test.csv',
-                "code;name\n0x2;Foo\n1y7;Bar\n"
+                "code;name\n0x2;Foo\n1y7;Bar\n",
             ],
             'EXT: syntax' => [
                 'EXT:svconnector/Tests/Functional/Utility/Fixtures/Files/test.csv',
-                "code;name\n0x2;Foo\n1y7;Bar\n"
+                "code;name\n0x2;Foo\n1y7;Bar\n",
             ],
             'Relative path' => [
                 'typo3conf/ext/svconnector/Tests/Functional/Utility/Fixtures/Files/test.csv',
-                "code;name\n0x2;Foo\n1y7;Bar\n"
+                "code;name\n0x2;Foo\n1y7;Bar\n",
             ],
             'Remote URI' => [
                 'https://raw.githubusercontent.com/cobwebch/svconnector/master/Tests/Functional/Utility/Fixtures/Files/test.csv',
-                "code;name\n0x2;Foo\n1y7;Bar\n"
-            ]
+                "code;name\n0x2;Foo\n1y7;Bar\n",
+            ],
         ];
     }
 
@@ -73,7 +71,7 @@ class FileUtilityTest extends FunctionalTestCase
     public function getFileContentWithValidUriReturnsContent(string $uri, string $expectedContent): void
     {
         if (str_starts_with($uri, 'FAL:')) {
-            $this->markTestSkipped('FAL support not implemented in tests yet.');
+            self::markTestSkipped('FAL support not implemented in tests yet.');
         }
         $content = $this->subject->getFileContent($uri);
         self::assertSame($expectedContent, $content);
@@ -83,7 +81,7 @@ class FileUtilityTest extends FunctionalTestCase
     public function getFileAsTemporaryFileWithValidUriReturnsFilename(string $uri, string $expectedContent): void
     {
         if (str_starts_with($uri, 'FAL:')) {
-            $this->markTestSkipped('FAL support not implemented in tests yet.');
+            self::markTestSkipped('FAL support not implemented in tests yet.');
         }
         $filename = $this->subject->getFileAsTemporaryFile($uri);
         $content = file_get_contents($filename);
@@ -94,11 +92,11 @@ class FileUtilityTest extends FunctionalTestCase
     {
         return [
             'Non-existing file' => [
-                'typo3conf/ext/svconnector/Tests/Functional/Utility/Fixtures/Files/testxxx.csv'
+                'typo3conf/ext/svconnector/Tests/Functional/Utility/Fixtures/Files/testxxx.csv',
             ],
             'Outside root path' => [
-                self::getInstancePath() . '../foo/test.csv'
-            ]
+                self::getInstancePath() . '../foo/test.csv',
+            ],
         ];
     }
 

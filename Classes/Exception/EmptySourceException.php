@@ -20,6 +20,4 @@ namespace Cobweb\Svconnector\Exception;
 /**
  * Exception to throw when the source of data is empty.
  */
-class EmptySourceException extends ConnectorException
-{
-}
+class EmptySourceException extends ConnectorException {}

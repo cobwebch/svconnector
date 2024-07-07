@@ -20,6 +20,4 @@ namespace Cobweb\Svconnector\Exception;
 /**
  * Exception to throw when the source contains invalid or malformed data.
  */
-class InvalidSourceException extends ConnectorException
-{
-}
+class InvalidSourceException extends ConnectorException {}

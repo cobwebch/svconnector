@@ -112,7 +112,7 @@ class FileUtility implements SingletonInterface, \Stringable
                     )
                 );
             }
-        // Keep path as is if allowed absolute path
+            // Keep path as is if allowed absolute path
         } elseif (GeneralUtility::isAllowedAbsPath($uri)) {
             $data = @file_get_contents($uri);
             if ($data === false) {
@@ -123,7 +123,7 @@ class FileUtility implements SingletonInterface, \Stringable
                     )
                 );
             }
-        // As a last resort, resolve "EXT:" syntax and paths relative to the TYPO3 root
+            // As a last resort, resolve "EXT:" syntax and paths relative to the TYPO3 root
         } else {
             $finalUri = GeneralUtility::getFileAbsFileName($uri);
             // The final URI might be empty, if GeneralUtility::getFileAbsFileName() wasn't happy with it

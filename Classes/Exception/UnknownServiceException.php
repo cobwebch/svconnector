@@ -20,6 +20,4 @@ namespace Cobweb\Svconnector\Exception;
 /**
  * Exception to throw when an unknown service is requested.
  */
-class UnknownServiceException extends ConnectorException
-{
-}
+class UnknownServiceException extends ConnectorException {}

@@ -82,8 +82,8 @@ class ConnectorUtility
         // If input string is empty, exit with exception
         if (empty($string)) {
             throw new EmptySourceException(
-                    'XML string is empty!',
-                    1294325109
+                'XML string is empty!',
+                1294325109
             );
         }
 
@@ -93,8 +93,8 @@ class ConnectorUtility
         // Transform XML into a PHP array
         if ($xmlObject === false) {
             throw new InvalidSourceException(
-                    'XML is invalid!',
-                    1545687481
+                'XML is invalid!',
+                1545687481
             );
         }
         return self::handleXmlNode($xmlObject, array_keys($xmlObject->getDocNamespaces()));
@@ -150,10 +150,11 @@ class ConnectorUtility
      *
      * @param \SimpleXMLElement $node
      * @param array $namespaces List of namespaces used (optional)
-     * @param string $namespace Namespace to be parsed (optional)
+     * @param string|null $namespace Namespace to be parsed (optional)
      * @return array
      */
-    public static function handleChildren(\SimpleXMLElement $node, array $namespaces = [], $namespace = null) {
+    public static function handleChildren(\SimpleXMLElement $node, array $namespaces = [], ?string $namespace = null): array
+    {
         $children = $node->children($namespace, true);
         $array = [];
         if ($children->count() > 0) {
@@ -162,9 +163,9 @@ class ConnectorUtility
             // Go through all child nodes and recursively convert them to arrays
             foreach ($children as $key => $subnode) {
                 $parsed = self::handleXmlNode(
-                        $subnode,
-                        array_unique(array_merge($namespaces, array_keys($subnode->getDocNamespaces(false, false))))
-                    );
+                    $subnode,
+                    array_unique(array_merge($namespaces, array_keys($subnode->getDocNamespaces(false, false))))
+                );
                 // define the array key for this child
                 $keyname = $base . $key;
                 // define child array once
@@ -182,10 +183,11 @@ class ConnectorUtility
      * Extracts all regular attributes or all attributes of a namespace
      *
      * @param \SimpleXMLElement $node XML node
-     * @param string $namespace Namespace to be used (optional)
+     * @param string|null $namespace Namespace to be used (optional)
      * @return array All attributes of the specified namespace (if any)
      */
-    public static function handleAttributes(\SimpleXMLElement $node, $namespace = null) {
+    public static function handleAttributes(\SimpleXMLElement $node, ?string $namespace = null): array
+    {
         // Get attributes of a namespace
         $attributes = $node->attributes($namespace, true);
         $parsed = [];

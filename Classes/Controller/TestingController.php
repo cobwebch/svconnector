@@ -17,7 +17,6 @@ namespace Cobweb\Svconnector\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
 use Cobweb\Svconnector\Registry\ConnectorRegistry;
 use Cobweb\Svconnector\Service\ConnectorBase;
 use Psr\Http\Message\ResponseInterface;
@@ -27,6 +26,7 @@ use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
 
 /**
  * Controller for the backend module
@@ -99,7 +99,7 @@ class TestingController extends ActionController
                     ContextualFeedbackSeverity::WARNING
                 );
 
-            // If there are simply no registered services, display a notice
+                // If there are simply no registered services, display a notice
             } else {
                 $this->addFlashMessage(
                     $this->getLanguageService()->sL('LLL:EXT:svconnector/Resources/Private/Language/locallang.xlf:no.services'),
@@ -128,7 +128,7 @@ class TestingController extends ActionController
                         $arguments['service'],
                         $arguments['parameters'],
                         (int)$arguments['format']
-                    )
+                    ),
                 ]
             );
         } else {
@@ -140,7 +140,7 @@ class TestingController extends ActionController
                     'selectedService' => $defaultService,
                     'parameters' => $defaultParameters,
                     'format' => 0,
-                    'testResult' => ''
+                    'testResult' => '',
                 ]
             );
         }

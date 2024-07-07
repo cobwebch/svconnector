@@ -20,6 +20,4 @@ namespace Cobweb\Svconnector\Exception;
 /**
  * Base class for all Connector-related exceptions.
  */
-class ConnectorException extends \Exception
-{
-}
+class ConnectorException extends \Exception {}

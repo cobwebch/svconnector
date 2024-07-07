@@ -21,6 +21,4 @@ namespace Cobweb\Svconnector\Exception;
  * Exception to throw when an error happens while performing
  * a non-specific connector operation.
  */
-class ConnectorRuntimeException extends ConnectorException
-{
-}
+class ConnectorRuntimeException extends ConnectorException {}

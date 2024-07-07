@@ -21,6 +21,4 @@ namespace Cobweb\Svconnector\Exception;
  * Exception to throw when an error occurs when trying to access a source of data
  * (e.g. a file is not found, a database cannot be accessed, etc.).
  */
-class SourceErrorException extends ConnectorException
-{
-}
+class SourceErrorException extends ConnectorException {}

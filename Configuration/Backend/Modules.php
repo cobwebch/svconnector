@@ -1,6 +1,7 @@
 <?php
 
 use Cobweb\Svconnector\Controller\TestingController;
+
 return [
     'Svconnector' => [
         'parent' => 'tools',
@@ -13,8 +14,8 @@ return [
         'extensionName' => 'svconnector',
         'controllerActions' => [
             TestingController::class => [
-                'default'
+                'default',
             ],
         ],
-    ]
+    ],
 ];

@@ -75,7 +75,7 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
      * Returns false if not. This base implementation always returns false,
      * since it is not supposed to be called directly
      *
-     * @return boolean TRUE if the service is available
+     * @return bool TRUE if the service is available
      */
     abstract public function isAvailable(): bool;
 
@@ -109,7 +109,7 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
         return [
             ContextualFeedbackSeverity::NOTICE->value => [],
             ContextualFeedbackSeverity::WARNING->value => [],
-            ContextualFeedbackSeverity::ERROR->value => []
+            ContextualFeedbackSeverity::ERROR->value => [],
         ];
     }
 
@@ -117,7 +117,6 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
      * Logs all problems reported by checkConfiguration().
      *
      * @param array $problems
-     * @return void
      */
     public function logConfigurationCheck(array $problems): void
     {
@@ -223,7 +222,7 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
      * It will throw an exception and send the error to the logging API.
      *
      * @param string $message Error message
-     * @param integer $exceptionNumber Number (code) of the exception
+     * @param int $exceptionNumber Number (code) of the exception
      * @param array $extraData Additional data to be passed to the log
      * @param string $exceptionClass Name of the class of exception which should be thrown
      * @throws \Exception
@@ -271,8 +270,6 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
 
     /**
      * Initializes the LanguageService depending on context, falling back to default language if all else fails
-     *
-     * @return void
      */
     protected function initializeLanguageService(): void
     {
