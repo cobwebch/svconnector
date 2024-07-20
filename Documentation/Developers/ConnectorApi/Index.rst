@@ -42,6 +42,16 @@ getName()
     string
 
 
+getName()
+  This method returns the current :ref:`call context object <developers-api-context>`.
+
+  Input
+    none
+
+  Output
+    string
+
+
 isAvailable()
   This method can be called when a connector service is about to be used
   to check if it is available or not. It is expected to return a boolean value
@@ -159,3 +169,26 @@ postProcessOperations()
   Output
     void
 
+
+.. _developers-api-context:
+
+Call context API
+""""""""""""""""
+
+The call context is meant to contain information about the context in which the
+Connector service was called. This can be useful when responding to events, in
+order to react appropriately. The context may contain serveral pieces of information,
+each referenced with a key (the context itself being an associative array). Each
+piece of information is also an array. It is recommended to use/include the name
+of the extension using the service in the keys, in order to avoid overwriting existing
+data (even though the scenario is pretty unlikely).
+
+Example usage:
+
+.. code-block:: php
+
+   // Set some data
+   $service->getCallContext()->add('external_import', ['foo' => 'bar']);
+
+   // Get some data
+   $context = $service->getCallContext()->get();

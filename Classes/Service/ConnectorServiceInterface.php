@@ -17,6 +17,8 @@ namespace Cobweb\Svconnector\Service;
  * The TYPO3 project - inspiring people to share!
  */
 
+use Cobweb\Svconnector\Domain\Model\Dto\CallContext;
+
 /**
  * Defines the methods that represent the Connector Service API
  */
@@ -57,6 +59,13 @@ interface ConnectorServiceInterface
      * @return array
      */
     public function checkConfiguration(array $parameters = []): array;
+
+    /**
+     * Returns the call context object
+     *
+     * @return CallContext
+     */
+    public function getCallContext(): CallContext;
 
     /**
      * Calls the query and returns the results from the response as is.

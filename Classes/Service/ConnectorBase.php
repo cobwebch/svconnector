@@ -17,6 +17,7 @@ namespace Cobweb\Svconnector\Service;
  * The TYPO3 project - inspiring people to share!
  */
 
+use Cobweb\Svconnector\Domain\Model\Dto\CallContext;
 use Cobweb\Svconnector\Exception\ConnectorRuntimeException;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerAwareInterface;
@@ -44,10 +45,8 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
 {
     use LoggerAwareTrait;
 
-    /**
-     * @var string Extension key
-     */
     protected string $extensionKey = 'svconnector';
+    protected CallContext $callContext;
 
     protected LanguageService $languageService;
 
@@ -69,6 +68,16 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
      * @return string
      */
     abstract public function getName(): string;
+
+    /**
+     * Returns the current call context object
+     *
+     * @return CallContext
+     */
+    public function getCallContext(): CallContext
+    {
+        return $this->callContext;
+    }
 
     /**
      * Verifies that the connection is functional
