@@ -173,9 +173,11 @@ class TestingController extends ActionController
         $result = '';
 
         if (isset($this->services[$type])) {
+            /** @var ConnectorBase $service */
             $service = $this->services[$type];
             if ($service->isAvailable()) {
                 try {
+                    $service->getCallContext()->add('svconnector', ['function' => 'testing module']);
                     $parsedParameters = json_decode($parameters, true, 512, JSON_THROW_ON_ERROR);
                     // Call the right "fetcher" depending on chosen format
                     $result = match ($format) {
