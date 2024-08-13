@@ -36,6 +36,7 @@ class FileUtilityTest extends FunctionalTestCase
 
     public function setUp(): void
     {
+        parent::setUp();
         try {
             //            $this->setUpBackendUserFromFixture(1);
             $this->subject = GeneralUtility::makeInstance(FileUtility::class);
