@@ -15,7 +15,7 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace Cobweb\Svconnector\Tests\Utility;
+namespace Cobweb\Svconnector\Tests\Unit\Utility;
 
 use Cobweb\Svconnector\Exception\EmptySourceException;
 use Cobweb\Svconnector\Exception\InvalidSourceException;
