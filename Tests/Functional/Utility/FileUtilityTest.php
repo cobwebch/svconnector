@@ -31,7 +31,7 @@ class FileUtilityTest extends FunctionalTestCase
     protected FileUtility $subject;
 
     protected array $testExtensionsToLoad = [
-        'typo3conf/ext/svconnector',
+        'cobweb/svconnector',
     ];
 
     public function setUp(): void
