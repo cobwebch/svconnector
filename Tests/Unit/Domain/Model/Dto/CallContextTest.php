@@ -49,7 +49,7 @@ class CallContextTest extends UnitTestCase
             [
                 'context1' => [
                     'location' => 'here',
-                ]
+                ],
             ]
         );
         self::assertSame(
