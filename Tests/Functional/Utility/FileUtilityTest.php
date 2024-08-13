@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Cobweb\Svconnector\Tests\Utility;
+namespace Cobweb\Svconnector\Tests\Functional\Utility;
 
 /*
  * This file is part of the TYPO3 CMS project.

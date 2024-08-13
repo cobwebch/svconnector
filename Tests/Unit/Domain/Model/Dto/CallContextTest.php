@@ -15,7 +15,7 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace Cobweb\Svconnector\Tests\Domain\Model\Dto;
+namespace Cobweb\Svconnector\Tests\Unit\Domain\Model\Dto;
 
 use Cobweb\Svconnector\Domain\Model\Dto\CallContext;
 use Cobweb\Svconnector\Exception\NoSuchContextException;
