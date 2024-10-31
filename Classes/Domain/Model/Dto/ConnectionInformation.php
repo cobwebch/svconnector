@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-namespace Cobweb\Svconnector\Exception;
-
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -17,7 +15,13 @@ namespace Cobweb\Svconnector\Exception;
  * The TYPO3 project - inspiring people to share!
  */
 
+namespace Cobweb\Svconnector\Domain\Model\Dto;
+
 /**
- * Exception to throw when trying to access an element which does not exist in the current call context
+ * DTO class for managing connection information.
+ *
+ * Connection to third-party sources may require some form of authentication, for example
+ * returning a token. This kind of information can be stored in the connection information,
+ * which can later be used in the connection parameters.
  */
-class NoSuchContextException extends ConnectorException {}
+class ConnectionInformation extends AbstractDataObject {}

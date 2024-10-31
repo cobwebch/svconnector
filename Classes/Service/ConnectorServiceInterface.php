@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-namespace Cobweb\Svconnector\Service;
-
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -17,7 +15,10 @@ namespace Cobweb\Svconnector\Service;
  * The TYPO3 project - inspiring people to share!
  */
 
+namespace Cobweb\Svconnector\Service;
+
 use Cobweb\Svconnector\Domain\Model\Dto\CallContext;
+use Cobweb\Svconnector\Domain\Model\Dto\ConnectionInformation;
 
 /**
  * Defines the methods that represent the Connector Service API
@@ -39,11 +40,21 @@ interface ConnectorServiceInterface
     public function getName(): string;
 
     /**
+     * Performs any necessary initialization for the service. Called automatically by the connector registry.
+     */
+    public function initialize(): void;
+
+    /**
      * Verifies that the connection is functional, returns false if not.
      *
      * @return bool TRUE if the service is available
      */
     public function isAvailable(): bool;
+
+    /**
+     * Set the connector parameters
+     */
+    public function setParameters(array $parameters): void;
 
     /**
      * Returns the sample configuration for the service, if any
@@ -61,11 +72,18 @@ interface ConnectorServiceInterface
     public function checkConfiguration(array $parameters = []): array;
 
     /**
-     * Returns the call context object
+     * Return the call context object
      *
      * @return CallContext
      */
     public function getCallContext(): CallContext;
+
+    /**
+     * Return the connection information object
+     *
+     * @return ConnectionInformation
+     */
+    public function getConnectionInformation(): ConnectionInformation;
 
     /**
      * Calls the query and returns the results from the response as is.

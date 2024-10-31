@@ -1,3 +1,7 @@
+2024-10-31 Francois Suter (Idéative)  <typo3@ideative.ch>
+
+    * Introduce connection information, resolves #33
+
 2024-07-20 Francois Suter (Idéative)  <typo3@ideative.ch>
 
     * Introduce call context , resolves #30

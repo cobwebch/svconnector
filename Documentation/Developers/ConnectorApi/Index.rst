@@ -22,7 +22,7 @@ than reimplementing boilerplate code.
 
 getType()
   This method returns the type of the connector service. The type is
-  representative of this kind of data it can handle, e.g. :code:`csv`
+  representative of the kind of data it can handle, e.g. :code:`csv`
   for the "svconnector_csv" service.
 
   Input
@@ -42,20 +42,26 @@ getName()
     string
 
 
-getName()
-  This method returns the current :ref:`call context object <developers-api-context>`.
+initialize()
+  This method performs any necessary initialization for the connector service. It is
+  called automatically by the registry when instanciating the service. The base class
+  :php:`\Cobweb\Svconnector\Service\ConnectorBase` contains a default implementation which
+  fires an event allowing custom initialization processes. If you should need to implement
+  your own version of the `initialize()` method in your connector service, make sure to call
+  the parent method or to dispatch the :php`\Cobweb\Svconnector\Event\InitializeConnectorEvent`,
+  since users of your service will expect that.
 
   Input
     none
 
   Output
-    string
+    void
 
 
 isAvailable()
   This method can be called when a connector service is about to be used
   to check if it is available or not. It is expected to return a boolean value
-  accordiningly.
+  accordingly.
 
   Input
     none
@@ -92,6 +98,27 @@ checkConfiguration()
     array of errors, warnings or notices
 
 
+getCallContext()
+  This method returns the current :ref:`call context object <developers-api-context>`.
+
+  Input
+    none
+
+  Output
+    :php:`\Cobweb\Svconnector\Domain\Model\Dto\CallContext`
+
+
+getConnectionInformation()
+  This method returns any connection information that may have been set by
+  the connector or events called by the connector.
+
+  Input
+    none
+
+  Output
+    php:`\Cobweb\Svconnector\Domain\Model\Dto\ConnectionInformation`
+
+
 logConfigurationCheck()
   This method is used to cleanly report all configuration issues by logging them
   using the TYPO3 logging API. This is not automatically done by :php:`checkConfiguration()`
@@ -115,7 +142,7 @@ query()
   programming practice to use it.
 
   Input
-    array of parameters
+    none
 
   Output
     mixed (result from the distant source)
@@ -126,7 +153,7 @@ fetchRaw()
   distant source as is, without transformation.
 
   Input
-    array of parameters
+    none
 
   Output
     mixed (result from the distant source)
@@ -137,7 +164,7 @@ fetchXML()
   distant source transformed into a XML structure (as a string).
 
   Input
-    array of parameters
+    none
 
   Output
     string (XML structure)
@@ -148,7 +175,7 @@ fetchArray()
   distant source transformed into a PHP array.
 
   Input
-    array of parameters
+    none
 
   Output
     array
@@ -164,7 +191,7 @@ postProcessOperations()
   It doesn't do anything by itself, but just calls events (or hooks).
 
   Input
-    array of parameters and a status
+    array of parameters (deprecated, pass an empty array instead) and a status
 
   Output
     void
@@ -192,3 +219,45 @@ Example usage:
 
    // Get some data
    $context = $service->getCallContext()->get();
+
+
+.. _developers-api-connection-information:
+
+Connection information API
+""""""""""""""""""""""""""
+
+The connection information is meant to contain data relative to the current
+connection to the third-party service being accessed by the connector service.
+For example, this could be an authentication token retrieved during the service
+initialization (i.e. when the :code:`initialize()` method was called).
+
+Assuming the following data is set:
+
+.. code-block:: php
+
+   // Set some data
+   $service->getConnectionInformation()->add('token', ['sso' => '$$XyZSecureCode42']);
+
+it is later used to substitute variables in the connector parameters. The parameters are parsed
+when getting a service from the registry. Considering the following parameters:
+
+.. code-block:: php
+
+   [
+      'headers' => [
+         'token' => '{token.sso}'
+      ]
+   ]
+
+the service would then have the following concrete parameters for usage:
+
+.. code-block:: php
+
+   [
+      'headers' => [
+         'token' => '$$XyZSecureCode42'
+      ]
+   ]
+
+A :php:`\Cobweb\Svconnector\Event\ProcessParametersEvent` event is fired after this
+parsing, allowing for further manipulation of the connector parameters.

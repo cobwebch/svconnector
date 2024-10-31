@@ -126,7 +126,7 @@ class TestingController extends ActionController
                     'format' => $arguments['format'],
                     'testResult' => $this->performTest(
                         $arguments['service'],
-                        $arguments['parameters'],
+                        $parameters,
                         (int)$arguments['format']
                     ),
                 ]
@@ -179,11 +179,12 @@ class TestingController extends ActionController
                 try {
                     $service->getCallContext()->add('svconnector', ['function' => 'testing module']);
                     $parsedParameters = json_decode($parameters, true, 512, JSON_THROW_ON_ERROR);
+                    $service->setParameters($parsedParameters);
                     // Call the right "fetcher" depending on chosen format
                     $result = match ($format) {
-                        1 => $service->fetchArray($parsedParameters),
-                        2 => $service->fetchXML($parsedParameters),
-                        default => $service->fetchRaw($parsedParameters),
+                        1 => $service->fetchArray(),
+                        2 => $service->fetchXML(),
+                        default => $service->fetchRaw(),
                     };
                     // If the result is empty, issue an information message
                     if (empty($result)) {

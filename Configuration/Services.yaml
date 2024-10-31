@@ -11,7 +11,7 @@ services:
   Cobweb\Svconnector\Utility\FileUtility:
     public: true
 
-  # Linktype registry
+  # Connector services registry
   Cobweb\Svconnector\Registry\ConnectorRegistry:
     public: true
     arguments:

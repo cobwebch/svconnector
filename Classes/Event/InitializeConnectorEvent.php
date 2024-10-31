@@ -15,12 +15,21 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace Cobweb\Svconnector\Domain\Model\Dto;
+namespace Cobweb\Svconnector\Event;
 
-/**
- * DTO class for managing a call context.
- *
- * A call context can be made up of a collection of information, each piece of information being stored
- * with a specific associative key in the context array.
- */
-class CallContext extends AbstractDataObject {}
+use Cobweb\Svconnector\Service\ConnectorBase;
+
+final class InitializeConnectorEvent
+{
+    protected ConnectorBase $connector;
+
+    public function __construct(ConnectorBase $connector)
+    {
+        $this->connector = $connector;
+    }
+
+    public function getConnector(): ConnectorBase
+    {
+        return $this->connector;
+    }
+}

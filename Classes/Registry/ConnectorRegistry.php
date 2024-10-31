@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-namespace Cobweb\Svconnector\Registry;
-
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -16,6 +14,8 @@ namespace Cobweb\Svconnector\Registry;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
+namespace Cobweb\Svconnector\Registry;
 
 use Cobweb\Svconnector\Exception\UnknownServiceException;
 use Cobweb\Svconnector\Service\ConnectorBase;
@@ -52,6 +52,7 @@ class ConnectorRegistry
                     1671361286
                 );
             }
+            $connector->initialize();
             $this->connectors[$type] = $connector;
         }
     }
@@ -70,13 +71,17 @@ class ConnectorRegistry
      * Returns a connector service object for the requested type
      *
      * @param string $type Type of connector service
+     * @param array $parameters Parameters for the connector
      * @return ConnectorBase
      * @throws UnknownServiceException
      */
-    public function getServiceForType(string $type): ConnectorBase
+    public function getServiceForType(string $type, array $parameters = []): ConnectorBase
     {
         if (isset($this->connectors[$type])) {
-            return $this->connectors[$type];
+            /** @var ConnectorBase $connector */
+            $connector = $this->connectors[$type];
+            $connector->setParameters($parameters);
+            return $connector;
         }
         throw new UnknownServiceException(
             sprintf(

@@ -18,7 +18,7 @@ declare(strict_types=1);
 namespace Cobweb\Svconnector\Tests\Unit\Domain\Model\Dto;
 
 use Cobweb\Svconnector\Domain\Model\Dto\CallContext;
-use Cobweb\Svconnector\Exception\NoSuchContextException;
+use Cobweb\Svconnector\Exception\NoSuchDataException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
@@ -63,7 +63,7 @@ class CallContextTest extends UnitTestCase
     #[Test]
     public function getForKeyWithUnknownKeyThrowsException(): void
     {
-        $this->expectException(NoSuchContextException::class);
+        $this->expectException(NoSuchDataException::class);
         self::assertSame(
             [
                 'location' => 'here',

@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Cobweb\Svconnector\Exception;
+
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -15,12 +17,7 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace Cobweb\Svconnector\Domain\Model\Dto;
-
 /**
- * DTO class for managing a call context.
- *
- * A call context can be made up of a collection of information, each piece of information being stored
- * with a specific associative key in the context array.
+ * Exception to throw when trying to access an element which does not exist in a data object
  */
-class CallContext extends AbstractDataObject {}
+class NoSuchDataException extends ConnectorException {}

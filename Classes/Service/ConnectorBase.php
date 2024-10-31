@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-namespace Cobweb\Svconnector\Service;
-
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -17,13 +15,20 @@ namespace Cobweb\Svconnector\Service;
  * The TYPO3 project - inspiring people to share!
  */
 
+namespace Cobweb\Svconnector\Service;
+
 use Cobweb\Svconnector\Domain\Model\Dto\CallContext;
+use Cobweb\Svconnector\Domain\Model\Dto\ConnectionInformation;
+use Cobweb\Svconnector\Event\InitializeConnectorEvent;
+use Cobweb\Svconnector\Event\ProcessParametersEvent;
 use Cobweb\Svconnector\Exception\ConnectorRuntimeException;
+use Cobweb\Svconnector\Utility\ParameterParser;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Charset\CharsetConverter;
+use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Localization\LanguageServiceFactory;
@@ -46,12 +51,19 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
     use LoggerAwareTrait;
 
     protected string $extensionKey = 'svconnector';
+    // Information set from outside the connector service, to give context about where it is being called from
     protected CallContext $callContext;
-
+    // Information about the connection that the service tries to establish
+    protected ConnectionInformation $connectionInformation;
+    protected EventDispatcher $eventDispatcher;
     protected LanguageService $languageService;
+    protected array $parameters = [];
 
     public function __construct()
     {
+        $this->eventDispatcher = GeneralUtility::makeInstance(EventDispatcher::class);
+        $this->callContext = new CallContext();
+        $this->connectionInformation = new ConnectionInformation();
         $this->initializeLanguageService();
     }
 
@@ -70,13 +82,46 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
     abstract public function getName(): string;
 
     /**
-     * Returns the current call context object
-     *
-     * @return CallContext
+     * Perform any necessary initialization of the service and fire an event to allow
+     * for custom handling in specific cases
+     */
+    public function initialize(): void
+    {
+        $this->eventDispatcher->dispatch(
+            new InitializeConnectorEvent($this)
+        );
+    }
+
+    /**
+     * Set the connector parameters, process them and fire an event for custom manipulation
+     */
+    public function setParameters(array $parameters): void
+    {
+        $parameterParser = GeneralUtility::makeInstance(ParameterParser::class);
+        $parameters = $parameterParser->parse(
+            $parameters,
+            $this->connectionInformation->get()
+        );
+        $event = $this->eventDispatcher->dispatch(
+            new ProcessParametersEvent($parameters)
+        );
+        $this->parameters = $event->getParameters();
+    }
+
+    /**
+     * Return the current call context object
      */
     public function getCallContext(): CallContext
     {
         return $this->callContext;
+    }
+
+    /**
+     * Return the current connection information
+     */
+    public function getConnectionInformation(): ConnectionInformation
+    {
+        return $this->connectionInformation;
     }
 
     /**
@@ -115,6 +160,14 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
      */
     public function checkConfiguration(array $parameters = []): array
     {
+        // Temporary code while passing parameters array is deprecated and before
+        // method signature is changed entirely (in the next major version)
+        // Base deprecation code that can be called by all inheriting classes
+        if (count(func_get_args()) > 0) {
+            $this->triggerDeprecation('fetchRaw()');
+            $this->parameters = $parameters;
+        }
+
         return [
             ContextualFeedbackSeverity::NOTICE->value => [],
             ContextualFeedbackSeverity::WARNING->value => [],
@@ -156,7 +209,17 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
      * @param array $parameters Parameters for the call
      * @return mixed Server response
      */
-    abstract public function fetchRaw(array $parameters = []);
+    public function fetchRaw(array $parameters = [])
+    {
+        // Temporary code while passing parameters array is deprecated and before
+        // method signature is changed entirely (in the next major version)
+        // Base deprecation code that can be called by all inheriting classes
+        if (count(func_get_args()) > 0) {
+            $this->triggerDeprecation('fetchRaw()');
+            $this->parameters = $parameters;
+        }
+        return '';
+    }
 
     /**
      * This method calls the query and returns the results from the response as an XML structure.
@@ -171,7 +234,17 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
      * @param array $parameters Parameters for the call
      * @return string XML structure
      */
-    abstract public function fetchXML(array $parameters = []): string;
+    public function fetchXML(array $parameters = []): string
+    {
+        // Temporary code while passing parameters array is deprecated and before
+        // method signature is changed entirely (in the next major version)
+        // Base deprecation code that can be called by all inheriting classes
+        if (count(func_get_args()) > 0) {
+            $this->triggerDeprecation('fetchRaw()');
+            $this->parameters = $parameters;
+        }
+        return '';
+    }
 
     /**
      * This method calls the query and returns the results from the response as a PHP array.
@@ -186,7 +259,17 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
      * @param array $parameters Parameters for the call
      * @return array PHP array
      */
-    abstract public function fetchArray(array $parameters = []): array;
+    public function fetchArray(array $parameters = []): array
+    {
+        // Temporary code while passing parameters array is deprecated and before
+        // method signature is changed entirely (in the next major version)
+        // Base deprecation code that can be called by all inheriting classes
+        if (count(func_get_args()) > 0) {
+            $this->triggerDeprecation('fetchRaw()');
+            $this->parameters = $parameters;
+        }
+        return [];
+    }
 
     /**
      * This method can be called to perform specific operations at some point after
@@ -197,13 +280,20 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
      * @param mixed $status Some form of status can be passed as argument
      *                      The nature of that status will depend on which process is calling this method
      */
-    public function postProcessOperations(array $parameters, $status): void
+    public function postProcessOperations(array $parameters, mixed $status): void
     {
+        // Temporary code while passing parameters array is deprecated and before
+        // method signature is changed entirely (in the next major version)
+        if (count($parameters) > 0) {
+            $this->triggerDeprecation('fetchRaw()');
+            $this->parameters = $parameters;
+        }
+
         $hooks = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][$this->extensionKey]['postProcessOperations'] ?? null;
         if (is_array($hooks)) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][$this->extensionKey]['postProcessOperations'] as $className) {
                 $processor = GeneralUtility::makeInstance($className);
-                $processor->postProcessOperations($parameters, $status, $this);
+                $processor->postProcessOperations($this->parameters, $status, $this);
             }
         }
     }
@@ -224,7 +314,17 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
      *
      * @return mixed Server response
      */
-    abstract protected function query(array $parameters = []);
+    protected function query(array $parameters = [])
+    {
+        // Temporary code while passing parameters array is deprecated and before
+        // method signature is changed entirely (in the next major version)
+        // Base deprecation code that can be called by all inheriting classes
+        if (count(func_get_args()) > 0) {
+            $this->triggerDeprecation('fetchRaw()');
+            $this->parameters = $parameters;
+        }
+        return '';
+    }
 
     /**
      * This method should be used by all connector services when they encounter a fatal error.
@@ -335,5 +435,22 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
     protected function getBackendUser(): BackendUserAuthentication
     {
         return $GLOBALS['BE_USER'];
+    }
+
+    /**
+     * @internal
+     * @deprecated Will be removed in next major version
+     */
+    public function triggerDeprecation(string $method): void
+    {
+        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+        $caller = end($backtrace);
+        $callerLocation = sprintf('file %s, line %d', $caller['file'], $caller['line']);
+
+        trigger_error(sprintf(
+            'Passing parameters as argument to %s is deprecated. Pass arguments when getting service from registry instead. Location: %s',
+            $method,
+            $callerLocation,
+        ), E_USER_DEPRECATED);
     }
 }
