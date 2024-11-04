@@ -19,6 +19,10 @@ namespace Cobweb\Svconnector\Event;
 
 use Cobweb\Svconnector\Service\ConnectorServiceInterface;
 
+/**
+ * Event for processing data in XML format retrieved by connector services.
+ * Primarily meant for use in the fetchXml() method.
+ */
 final class ProcessXmlDataEvent
 {
     protected string $data;

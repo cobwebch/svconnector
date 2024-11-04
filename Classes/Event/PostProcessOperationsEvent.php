@@ -20,17 +20,19 @@ namespace Cobweb\Svconnector\Event;
 use Cobweb\Svconnector\Service\ConnectorServiceInterface;
 
 /**
- * Event for processing the raw response received by the connector service when retrieving data.
- * Primarily meant for use in the query() method.
+ * Event for performing any custom process after the connector has finished its work.
+ * It depends on method \Cobweb\Svconnector\Service\ConnectorBase::postProcessOperations()
+ * being called. It receives a status information, the nature of which depends on the
+ * code calling the post-process operations.
  */
-final class ProcessResponseEvent
+final class PostProcessOperationsEvent
 {
-    protected mixed $response;
+    protected mixed $status;
     protected ConnectorServiceInterface $connectorService;
 
     public function __construct(mixed $data, ConnectorServiceInterface $connectorService)
     {
-        $this->response = $data;
+        $this->status = $data;
         $this->connectorService = $connectorService;
     }
 
@@ -39,14 +41,9 @@ final class ProcessResponseEvent
         return $this->connectorService;
     }
 
-    public function getResponse(): mixed
+    public function getStatus(): mixed
     {
-        return $this->response;
-    }
-
-    public function setResponse(mixed $response): void
-    {
-        $this->response = $response;
+        return $this->status;
     }
 
 }

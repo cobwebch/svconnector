@@ -19,6 +19,10 @@ namespace Cobweb\Svconnector\Event;
 
 use Cobweb\Svconnector\Service\ConnectorServiceInterface;
 
+/**
+ * Event for processing the raw data retrieved by connector services.
+ * Primarily meant for use in the fetchRaw() method.
+ */
 final class ProcessRawDataEvent
 {
     protected mixed $data;

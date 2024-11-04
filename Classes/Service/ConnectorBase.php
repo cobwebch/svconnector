@@ -20,6 +20,7 @@ namespace Cobweb\Svconnector\Service;
 use Cobweb\Svconnector\Domain\Model\Dto\CallContext;
 use Cobweb\Svconnector\Domain\Model\Dto\ConnectionInformation;
 use Cobweb\Svconnector\Event\InitializeConnectorEvent;
+use Cobweb\Svconnector\Event\PostProcessOperationsEvent;
 use Cobweb\Svconnector\Event\ProcessParametersEvent;
 use Cobweb\Svconnector\Exception\ConnectorRuntimeException;
 use Cobweb\Svconnector\Utility\ParameterParser;
@@ -290,12 +291,19 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
         }
 
         $hooks = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][$this->extensionKey]['postProcessOperations'] ?? null;
-        if (is_array($hooks)) {
+        if (is_array($hooks) && count($hooks) > 0) {
+            trigger_error(
+                'Using the postProcessOperations hook is deprecated. Use the PostProcessOperationsEvent instead',
+                E_USER_DEPRECATED
+            );
             foreach ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][$this->extensionKey]['postProcessOperations'] as $className) {
                 $processor = GeneralUtility::makeInstance($className);
                 $processor->postProcessOperations($this->parameters, $status, $this);
             }
         }
+        $this->eventDispatcher->dispatch(
+            new PostProcessOperationsEvent($status, $this)
+        );
     }
 
     /**

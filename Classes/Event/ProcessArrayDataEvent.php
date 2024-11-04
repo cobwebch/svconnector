@@ -19,6 +19,10 @@ namespace Cobweb\Svconnector\Event;
 
 use Cobweb\Svconnector\Service\ConnectorServiceInterface;
 
+/**
+ * Event for processing data in array format retrieved by connector services.
+ * Primarily meant for use in the fetchArray() method.
+ */
 final class ProcessArrayDataEvent
 {
     protected array $data;

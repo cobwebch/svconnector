@@ -34,3 +34,49 @@ dynamic usage in the connector parameters.
 
 This event is fired after :ref`parameters have been parsed <developers-api-connection-information>`
 and allows for further manipulation of the connector parameters.
+
+
+.. _developers-events-rawdata:
+
+\Cobweb\Svconnector\Event\ProcessRawDataEvent
+"""""""""""""""""""""""""""""""""""""""""""""
+
+This event is fired after the service has retrieved data in raw format. It is designed
+for use in the :code:`fetchRaw()` method.
+
+
+.. _developers-events-arraydata:
+
+\Cobweb\Svconnector\Event\ProcessArrayDataEvent
+"""""""""""""""""""""""""""""""""""""""""""""""
+
+This event is fired after the service has retrieved data in array format. It is designed
+for use in the :code:`fetchArray()` method.
+
+
+.. _developers-events-xmldata:
+
+\Cobweb\Svconnector\Event\ProcessXmlDataEvent
+""""""""""""""""""""""""""""""""""""""""""""""
+
+This event is fired after the service has retrieved data in XML format. It is designed
+for use in the :code:`fetchXml()` method.
+
+
+.. _developers-events-response:
+
+\Cobweb\Svconnector\Event\ProcessResponseEvent
+""""""""""""""""""""""""""""""""""""""""""""""
+
+This event is fired after the service has called the distant source and received a
+response from that source. It is designed for use in the :code:`query()` method.
+
+
+.. _developers-events-postprocess:
+
+\Cobweb\Svconnector\Event\PostProcessOperationsEvent
+""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+This event is fired after all operations have been performed by the connector services.
+Actually, it will be triggered only if the code that used the service called the
+:code:`\Cobweb\Svconnector\Service\ConnectorServiceInterface::postProcessOperations()` method.

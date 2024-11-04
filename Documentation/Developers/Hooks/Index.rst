@@ -11,6 +11,12 @@
 Hooks
 ^^^^^
 
+.. warning::
+
+   Hooks are deprecated and will be removed in the next major version of all
+   official connector services. Please use the :ref:`events <developers-events>`
+   provided by svconnector instead.
+
 It doesn't really make sense to have hooks in the base connector
 class, since it cannot be instantiated directly. There are quite
 some examples in the existing connector services and here is a list
