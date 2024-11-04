@@ -1,5 +1,6 @@
 /Documentation-GENERATED-temp/
 /.Build/
+/.cache/
 composer.json.testing
 composer.lock
 /public/
