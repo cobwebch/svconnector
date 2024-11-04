@@ -1,3 +1,7 @@
+2024-11-04 Francois Suter (Idéative)  <typo3@ideative.ch>
+
+    * Add events for replacing all usual hooks, resolves #31
+
 2024-10-31 Francois Suter (Idéative)  <typo3@ideative.ch>
 
     * Introduce connection information, resolves #33
