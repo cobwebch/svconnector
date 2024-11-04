@@ -203,8 +203,7 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
      * This method calls the query and returns the results from the response as is.
      *
      * You need to implement your own fetchRaw() method when creating a connector service.
-     * It is recommended to place a hook in it, to allow for custom manipulations of the
-     * received data.
+     * It is recommended to fire the \Cobweb\Svconnector\Event\ProcessRawDataEvent in this method.
      * Look at the existing connector services for examples.
      *
      * @param array $parameters Parameters for the call
@@ -228,8 +227,7 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
      * You need to implement your own fetchXML() method when creating a connector service.
      * You can rely on \TYPO3\CMS\Core\Utility\GeneralUtility::array2xml_cs() to convert
      * an array response to XML.
-     * It is recommended to place a hook in it, to allow for custom manipulations of the
-     * received data.
+     * It is recommended to fire the \Cobweb\Svconnector\Event\ProcessXmlDataEvent in this method.
      * Look at the existing connector services for examples.
      *
      * @param array $parameters Parameters for the call
@@ -253,8 +251,7 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
      * You need to implement your own fetchArray() method when creating a connector service.
      * You can rely on \tx_svconnector_utility::convertXmlToArray() to convert
      * an XML response to an array.
-     * It is recommended to place a hook in it, to allow for custom manipulations of the
-     * received data.
+     * It is recommended to fire the \Cobweb\Svconnector\Event\ProcessArrayDataEvent in this method.
      * Look at the existing connector services for examples.
      *
      * @param array $parameters Parameters for the call
@@ -309,12 +306,9 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
     /**
      * Queries the distant server given some parameters and returns the server response.
      *
-     * You need to implement your own query() method when creating a connector service. It will be called
-     * by all fetch*() methods.
-     *
-     * It is recommended to put some events in your code, because actual use cases from users
-     * may differ from your own. An event to process parameters and an event to process the response
-     * seem useful in general.
+     * Note that this is not officially part of the Connector Service API. However, all fetch*
+     * methods will need the same logic for retrieving the data, and the customary practice is
+     * to centralize that code in a method called query().
      *
      * Look at the existing connector services for implementation examples.
      *

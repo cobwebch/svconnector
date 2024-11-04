@@ -15,6 +15,10 @@ The "svconnector" extension provides a number of events which can be used by the
 connector implementations. Except is special cases - since all connector services
 share a common way of working - it should not be necessary to develop custom events.
 
+It is strongly recommended that you trigger these events in your custom connector services,
+because use case may strongly vary from user to user, and they will welcome the possibility
+of manipulating the data retrieved by the service in its various forms.
+
 
 .. _developers-events-initialize:
 
