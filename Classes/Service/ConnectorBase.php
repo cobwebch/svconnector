@@ -110,6 +110,14 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
     }
 
     /**
+     * Return the defined connector parameters
+     */
+    public function getParameters(): array
+    {
+        return $this->parameters;
+    }
+
+    /**
      * Return the current call context object
      */
     public function getCallContext(): CallContext
