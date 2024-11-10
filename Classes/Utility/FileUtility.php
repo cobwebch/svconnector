@@ -42,6 +42,7 @@ class FileUtility implements SingletonInterface, \Stringable
     {
         return 'FileUtility';
     }
+
     /**
      * Reads data from a file pointed to by a versatile URI.
      *
@@ -51,9 +52,10 @@ class FileUtility implements SingletonInterface, \Stringable
      *
      * @param string $uri Address of the file to read
      * @param array|null $headers Headers to pass on to the request
+     * @param string $method Method to use for fetching a remote URI, defaults to GET
      * @return string|bool
      */
-    public function getFileContent(string $uri, ?array $headers = null): bool|string
+    public function getFileContent(string $uri, ?array $headers = null, string $method = 'GET'): bool|string
     {
         // Reset the error message
         $this->setError('');
@@ -97,7 +99,7 @@ class FileUtility implements SingletonInterface, \Stringable
             try {
                 $response = $requestFactory->request(
                     $uri,
-                    'GET',
+                    $method,
                     is_array($headers) ? ['headers' => $headers] : []
                 );
                 $data = $response->getBody()->getContents();
@@ -156,12 +158,13 @@ class FileUtility implements SingletonInterface, \Stringable
      *
      * @param string $uri Address of the file to read
      * @param array|null $headers Headers to pass on to the request
+     * @param string $method Method to use for fetching a remote URI, defaults to GET
      * @return string|bool
      * @see getFileContent
      */
-    public function getFileAsTemporaryFile(string $uri, ?array $headers = null): bool|string
+    public function getFileAsTemporaryFile(string $uri, ?array $headers = null, string $method = 'GET'): bool|string
     {
-        $fileContent = $this->getFileContent($uri, $headers);
+        $fileContent = $this->getFileContent($uri, $headers, $method);
         // Exit early if file content could not be read
         if ($fileContent === false) {
             return false;
@@ -199,6 +202,6 @@ class FileUtility implements SingletonInterface, \Stringable
      */
     public function setError(string $error): void
     {
-        $this->error = (string)$error;
+        $this->error = $error;
     }
 }
