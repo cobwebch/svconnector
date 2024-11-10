@@ -58,6 +58,8 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
     protected ConnectionInformation $connectionInformation;
     protected EventDispatcher $eventDispatcher;
     protected LanguageService $languageService;
+    protected string $type = '';
+    protected string $name = '';
     protected array $parameters = [];
 
     public function __construct()
@@ -68,19 +70,25 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
         $this->initializeLanguageService();
     }
 
-    /**
-     * Returns the type of data handled by the connector service
-     *
-     * @return string
-     */
-    abstract public function getType(): string;
+    public function getType(): string
+    {
+        return $this->type;
+    }
 
-    /**
-     * Returns a descriptive name of the connector service
-     *
-     * @return string
-     */
-    abstract public function getName(): string;
+    public function setType(string $type): void
+    {
+        $this->type = $type;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
 
     /**
      * Perform any necessary initialization of the service and fire an event to allow

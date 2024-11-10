@@ -1,6 +1,7 @@
 2024-11-10 Francois Suter (Idéative)  <typo3@ideative.ch>
 
     * Allow for using another method than GET in FileUtility, resolves #29
+    * Introduce attribute for registering connector services, resolves #34
 
 2024-11-04 Francois Suter (Idéative)  <typo3@ideative.ch>
 

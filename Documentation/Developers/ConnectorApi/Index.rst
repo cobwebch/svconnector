@@ -23,7 +23,8 @@ than reimplementing boilerplate code.
 getType()
   This method returns the type of the connector service. The type is
   representative of the kind of data it can handle, e.g. :code:`csv`
-  for the "svconnector_csv" service.
+  for the "svconnector_csv" service. When using :ref:`registration via attribute <developers-implementing>`,
+  the type comes from the attribute and will be set by the :php:`ConnectorRegistry` class.
 
   Input
     none
@@ -33,7 +34,7 @@ getType()
 
 
 getName()
-  This method returns a human-readable name for the service.
+  This method returns a human-readable name for the service. Same remark as above.
 
   Input
     none

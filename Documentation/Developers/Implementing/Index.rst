@@ -30,15 +30,30 @@ It is considered a best practice to place your class file in the
 :code:`$extensionKey` member variable, as this is used by the API to fetch
 the sample configuration.
 
-You must then register your service with the connector registry. This goes
-into the :file:`Configuration/Services.yaml` file. Example:
+You must then register your service with the connector registry. This is done
+using the :php:`\Cobweb\Svconnector\Attribute\AsConnectorService` attribute,
+with the service's type and name passed as attribute arguments (the type is
+critical, since this is what identifies a service; the name is a description):
 
-.. code-block:: yaml
+.. code-block:: php
 
-     Cobweb\SvconnectorCsv\Service\ConnectorCsv:
-       public: true
-       arguments:
-         - !tagged_iterator connector.service
+   #[AsConnectorService(type: 'json', name: 'JSON connector')]
+   class ConnectorJson extends ConnectorBase
+   {
+      ...
+   }
+
+.. note::
+
+   A connector service can also be registered in the :file:`Configuration/Services.yaml` file,
+   but this is now deprecated in favor of using the PHP attribute described above. Example:
+
+   .. code-block:: yaml
+
+        Cobweb\SvconnectorCsv\Service\ConnectorCsv:
+          public: true
+          arguments:
+            - !tagged_iterator connector.service
 
 The base service provides several utility methods to access method or
 properties of the :code:`\TYPO3\CMS\Lang\LanguageService` class and of

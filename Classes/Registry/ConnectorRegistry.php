@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace Cobweb\Svconnector\Registry;
 
+use Cobweb\Svconnector\Attribute\AsConnectorService;
 use Cobweb\Svconnector\Exception\UnknownServiceException;
 use Cobweb\Svconnector\Service\ConnectorBase;
 
@@ -30,11 +31,24 @@ class ConnectorRegistry
     public function __construct(iterable $connectors)
     {
         foreach ($connectors as $connector) {
+            $type = null;
+            // Get type and name from connector service attribute
+            $reflection = new \ReflectionClass($connector::class);
+            $attributes = $reflection->getAttributes(AsConnectorService::class);
+            foreach ($attributes as $attribute) {
+                $type = $attribute->getArguments()['type'];
+                $name = $attribute->getArguments()['name'];
+                $connector->setType($type);
+                $connector->setName($name);
+            }
             if (!($connector instanceof ConnectorBase)) {
                 continue;
             }
-            $type = $connector->getType();
-            if ($type === '') {
+            // If type has not been defined by attribute arguments, try to get it from class itself
+            if ($type === null) {
+                $type = $connector->getType();
+            }
+            if (empty($type)) {
                 throw new \InvalidArgumentException(
                     sprintf(
                         'Type for connector %s is empty.',

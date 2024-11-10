@@ -33,11 +33,27 @@ interface ConnectorServiceInterface
     public function getType(): string;
 
     /**
+     * Sets the type of the connector service
+     *
+     * @param string $type
+     * @return void
+     */
+    public function setType(string $type): void;
+
+    /**
      * Returns a descriptive name of the connector service
      *
      * @return string
      */
     public function getName(): string;
+
+    /**
+     * Sets the name of the connector service
+     *
+     * @param string $name
+     * @return void
+     */
+    public function setName(string $name): void;
 
     /**
      * Performs any necessary initialization for the service. Called automatically by the connector registry.
