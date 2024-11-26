@@ -21,30 +21,31 @@ Connector Services
 		|release|
 
 	:Description:
-		  Base for a family of services used to connect to external data sources and fetch data from them.
+      Base for a family of services used to connect to external data sources and fetch data from them.
 
 	:Keywords:
-		  data import, fetch data, services
+      data import, fetch data, services
 
 	:Copyright:
-		2007-2023
+      2007-2024
 
 	:Author:
-		  François Suter (Idéative)
+      François Suter (Idéative)
 
 	:Email:
-		  typo3@ideative.ch
+      typo3@ideative.ch
 
 	:License:
-		This document is published under the Open Content License
-		available from http://www.opencontent.org/opl.shtml
+        This document is published under the
+        `Creative Commons BY 4.0 <https://creativecommons.org/licenses/by/4.0/>`__
+        license.
 
 	:Rendered:
 		|today|
 
 
 The content of this document is related to TYPO3,
-a GNU/GPL CMS/Framework available from `www.typo3.org <http://www.typo3.org/>`_.
+a GNU/GPL CMS/Framework available from `www.typo3.org <https://www.typo3.org/>`_.
 
 
 .. Table of Contents

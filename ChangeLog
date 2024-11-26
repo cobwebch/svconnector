@@ -1,6 +1,7 @@
-2024-11-25 Francois Suter (Idéative)  <typo3@ideative.ch>
+2024-11-26 Francois Suter (Idéative)  <typo3@ideative.ch>
 
     * Verify compatibility with TYPO3 13 ELTS, resolves #28
+    * Review and update the documentation
 
 2024-11-10 Francois Suter (Idéative)  <typo3@ideative.ch>
 

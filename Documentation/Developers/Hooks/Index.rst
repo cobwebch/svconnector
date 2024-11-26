@@ -33,10 +33,6 @@ processParameters
   the :code:`query()` method and a back-reference to the calling connector
   object.
 
-  .. warning::
-
-     This hook is deprecated. Use the :php:`\Cobweb\Svconnector\Event\ProcessParametersEvent` instead.
-
 processResponse
   This hook is designed to process the data inside
   the :code:`query()` method, just as it is returned from the distant source.
