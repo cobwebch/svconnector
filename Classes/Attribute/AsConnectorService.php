@@ -20,6 +20,5 @@ namespace Cobweb\Svconnector\Attribute;
 #[\Attribute(\Attribute::TARGET_CLASS)]
 class AsConnectorService
 {
-    public function __construct(public string $type, public string $name) {
-    }
+    public function __construct(public string $type, public string $name) {}
 }

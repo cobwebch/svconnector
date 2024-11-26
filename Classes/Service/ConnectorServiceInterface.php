@@ -27,31 +27,21 @@ interface ConnectorServiceInterface
 {
     /**
      * Returns the type of data handled by the connector service
-     *
-     * @return string
      */
     public function getType(): string;
 
     /**
      * Sets the type of the connector service
-     *
-     * @param string $type
-     * @return void
      */
     public function setType(string $type): void;
 
     /**
      * Returns a descriptive name of the connector service
-     *
-     * @return string
      */
     public function getName(): string;
 
     /**
      * Sets the name of the connector service
-     *
-     * @param string $name
-     * @return void
      */
     public function setName(string $name): void;
 
@@ -74,61 +64,43 @@ interface ConnectorServiceInterface
 
     /**
      * Returns the sample configuration for the service, if any
-     *
-     * @return string
      */
     public function getSampleConfiguration(): string;
 
     /**
      * Checks the connector configuration and returns notices, warnings or errors, if any.
-     *
-     * @param array $parameters Connector call parameters
-     * @return array
      */
     public function checkConfiguration(array $parameters = []): array;
 
     /**
      * Return the call context object
-     *
-     * @return CallContext
      */
     public function getCallContext(): CallContext;
 
     /**
      * Return the connection information object
-     *
-     * @return ConnectionInformation
      */
     public function getConnectionInformation(): ConnectionInformation;
 
     /**
      * Calls the query and returns the results from the response as is.
      *
-     * @param array $parameters Parameters for the call
      * @return mixed Server response
      */
     public function fetchRaw(array $parameters = []);
 
     /**
      * Calls the query and returns the results from the response as an XML structure.
-     *
-     * @param array $parameters Parameters for the call
-     * @return string XML structure
      */
     public function fetchXML(array $parameters = []): string;
 
     /**
      * Calls the query and returns the results from the response as a PHP array.
-     *
-     * @param array $parameters Parameters for the call
-     * @return array PHP array
      */
     public function fetchArray(array $parameters = []): array;
 
     /**
      * Performs post-process operations using events
-     *
-     * @param array $parameters Parameters for the call
      */
     public function postProcessOperations(array $parameters, mixed $status);
 }
