@@ -23,6 +23,7 @@ Updating to 6.0.0
 ^^^^^^^^^^^^^^^^^
 
 Version 6.0.0 adds support for TYPO3 13 and drops support for TYPO3 11.
+It also adds support for PHP 8.4.
 
 It introduces one new important method to the base API: :code:`initialize()`, which
 is called by the registry when it collects all available services.
@@ -33,13 +34,22 @@ contains information about the context in which the service is being used.
 Another object called :ref:`connection information <developers-api-connection-information>` may contain data than can
 be used to dynamically change the parameters passed to the service.
 
-Most importantly, passing the connector parameters in the :code:`fetch*()` methods
-has been deprecated. Instead, parameters must be passed when getting the connector
-from the registry:
+**Most importantly**, passing the connector parameters in the :code:`fetch*()` methods has been deprecated.
+Instead, parameters must be passed when getting the connector from the registry:
 
 .. code-block:: php
 
     $service = $connectorRegistry->getServiceForType('json', $parameters);
+
+This version also provides :ref:`events <developers-events>` in replacement of existing hooks
+for all connector services. All hooks have been deprecated and will be removed in the next major version.
+Please update your code if you have developed custom connectors.
+
+The :php:`\Cobweb\Svconnector\Utility\FileUtility` class has been modified to allow all connector
+services that make use of it to pass another method than :code:`GET` and to send any array of
+headers. See the documentation for each connector service for details.
+
+Finally it is now possible to :ref:`register custom connectors using PHP attributes <developers-implementing>`.
 
 
 .. _installation-updating-500:
