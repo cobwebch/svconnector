@@ -23,7 +23,7 @@ Updating to 6.0.0
 ^^^^^^^^^^^^^^^^^
 
 Version 6.0.0 adds support for TYPO3 13 and drops support for TYPO3 11.
-It also adds support for PHP 8.4.
+It also adds support for PHP 8.4, while dropping support for PHP 7.4 and 8.0.
 
 It introduces one new important method to the base API: :code:`initialize()`, which
 is called by the registry when it collects all available services.
