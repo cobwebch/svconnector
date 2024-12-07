@@ -1,3 +1,7 @@
+2024-12-07 Francois Suter (Idéative)  <typo3@ideative.ch>
+
+    * Verify compatibility with PHP 8.4
+
 2024-11-26 Francois Suter (Idéative)  <typo3@ideative.ch>
 
     * Verify compatibility with TYPO3 13 ELTS, resolves #28

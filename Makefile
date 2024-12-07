@@ -34,23 +34,23 @@ test-cgl: ## Fix PHP coding styles
 test-unit-8-1: ## Run unit tests with PHP 8.1 (lowest)
 	Build/Scripts/runTests.sh -s unit -p 8.1
 
-.PHONY: test-unit-8-3
-test-unit-8-3: ## Run unit tests with PHP 8.3 (highest supported by TYPO3 11)
-	Build/Scripts/runTests.sh -s unit -p 8.3
+.PHONY: test-unit-8-4
+test-unit-8-4: ## Run unit tests with PHP 8.3 (highest supported by TYPO3 11)
+	Build/Scripts/runTests.sh -s unit -p 8.4
 
 .PHONY: test-unit
-test-unit: test-unit-8-1 test-unit-8-3## Run unit tests with PHP 8.1 and 8.3
+test-unit: test-unit-8-1 test-unit-8-4## Run unit tests with PHP 8.1 and 8.3
 
 .PHONY: test-functional-8-1
 test-functional-8-1: ## Run functional tests with PHP 8.1 and mariadb (lowest)
 	Build/Scripts/runTests.sh -s functional -p 8.1 -d mysql
 
-.PHONY: test-functional-8-3
-test-functional-8-3: ## Run functional tests with PHP 8.3 and mariadb (highest supported by TYPO3 11)
-	Build/Scripts/runTests.sh -s functional -p 8.3 -d mysql
+.PHONY: test-functional-8-4
+test-functional-8-4: ## Run functional tests with PHP 8.3 and mariadb (highest supported by TYPO3 11)
+	Build/Scripts/runTests.sh -s functional -p 8.4 -d mysql
 
 .PHONY: test-functional
-test-functional: test-functional-8-1 test-functional-8-3## Run functional tests with PHP 8.1 and 8.3
+test-functional: test-functional-8-1 test-functional-8-4## Run functional tests with PHP 8.1 and 8.3
 
 .PHONY: phpstan
 phpstan: ## Run phpstan tests
