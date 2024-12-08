@@ -27,7 +27,7 @@ Connector Services
       data import, fetch data, services
 
 	:Copyright:
-      2007-2024
+      2007-2025
 
 	:Author:
       François Suter (Idéative)
