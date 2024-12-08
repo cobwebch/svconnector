@@ -60,9 +60,10 @@ initialize()
 
 
 isAvailable()
-  This method can be called when a connector service is about to be used
-  to check if it is available or not. It is expected to return a boolean value
-  accordingly.
+  This method is called when a connector service is requested via the registry.
+  It is designed to check whether the service is actually available or not.
+  It is expected to return a boolean value accordingly. If the service is not available,
+  the registry will throw a :php:`\Cobweb\Svconnector\Exception\UnavailableServiceException`.
 
   Input
     none

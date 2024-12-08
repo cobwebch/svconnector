@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace Cobweb\Svconnector\Registry;
 
 use Cobweb\Svconnector\Attribute\AsConnectorService;
+use Cobweb\Svconnector\Exception\UnavailableServiceException;
 use Cobweb\Svconnector\Exception\UnknownServiceException;
 use Cobweb\Svconnector\Service\ConnectorBase;
 
@@ -88,12 +89,22 @@ class ConnectorRegistry
      * @param array $parameters Parameters for the connector
      * @return ConnectorBase
      * @throws UnknownServiceException
+     * @throws UnavailableServiceException
      */
     public function getServiceForType(string $type, array $parameters = []): ConnectorBase
     {
         if (isset($this->connectors[$type])) {
             /** @var ConnectorBase $connector */
             $connector = $this->connectors[$type];
+            if (!$connector->isAvailable()) {
+                throw new UnavailableServiceException(
+                    sprintf(
+                        'Connector service for type %s is not available.',
+                        $type
+                    ),
+                    1733675709
+                );
+            }
             $connector->setParameters($parameters);
             return $connector;
         }

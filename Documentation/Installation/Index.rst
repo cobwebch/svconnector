@@ -41,6 +41,10 @@ Instead, parameters must be passed when getting the connector from the registry:
 
     $service = $connectorRegistry->getServiceForType('json', $parameters);
 
+When :code:`getServiceForType()` is called, the connector's :code:`isAvailable()` method is
+now called. If the connector is not available a :php:`\Cobweb\Svconnector\Exception\UnavailableServiceException`
+is thrown.
+
 This version also provides :ref:`events <developers-events>` in replacement of existing hooks
 for all connector services. All hooks have been deprecated and will be removed in the next major version.
 Please update your code if you have developed custom connectors.
