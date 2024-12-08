@@ -338,7 +338,7 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
         // method signature is changed entirely (in the next major version)
         // Base deprecation code that can be called by all inheriting classes
         if (count(func_get_args()) > 0) {
-            $this->triggerDeprecation('fetchRaw()');
+            $this->triggerDeprecation('query()');
             $this->parameters = $parameters;
         }
         return '';
