@@ -401,13 +401,12 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
     protected function initializeLanguageService(): void
     {
         try {
-            $applicationType = ApplicationType::fromRequest(
-                $this->getTypo3Request()
-            );
+            $request = $this->getTypo3Request();
+            $applicationType = ApplicationType::fromRequest($request);
             if ($applicationType->isFrontend()) {
                 $this->languageService = GeneralUtility::makeInstance(LanguageServiceFactory::class)
                     ->createFromSiteLanguage(
-                        $this->getTyposcriptFrontendController()->getLanguage()
+                        $request->getAttribute('language')
                     );
             } else {
                 $this->languageService = GeneralUtility::makeInstance(LanguageServiceFactory::class)
@@ -433,16 +432,6 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
             return $GLOBALS['TYPO3_REQUEST'];
         }
         throw new \InvalidArgumentException('Global request object not found');
-    }
-
-    /**
-     * Wrapper around the global frontend controller object
-     *
-     * @return TypoScriptFrontendController
-     */
-    protected function getTyposcriptFrontendController(): TypoScriptFrontendController
-    {
-        return $GLOBALS['TSFE'];
     }
 
     /**
