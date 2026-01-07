@@ -1,3 +1,11 @@
+2026-01-07 Francois Suter (Idéative)  <typo3@ideative.ch>
+
+    * Release version 6.0.1
+
+2025-09-25 Achim Fritz <af@achimfritz.de>
+
+    * Use language attribute from request
+
 2024-12-08 Francois Suter (Idéative)  <typo3@ideative.ch>
 
     * Release version 6.0.0
