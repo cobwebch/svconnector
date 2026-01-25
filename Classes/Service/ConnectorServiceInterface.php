@@ -70,7 +70,7 @@ interface ConnectorServiceInterface
     /**
      * Checks the connector configuration and returns notices, warnings or errors, if any.
      */
-    public function checkConfiguration(array $parameters = []): array;
+    public function checkConfiguration(): array;
 
     /**
      * Return the call context object
@@ -83,24 +83,37 @@ interface ConnectorServiceInterface
     public function getConnectionInformation(): ConnectionInformation;
 
     /**
-     * Calls the query and returns the results from the response as is.
+     * Queries the source and returns the results from the response as is.
+     *
+     * It is recommended to fire the \Cobweb\Svconnector\Event\ProcessRawDataEvent in this method.
      *
      * @return mixed Server response
      */
-    public function fetchRaw(array $parameters = []);
+    public function fetchRaw(): mixed;
 
     /**
-     * Calls the query and returns the results from the response as an XML structure.
+     * Queries the source and returns the results from the response as an XML structure.
+     *
+     * You may rely on \TYPO3\CMS\Core\Utility\GeneralUtility::array2xml_cs() to convert an array response to XML.
+     * It is recommended to fire the \Cobweb\Svconnector\Event\ProcessXmlDataEvent in this method.
+     *
+     * @return string XML structure
      */
-    public function fetchXML(array $parameters = []): string;
+    public function fetchXML(): string;
 
     /**
-     * Calls the query and returns the results from the response as a PHP array.
+     * Queries the source and returns the results from the response as a PHP array.
+     *
+     * You may rely on \tx_svconnector_utility::convertXmlToArray() to convert
+     * an XML response to an array.
+     * It is recommended to fire the \Cobweb\Svconnector\Event\ProcessArrayDataEvent in this method.
+     *
+     * @return array PHP array
      */
-    public function fetchArray(array $parameters = []): array;
+    public function fetchArray(): array;
 
     /**
      * Performs post-process operations using events
      */
-    public function postProcessOperations(array $parameters, mixed $status);
+    public function postProcessOperations(mixed $status): void;
 }

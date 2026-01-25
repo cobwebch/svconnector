@@ -25,7 +25,6 @@ indications about how to implement your own connector services.
    ConnectorApi/Index
    Implementing/Index
    Exceptions/Index
-   Hooks/Index
    Events/Index
    Utilities/Index
    Sample/Index

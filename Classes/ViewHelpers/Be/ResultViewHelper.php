@@ -19,7 +19,6 @@ namespace Cobweb\Svconnector\ViewHelpers\Be;
 
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Fluid\ViewHelpers\Be\AbstractBackendViewHelper;
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 
 /**
  * This view helper is designed to output the result of the connection test appropriately, depending on its format
@@ -43,15 +42,10 @@ class ResultViewHelper extends AbstractBackendViewHelper
 
     /**
      * Renders whatever result the connection test returned.
-     *
-     * @param array $arguments
-     * @param \Closure $renderChildrenClosure
-     * @param RenderingContextInterface $renderingContext
-     * @return mixed
      */
-    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
+    public function render()
     {
-        $result = $arguments['result'];
+        $result = $this->arguments['result'];
         // If the result is an array, dump it in a formatted display
         // Otherwise display a formatted string
         if (is_array($result)) {

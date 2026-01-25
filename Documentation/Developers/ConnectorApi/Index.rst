@@ -86,15 +86,14 @@ getSampleConfiguration()
 checkConfiguration()
   This method is called whenever the connector configuration needs to be checked.
   It is typically called by the :php:`query()` method, but can also be called
-  by third-party code. It receives the list of connector parameters as an input
-  and is expected to return a list of errors, warnings and notices
+  by third-party code. It is expected to return a list of errors, warnings and notices
   (see: :php:`\Cobweb\Svconnector\Service\ConnectorBase::checkConfiguration()`
   for the structure of the return array.
 
   Warnings and notices are not considered blocking.
 
   Input
-    array of parameters
+    none
 
   Output
     array of errors, warnings or notices
@@ -186,14 +185,13 @@ fetchArray()
 postProcessOperations()
   This method is designed to be called back by whatever process called
   the connector in the first place when said process is done. It
-  receives as argument the usual list of parameters, plus some variable
-  indicating the status of the process (typically this could be an
-  indication of success or failure).
+  receives as argument some variable indicating the status of the process
+  (typically this could be an indication of success or failure).
 
   It doesn't do anything by itself, but just calls events (or hooks).
 
   Input
-    array of parameters (deprecated, pass an empty array instead) and a status
+    A status indication (:code:`mixed`)
 
   Output
     void

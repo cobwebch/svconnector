@@ -131,7 +131,7 @@ class TestingController extends ActionController
                     ),
                 ]
             );
-        } else {
+        } elseif (count($availableServices) > 0) {
             // Select the first service in the list as default and get its sample configuration, if defined
             $defaultService = key($availableServices);
             $defaultParameters = $this->sampleConfigurations[$defaultService] ?? '';

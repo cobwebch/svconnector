@@ -28,7 +28,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
-use TYPO3\CMS\Core\Charset\CharsetConverter;
 use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Localization\LanguageService;
@@ -171,19 +170,10 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
      *
      * This base method needs to be implemented for each actual service.
      *
-     * @param array $parameters Connector call parameters
      * @return array
      */
-    public function checkConfiguration(array $parameters = []): array
+    public function checkConfiguration(): array
     {
-        // Temporary code while passing parameters array is deprecated and before
-        // method signature is changed entirely (in the next major version)
-        // Base deprecation code that can be called by all inheriting classes
-        if (count(func_get_args()) > 0) {
-            $this->triggerDeprecation('fetchRaw()');
-            $this->parameters = $parameters;
-        }
-
         return [
             ContextualFeedbackSeverity::NOTICE->value => [],
             ContextualFeedbackSeverity::WARNING->value => [],
@@ -214,105 +204,22 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
         }
     }
 
-    /**
-     * This method calls the query and returns the results from the response as is.
-     *
-     * You need to implement your own fetchRaw() method when creating a connector service.
-     * It is recommended to fire the \Cobweb\Svconnector\Event\ProcessRawDataEvent in this method.
-     * Look at the existing connector services for examples.
-     *
-     * @param array $parameters Parameters for the call
-     * @return mixed Server response
-     */
-    public function fetchRaw(array $parameters = [])
-    {
-        // Temporary code while passing parameters array is deprecated and before
-        // method signature is changed entirely (in the next major version)
-        // Base deprecation code that can be called by all inheriting classes
-        if (count(func_get_args()) > 0) {
-            $this->triggerDeprecation('fetchRaw()');
-            $this->parameters = $parameters;
-        }
-        return '';
-    }
+    abstract public function fetchRaw(): mixed;
 
-    /**
-     * This method calls the query and returns the results from the response as an XML structure.
-     *
-     * You need to implement your own fetchXML() method when creating a connector service.
-     * You can rely on \TYPO3\CMS\Core\Utility\GeneralUtility::array2xml_cs() to convert
-     * an array response to XML.
-     * It is recommended to fire the \Cobweb\Svconnector\Event\ProcessXmlDataEvent in this method.
-     * Look at the existing connector services for examples.
-     *
-     * @param array $parameters Parameters for the call
-     * @return string XML structure
-     */
-    public function fetchXML(array $parameters = []): string
-    {
-        // Temporary code while passing parameters array is deprecated and before
-        // method signature is changed entirely (in the next major version)
-        // Base deprecation code that can be called by all inheriting classes
-        if (count(func_get_args()) > 0) {
-            $this->triggerDeprecation('fetchRaw()');
-            $this->parameters = $parameters;
-        }
-        return '';
-    }
+    abstract public function fetchXML(): string;
 
-    /**
-     * This method calls the query and returns the results from the response as a PHP array.
-     *
-     * You need to implement your own fetchArray() method when creating a connector service.
-     * You can rely on \tx_svconnector_utility::convertXmlToArray() to convert
-     * an XML response to an array.
-     * It is recommended to fire the \Cobweb\Svconnector\Event\ProcessArrayDataEvent in this method.
-     * Look at the existing connector services for examples.
-     *
-     * @param array $parameters Parameters for the call
-     * @return array PHP array
-     */
-    public function fetchArray(array $parameters = []): array
-    {
-        // Temporary code while passing parameters array is deprecated and before
-        // method signature is changed entirely (in the next major version)
-        // Base deprecation code that can be called by all inheriting classes
-        if (count(func_get_args()) > 0) {
-            $this->triggerDeprecation('fetchRaw()');
-            $this->parameters = $parameters;
-        }
-        return [];
-    }
+    abstract public function fetchArray(): array;
 
     /**
      * This method can be called to perform specific operations at some point after
-     * any of the fetch methods have been called. It does nothing by itself,
-     * but provides a hook for custom post-processing
+     * any of the fetch methods have been called. The base implementation does nothing
+     * but fire an event.
      *
-     * @param array $parameters Parameters for the call
      * @param mixed $status Some form of status can be passed as argument
      *                      The nature of that status will depend on which process is calling this method
      */
-    public function postProcessOperations(array $parameters, mixed $status): void
+    public function postProcessOperations(mixed $status): void
     {
-        // Temporary code while passing parameters array is deprecated and before
-        // method signature is changed entirely (in the next major version)
-        if (count($parameters) > 0) {
-            $this->triggerDeprecation('fetchRaw()');
-            $this->parameters = $parameters;
-        }
-
-        $hooks = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][$this->extensionKey]['postProcessOperations'] ?? null;
-        if (is_array($hooks) && count($hooks) > 0) {
-            trigger_error(
-                'Using the postProcessOperations hook is deprecated. Use the PostProcessOperationsEvent instead',
-                E_USER_DEPRECATED
-            );
-            foreach ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][$this->extensionKey]['postProcessOperations'] as $className) {
-                $processor = GeneralUtility::makeInstance($className);
-                $processor->postProcessOperations($this->parameters, $status, $this);
-            }
-        }
         $this->eventDispatcher->dispatch(
             new PostProcessOperationsEvent($status, $this)
         );
@@ -327,21 +234,9 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
      *
      * Look at the existing connector services for implementation examples.
      *
-     * @param array $parameters Parameters for the call
-     *
      * @return mixed Server response
      */
-    protected function query(array $parameters = [])
-    {
-        // Temporary code while passing parameters array is deprecated and before
-        // method signature is changed entirely (in the next major version)
-        // Base deprecation code that can be called by all inheriting classes
-        if (count(func_get_args()) > 0) {
-            $this->triggerDeprecation('query()');
-            $this->parameters = $parameters;
-        }
-        return '';
-    }
+    abstract protected function query(): mixed;
 
     /**
      * This method should be used by all connector services when they encounter a fatal error.
@@ -353,8 +248,12 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
      * @param string $exceptionClass Name of the class of exception which should be thrown
      * @throws \Exception
      */
-    protected function raiseError($message, $exceptionNumber, array $extraData = [], $exceptionClass = ConnectorRuntimeException::class): never
-    {
+    protected function raiseError(
+        string $message,
+        int $exceptionNumber,
+        array $extraData = [],
+        string $exceptionClass = ConnectorRuntimeException::class
+    ): never {
         $this->logger->error($message, $extraData);
         throw new $exceptionClass($message, $exceptionNumber);
     }
@@ -381,17 +280,6 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
     public function getCharset(): string
     {
         return 'utf-8';
-    }
-
-    /**
-     * Get an existing instance of the charset conversion class, depending on context.
-     *
-     * @throws \Exception
-     * @return CharsetConverter
-     */
-    public function getCharsetConverter(): CharsetConverter
-    {
-        return GeneralUtility::makeInstance(CharsetConverter::class);
     }
 
     /**
@@ -441,22 +329,5 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
     protected function getBackendUser(): BackendUserAuthentication
     {
         return $GLOBALS['BE_USER'];
-    }
-
-    /**
-     * @internal
-     * @deprecated Will be removed in next major version
-     */
-    public function triggerDeprecation(string $method): void
-    {
-        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
-        $caller = end($backtrace);
-        $callerLocation = sprintf('file %s, line %d', $caller['file'], $caller['line']);
-
-        trigger_error(sprintf(
-            'Passing parameters as argument to %s is deprecated. Pass arguments when getting service from registry instead. Location: %s',
-            $method,
-            $callerLocation,
-        ), E_USER_DEPRECATED);
     }
 }

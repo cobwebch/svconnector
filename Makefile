@@ -30,27 +30,27 @@ fix: fix-cgl## Run all fixes
 test-cgl: ## Fix PHP coding styles
 	Build/Scripts/runTests.sh -s cgl
 
-.PHONY: test-unit-8-1
-test-unit-8-1: ## Run unit tests with PHP 8.1 (lowest)
-	Build/Scripts/runTests.sh -s unit -p 8.1
+.PHONY: test-unit-8-2
+test-unit-8-2: ## Run unit tests with PHP 8.2 (lowest)
+	Build/Scripts/runTests.sh -s unit -p 8.2
 
-.PHONY: test-unit-8-4
-test-unit-8-4: ## Run unit tests with PHP 8.3 (highest supported by TYPO3 11)
-	Build/Scripts/runTests.sh -s unit -p 8.4
+.PHONY: test-unit-8-5
+test-unit-8-5: ## Run unit tests with PHP 8.4 (highest supported by TYPO3 13)
+	Build/Scripts/runTests.sh -s unit -p 8.5
 
 .PHONY: test-unit
-test-unit: test-unit-8-1 test-unit-8-4## Run unit tests with PHP 8.1 and 8.3
+test-unit: test-unit-8-2 test-unit-8-5## Run unit tests with PHP 8.2 and 8.5
 
-.PHONY: test-functional-8-1
-test-functional-8-1: ## Run functional tests with PHP 8.1 and mariadb (lowest)
-	Build/Scripts/runTests.sh -s functional -p 8.1 -d mysql
+.PHONY: test-functional-8-2
+test-functional-8-2: ## Run functional tests with PHP 8.2 and mariadb (lowest)
+	Build/Scripts/runTests.sh -s functional -p 8.2 -d mysql
 
-.PHONY: test-functional-8-4
-test-functional-8-4: ## Run functional tests with PHP 8.3 and mariadb (highest supported by TYPO3 11)
-	Build/Scripts/runTests.sh -s functional -p 8.4 -d mysql
+.PHONY: test-functional-8-5
+test-functional-8-5: ## Run functional tests with PHP 8.5 and mariadb (highest supported by TYPO3 13)
+	Build/Scripts/runTests.sh -s functional -p 8.5 -d mysql
 
 .PHONY: test-functional
-test-functional: test-functional-8-1 test-functional-8-4## Run functional tests with PHP 8.1 and 8.3
+test-functional: test-functional-8-2 test-functional-8-5## Run functional tests with PHP 8.2 and 8.5
 
 .PHONY: phpstan
 phpstan: ## Run phpstan tests

@@ -17,6 +17,33 @@ extension must be installed since it provides the base class from
 which all connector services inherit.
 
 
+.. _installation-updating-700:
+
+Updating to 7.0.0
+^^^^^^^^^^^^^^^^^
+
+Version 7.0.0 adds support for TYPO3 14 and drops support for TYPO3 12.
+It also adds support for PHP 8.5, while dropping support for PHP 8.1.
+
+In version 6.0.0, passing the connector parameters to most API methods,
+particularly the :code:`fetch*()` methods, had been deprecated. Support
+for this has been fully removed in version 7.0.0, making it possible to
+make the methods :php:`\Cobweb\Svconnector\Service\ConnectorBase` abstract.
+This makes it mandatory to implement these methods in a custom connector service,
+although it's hard to imagine a custom service that didn't implement them. So you
+should be pretty safe. All impacted method signatures have been changed.
+
+The :php:`\Cobweb\Svconnector\Service\ConnectorBase::getCharsetConverter()` has
+been removed since the TYPO3 Core does not provide a charset conversion class anymore
+as of version 14. Custom connector services should rely on :code:`mb_convert_encoding()`
+instead.
+
+Some method signatures in :php:`\Cobweb\Svconnector\Service\ConnectorServiceInterface`
+have been changed to ensure stricter typing. You will to adapt your implementations.
+
+All hooks have been removed, leaving only events.
+
+
 .. _installation-updating-600:
 
 Updating to 6.0.0

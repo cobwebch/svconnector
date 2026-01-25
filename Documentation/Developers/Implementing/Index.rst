@@ -55,9 +55,7 @@ critical, since this is what identifies a service; the name is a description):
           arguments:
             - !tagged_iterator connector.service
 
-The base service provides several utility methods to access method or
-properties of the :code:`\TYPO3\CMS\Lang\LanguageService` class and of
-the :code:`\TYPO3\CMS\Core\Charset\CharsetConverter` class
+The base service provides an instance :php:`\TYPO3\CMS\Lang\LanguageService`
 independently of context (FE or BE).
 
 If you need to implement the :code:`__construct()` method, make sure to call
