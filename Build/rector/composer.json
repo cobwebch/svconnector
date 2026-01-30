@@ -10,7 +10,7 @@
     }
   ],
   "require": {
-    "ssch/typo3-rector": "^2.6"
+    "ssch/typo3-rector": "^3.11"
   },
   "config": {
     "bin-dir": ".Build/bin",
