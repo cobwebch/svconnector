@@ -25,9 +25,7 @@ use Cobweb\Svconnector\Service\ConnectorServiceInterface;
  */
 final class ProcessXmlDataEvent
 {
-    public function __construct(protected string $data, protected ConnectorServiceInterface $connectorService)
-    {
-    }
+    public function __construct(protected string $data, protected ConnectorServiceInterface $connectorService) {}
 
     public function getConnectorService(): ConnectorServiceInterface
     {

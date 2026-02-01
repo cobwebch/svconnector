@@ -25,9 +25,7 @@ use Cobweb\Svconnector\Service\ConnectorServiceInterface;
  */
 final class ProcessArrayDataEvent
 {
-    public function __construct(protected array $data, protected ConnectorServiceInterface $connectorService)
-    {
-    }
+    public function __construct(protected array $data, protected ConnectorServiceInterface $connectorService) {}
 
     public function getConnectorService(): ConnectorServiceInterface
     {

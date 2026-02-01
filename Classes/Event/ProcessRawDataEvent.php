@@ -25,9 +25,7 @@ use Cobweb\Svconnector\Service\ConnectorServiceInterface;
  */
 final class ProcessRawDataEvent
 {
-    public function __construct(protected mixed $data, protected ConnectorServiceInterface $connectorService)
-    {
-    }
+    public function __construct(protected mixed $data, protected ConnectorServiceInterface $connectorService) {}
 
     public function getConnectorService(): ConnectorServiceInterface
     {

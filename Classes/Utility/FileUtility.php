@@ -32,9 +32,7 @@ class FileUtility implements SingletonInterface, \Stringable
      * @var string Error message from reading the URI
      */
     protected string $error = '';
-    public function __construct(protected readonly ResourceFactory $resourceFactory)
-    {
-    }
+    public function __construct(protected readonly ResourceFactory $resourceFactory) {}
 
     /**
      * Returns the class as a string. Seems to be needed by phpunit when an exception occurs during a test run.

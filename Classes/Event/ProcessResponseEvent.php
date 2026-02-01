@@ -25,9 +25,7 @@ use Cobweb\Svconnector\Service\ConnectorServiceInterface;
  */
 final class ProcessResponseEvent
 {
-    public function __construct(protected mixed $response, protected ConnectorServiceInterface $connectorService)
-    {
-    }
+    public function __construct(protected mixed $response, protected ConnectorServiceInterface $connectorService) {}
 
     public function getConnectorService(): ConnectorServiceInterface
     {

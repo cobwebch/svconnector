@@ -21,9 +21,7 @@ use Cobweb\Svconnector\Service\ConnectorBase;
 
 final class InitializeConnectorEvent
 {
-    public function __construct(protected ConnectorBase $connector)
-    {
-    }
+    public function __construct(protected ConnectorBase $connector) {}
 
     public function getConnector(): ConnectorBase
     {
