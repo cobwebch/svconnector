@@ -16,9 +16,7 @@ declare(strict_types=1);
  */
 
 use Rector\Config\RectorConfig;
-use Rector\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector;
-use Ssch\TYPO3Rector\CodeQuality\General\ConvertImplicitVariablesToExplicitGlobalsRector;
 use Ssch\TYPO3Rector\CodeQuality\General\ExtEmConfRector;
 use Ssch\TYPO3Rector\Configuration\Typo3Option;
 use Ssch\TYPO3Rector\Set\Typo3LevelSetList;
@@ -43,16 +41,12 @@ return RectorConfig::configure()
     ])
     ->withRules([
         AddVoidReturnTypeWhereNoReturnRector::class,
-        ConvertImplicitVariablesToExplicitGlobalsRector::class,
     ])
     ->withConfiguredRule(ExtEmConfRector::class, [
         ExtEmConfRector::TYPO3_VERSION_CONSTRAINT => '13.4.0-14.1.99',
+        ExtEmConfRector::PHP_VERSION_CONSTRAINT => '8.2.0-8.5.99',
         ExtEmConfRector::ADDITIONAL_VALUES_TO_BE_REMOVED => [],
     ])
     // If you use importNames(), you should consider excluding some TYPO3 files.
-    ->withSkip([
-        // AddLiteralSeparatorToNumberRector would make the exception codes more readable.
-        // But as they are just timestamps this is not needed/wanted.
-        AddLiteralSeparatorToNumberRector::class,
-    ])
+//    ->withSkip([])
 ;

@@ -19,11 +19,8 @@ namespace Cobweb\Svconnector\Event;
 
 final class ProcessParametersEvent
 {
-    protected array $parameters;
-
-    public function __construct(array $parameters)
+    public function __construct(protected array $parameters)
     {
-        $this->parameters = $parameters;
     }
 
     public function getParameters(): array
@@ -35,5 +32,4 @@ final class ProcessParametersEvent
     {
         $this->parameters = $parameters;
     }
-
 }

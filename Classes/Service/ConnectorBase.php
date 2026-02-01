@@ -190,16 +190,11 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
     {
         foreach ($problems as $severity => $issues) {
             foreach ($issues as $issue) {
-                switch ($severity) {
-                    case ContextualFeedbackSeverity::ERROR->value:
-                        $this->logger->error($issue);
-                        break;
-                    case ContextualFeedbackSeverity::WARNING->value:
-                        $this->logger->warning($issue);
-                        break;
-                    default:
-                        $this->logger->notice($issue);
-                }
+                match ($severity) {
+                    ContextualFeedbackSeverity::ERROR->value => $this->logger->error($issue),
+                    ContextualFeedbackSeverity::WARNING->value => $this->logger->warning($issue),
+                    default => $this->logger->notice($issue),
+                };
             }
         }
     }
@@ -318,7 +313,7 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
         if (isset($GLOBALS['TYPO3_REQUEST']) && $GLOBALS['TYPO3_REQUEST'] instanceof ServerRequestInterface) {
             return $GLOBALS['TYPO3_REQUEST'];
         }
-        throw new \InvalidArgumentException('Global request object not found');
+        throw new \InvalidArgumentException('Global request object not found', 1769969139);
     }
 
     /**

@@ -78,7 +78,7 @@ class ParameterParser
             try {
                 $replacements[] = ArrayUtility::getValueByPath($data, $match, '.');
                 $searches[] = '{' . $match . '}';
-            } catch (\Throwable $exception) {
+            } catch (\Throwable) {
                 // Do nothing, variable was not matched and will not be substituted
             }
         }

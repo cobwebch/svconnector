@@ -32,6 +32,9 @@ class FileUtility implements SingletonInterface, \Stringable
      * @var string Error message from reading the URI
      */
     protected string $error = '';
+    public function __construct(protected readonly ResourceFactory $resourceFactory)
+    {
+    }
 
     /**
      * Returns the class as a string. Seems to be needed by phpunit when an exception occurs during a test run.
@@ -84,9 +87,8 @@ class FileUtility implements SingletonInterface, \Stringable
             // If the key is "FAL", read the data using FAL API
         } elseif ($key === 'FAL') {
             $falPath = substr($uri, 4);
-            $resourceFactory = GeneralUtility::makeInstance(ResourceFactory::class);
             try {
-                $file = $resourceFactory->getObjectFromCombinedIdentifier($falPath);
+                $file = $this->resourceFactory->getObjectFromCombinedIdentifier($falPath);
                 $data = $file->getContents();
             } catch (\Exception $exception) {
                 $data = false;
@@ -145,7 +147,7 @@ class FileUtility implements SingletonInterface, \Stringable
         // If some data was read, remove the BOM from the beginning of the file
         if ($data !== false) {
             $byteOrderMark = pack('H*', 'EFBBBF');
-            $data = preg_replace('/^' . $byteOrderMark . '/', '', $data);
+            $data = preg_replace('/^' . $byteOrderMark . '/', '', (string)$data);
         }
 
         return $data;

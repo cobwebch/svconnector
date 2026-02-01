@@ -21,11 +21,8 @@ use Cobweb\Svconnector\Service\ConnectorBase;
 
 final class InitializeConnectorEvent
 {
-    protected ConnectorBase $connector;
-
-    public function __construct(ConnectorBase $connector)
+    public function __construct(protected ConnectorBase $connector)
     {
-        $this->connector = $connector;
     }
 
     public function getConnector(): ConnectorBase

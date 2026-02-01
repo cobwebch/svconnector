@@ -60,5 +60,9 @@ phpstan: ## Run phpstan tests
 phpstan-baseline: ## Update the phpstan baseline
 	Build/Scripts/runTests.sh -s phpstanBaseline
 
+.PHONY: rector
+rector: ## Run rector
+	Build/Scripts/runTests.sh -s composerUpdateRector; Build/Scripts/runTests.sh -s rector
+
 .PHONY: test
-test: test-cgl phpstan test-docs test-unit test-functional## Run all tests
+test: test-cgl phpstan rector test-docs test-unit test-functional## Run all tests

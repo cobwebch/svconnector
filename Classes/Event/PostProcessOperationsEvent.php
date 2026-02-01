@@ -27,13 +27,8 @@ use Cobweb\Svconnector\Service\ConnectorServiceInterface;
  */
 final class PostProcessOperationsEvent
 {
-    protected mixed $status;
-    protected ConnectorServiceInterface $connectorService;
-
-    public function __construct(mixed $data, ConnectorServiceInterface $connectorService)
+    public function __construct(protected mixed $status, protected ConnectorServiceInterface $connectorService)
     {
-        $this->status = $data;
-        $this->connectorService = $connectorService;
     }
 
     public function getConnectorService(): ConnectorServiceInterface
@@ -45,5 +40,4 @@ final class PostProcessOperationsEvent
     {
         return $this->status;
     }
-
 }
