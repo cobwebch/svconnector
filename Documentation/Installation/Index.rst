@@ -33,13 +33,18 @@ This makes it mandatory to implement these methods in a custom connector service
 although it's hard to imagine a custom service that didn't implement them. So you
 should be pretty safe. All impacted method signatures have been changed.
 
+Signatures of methods :php:`\Cobweb\Svconnector\Utility\FileUtility::getFileContent()`
+and :php:`\Cobweb\Svconnector\Utility\FileUtility::getFileAsTemporaryFile()` have been changed,
+adding a new argument and deprecating an existing one. If you have developed a custom
+connector service using this API, please make sure to adapt your code.
+
+Some method signatures in :php:`\Cobweb\Svconnector\Service\ConnectorServiceInterface`
+have been changed to ensure stricter typing. You will to adapt your implementations.
+
 The :php:`\Cobweb\Svconnector\Service\ConnectorBase::getCharsetConverter()` has
 been removed since the TYPO3 Core does not provide a charset conversion class anymore
 as of version 14. Custom connector services should rely on :code:`mb_convert_encoding()`
 instead.
-
-Some method signatures in :php:`\Cobweb\Svconnector\Service\ConnectorServiceInterface`
-have been changed to ensure stricter typing. You will to adapt your implementations.
 
 All hooks have been removed, leaving only events.
 

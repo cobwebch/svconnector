@@ -1,3 +1,7 @@
+2026-02-09 Francois Suter (Idéative)  <typo3@ideative.ch>
+
+    * Allow passing full request options to Guzzle HTTP calls, resolves #35
+
 2026-01-25 Francois Suter (Idéative)  <typo3@ideative.ch>
 
     * Ensure base compatibility with TYPO3 14 and PHP 8.5, resolves #38

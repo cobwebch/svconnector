@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-namespace Cobweb\Svconnector\Utility;
-
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -17,6 +15,8 @@ namespace Cobweb\Svconnector\Utility;
  * The TYPO3 project - inspiring people to share!
  */
 
+namespace Cobweb\Svconnector\Utility;
+
 use GuzzleHttp\Exception\RequestException;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
@@ -26,23 +26,13 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * Class for opening either local or remote files.
  */
-class FileUtility implements SingletonInterface, \Stringable
+class FileUtility implements SingletonInterface
 {
     /**
      * @var string Error message from reading the URI
      */
     protected string $error = '';
     public function __construct(protected readonly ResourceFactory $resourceFactory) {}
-
-    /**
-     * Returns the class as a string. Seems to be needed by phpunit when an exception occurs during a test run.
-     *
-     * @return string
-     */
-    public function __toString(): string
-    {
-        return 'FileUtility';
-    }
 
     /**
      * Reads data from a file pointed to by a versatile URI.
@@ -52,12 +42,27 @@ class FileUtility implements SingletonInterface, \Stringable
      * (declared as a hook).
      *
      * @param string $uri Address of the file to read
-     * @param array|null $headers Headers to pass on to the request
      * @param string $method Method to use for fetching a remote URI, defaults to GET
+     * @param array $requestOptions Options for Guzzle HTTP request (see https://docs.guzzlephp.org/en/stable/request-options.html)
+     * @param array|null $headers Headers to pass on to the request
      * @return string|bool
      */
-    public function getFileContent(string $uri, ?array $headers = null, string $method = 'GET'): bool|string
+    public function getFileContent(string $uri, string $method = 'GET', array $requestOptions = [], ?array $headers = null): bool|string
     {
+        if (count($headers ?? []) > 0) {
+            $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+            $caller = end($backtrace);
+            $callerLocation = sprintf('file %s, line %d', $caller['file'], $caller['line']);
+
+            trigger_error(sprintf(
+                'Passing headers as argument to %s is deprecated. Pass headers as request option instead. Location: %s',
+                $method,
+                $callerLocation,
+            ), E_USER_DEPRECATED);
+
+            $requestOptions = array_merge_recursive($requestOptions, ['headers' => $headers]);
+        }
+
         // Reset the error message
         $this->setError('');
         // The first part of the URI may be a key to a dedicated file reader
@@ -93,14 +98,14 @@ class FileUtility implements SingletonInterface, \Stringable
                 $this->setError($exception->getMessage());
             }
             // If the URI looks like a fully qualified URL, use it as is
-            // NOTE: this is very similar to GeneralUtility::getUrl() but we want to be able to pass headers
+            // NOTE: this is very similar to GeneralUtility::getUrl() but we want to be able to pass full request options
         } elseif (preg_match('/^(?:http|ftp)s?|s(?:ftp|cp):/', $uri)) {
             $requestFactory = GeneralUtility::makeInstance(RequestFactory::class);
             try {
                 $response = $requestFactory->request(
                     $uri,
                     $method,
-                    is_array($headers) ? ['headers' => $headers] : []
+                    $requestOptions
                 );
                 $data = $response->getBody()->getContents();
             } catch (RequestException $exception) {
@@ -157,14 +162,27 @@ class FileUtility implements SingletonInterface, \Stringable
      * NOTE: if you use this API, it is up to you to clean up the temporary file after use.
      *
      * @param string $uri Address of the file to read
+     * @param array $requestOptions Options for Guzzle HTTP request (see https://docs.guzzlephp.org/en/stable/request-options.html)
      * @param array|null $headers Headers to pass on to the request
      * @param string $method Method to use for fetching a remote URI, defaults to GET
-     * @return string|bool
      * @see getFileContent
      */
-    public function getFileAsTemporaryFile(string $uri, ?array $headers = null, string $method = 'GET'): bool|string
+    public function getFileAsTemporaryFile(string $uri, string $method = 'GET', array $requestOptions = [], ?array $headers = null): bool|string
     {
-        $fileContent = $this->getFileContent($uri, $headers, $method);
+        if (count($headers ?? []) > 0) {
+            $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+            $caller = end($backtrace);
+            $callerLocation = sprintf('file %s, line %d', $caller['file'], $caller['line']);
+
+            trigger_error(sprintf(
+                'Passing headers as argument to %s is deprecated. Pass headers as request option instead. Location: %s',
+                $method,
+                $callerLocation,
+            ), E_USER_DEPRECATED);
+            $requestOptions = array_merge_recursive($requestOptions, ['headers' => $headers]);
+        }
+
+        $fileContent = $this->getFileContent($uri, $method, $requestOptions);
         // Exit early if file content could not be read
         if ($fileContent === false) {
             return false;
