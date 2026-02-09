@@ -1,6 +1,7 @@
 2026-02-09 Francois Suter (Idéative)  <typo3@ideative.ch>
 
     * Allow passing full request options to Guzzle HTTP calls, resolves #35
+    * Display configuration issues in the testing controller, resolves #39
 
 2026-01-25 Francois Suter (Idéative)  <typo3@ideative.ch>
 

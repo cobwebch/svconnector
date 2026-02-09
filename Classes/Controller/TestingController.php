@@ -18,7 +18,7 @@ namespace Cobweb\Svconnector\Controller;
  */
 
 use Cobweb\Svconnector\Registry\ConnectorRegistry;
-use Cobweb\Svconnector\Service\ConnectorBase;
+use Cobweb\Svconnector\Service\ConnectorServiceInterface;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Localization\LanguageService;
@@ -47,7 +47,7 @@ class TestingController extends ActionController
     {
         $this->services = GeneralUtility::makeInstance(ConnectorRegistry::class)->getAllServices();
         // Get the sample configurations provided by the various connector services
-        /** @var ConnectorBase $service */
+        /** @var ConnectorServiceInterface $service */
         foreach ($this->services as $type => $service) {
             $this->sampleConfigurations[$type] = $service->getSampleConfiguration();
         }
@@ -69,7 +69,7 @@ class TestingController extends ActionController
         // Check unavailable services
         // If there are any, display a warning about it and remove it from the list of services
         // All other services are assigned to the view
-        /** @var ConnectorBase $service */
+        /** @var ConnectorServiceInterface $service */
         foreach ($this->services as $type => $service) {
             if ($service->isAvailable()) {
                 $availableServices[$type] = sprintf(
@@ -173,13 +173,24 @@ class TestingController extends ActionController
         $result = '';
 
         if (isset($this->services[$type])) {
-            /** @var ConnectorBase $service */
+            /** @var ConnectorServiceInterface $service */
             $service = $this->services[$type];
             if ($service->isAvailable()) {
                 try {
                     $service->getCallContext()->add('svconnector', ['function' => 'testing module']);
                     $parsedParameters = json_decode($parameters, true, 512, JSON_THROW_ON_ERROR);
                     $service->setParameters($parsedParameters);
+                    // Check the configuration and print issues as flash messages
+                    $configurationCheckResult = $service->checkConfiguration();
+                    foreach ($configurationCheckResult as $severity => $messages) {
+                        foreach ($messages as $message) {
+                            $this->addFlashMessage(
+                                $message,
+                                '',
+                                ContextualFeedbackSeverity::tryFrom($severity)
+                            );
+                        }
+                    }
                     // Call the right "fetcher" depending on chosen format
                     $result = match ($format) {
                         1 => $service->fetchArray(),

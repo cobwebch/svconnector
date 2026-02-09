@@ -56,7 +56,7 @@ class FileUtility implements SingletonInterface
 
             trigger_error(sprintf(
                 'Passing headers as argument to %s is deprecated. Pass headers as request option instead. Location: %s',
-                $method,
+                '\Cobweb\Svconnector\Utility\FileUtility::getFileContent()',
                 $callerLocation,
             ), E_USER_DEPRECATED);
 
@@ -176,7 +176,7 @@ class FileUtility implements SingletonInterface
 
             trigger_error(sprintf(
                 'Passing headers as argument to %s is deprecated. Pass headers as request option instead. Location: %s',
-                $method,
+                '\Cobweb\Svconnector\Utility\FileUtility::getFileAsTemporaryFile()',
                 $callerLocation,
             ), E_USER_DEPRECATED);
             $requestOptions = array_merge_recursive($requestOptions, ['headers' => $headers]);
