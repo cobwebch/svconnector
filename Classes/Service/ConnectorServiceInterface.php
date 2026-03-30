@@ -58,6 +58,11 @@ interface ConnectorServiceInterface
     public function isAvailable(): bool;
 
     /**
+     * Return the defined connector parameters
+     */
+    public function getParameters(): array;
+
+    /**
      * Set the connector parameters
      */
     public function setParameters(array $parameters): void;
