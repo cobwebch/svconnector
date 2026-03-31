@@ -46,6 +46,9 @@ been removed since the TYPO3 Core does not provide a charset conversion class an
 as of version 14. Custom connector services should rely on :code:`mb_convert_encoding()`
 instead.
 
+The :php:`\Cobweb\Svconnector\Service\ConnectorBase` constructor now uses dependency injection.
+If you overrode the constructor in your custom services, you will need to adapt your code.
+
 All hooks have been removed, leaving only events.
 
 

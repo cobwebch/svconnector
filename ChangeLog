@@ -1,3 +1,7 @@
+2026-03-31 Francois Suter (Idéative)  <typo3@ideative.ch>
+
+    * Use dependency injection for connector base constructor
+
 2026-02-09 Francois Suter (Idéative)  <typo3@ideative.ch>
 
     * Allow passing full request options to Guzzle HTTP calls, resolves #35

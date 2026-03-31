@@ -24,11 +24,11 @@ use Cobweb\Svconnector\Event\PostProcessOperationsEvent;
 use Cobweb\Svconnector\Event\ProcessParametersEvent;
 use Cobweb\Svconnector\Exception\ConnectorRuntimeException;
 use Cobweb\Svconnector\Utility\ParameterParser;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
-use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Localization\LanguageServiceFactory;
@@ -50,21 +50,18 @@ abstract class ConnectorBase implements LoggerAwareInterface, ConnectorServiceIn
     use LoggerAwareTrait;
 
     protected string $extensionKey = 'svconnector';
-    // Information set from outside the connector service, to give context about where it is being called from
-    protected CallContext $callContext;
-    // Information about the connection that the service tries to establish
-    protected ConnectionInformation $connectionInformation;
-    protected EventDispatcher $eventDispatcher;
     protected LanguageService $languageService;
     protected string $type = '';
     protected string $name = '';
     protected array $parameters = [];
 
-    public function __construct()
-    {
-        $this->eventDispatcher = GeneralUtility::makeInstance(EventDispatcher::class);
-        $this->callContext = new CallContext();
-        $this->connectionInformation = new ConnectionInformation();
+    public function __construct(
+        protected EventDispatcherInterface $eventDispatcher,
+        // Information set from outside the connector service, to give context about where it is being called from
+        protected CallContext $callContext,
+        // Information about the connection that the service tries to establish
+        protected ConnectionInformation $connectionInformation
+    ) {
         $this->initializeLanguageService();
     }
 
