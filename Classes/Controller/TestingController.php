@@ -19,6 +19,7 @@ namespace Cobweb\Svconnector\Controller;
 
 use Cobweb\Svconnector\Registry\ConnectorRegistry;
 use Cobweb\Svconnector\Service\ConnectorServiceInterface;
+use JsonException;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Localization\LanguageService;
@@ -205,7 +206,20 @@ class TestingController extends ActionController
                             ContextualFeedbackSeverity::INFO
                         );
                     }
-                } // Catch the exception and display an error message
+                }
+                // Catch specific JSON-decoding exception
+                catch (JsonException $e) {
+                    $this->addFlashMessage(
+                        sprintf(
+                            $this->getLanguageService()->sL('LLL:EXT:svconnector/Resources/Private/Language/locallang.xlf:parameters.error'),
+                            $e->getMessage(),
+                            $e->getCode()
+                        ),
+                        '',
+                        ContextualFeedbackSeverity::ERROR
+                    );
+                }
+                // Catch the exception and display an error message
                 catch (\Exception $e) {
                     $this->addFlashMessage(
                         sprintf(

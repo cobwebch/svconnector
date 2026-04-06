@@ -54,6 +54,9 @@
 			<trans-unit id="service.error" xml:space="preserve">
 				<source>An error occurred when trying to call the requested service: %1$s (%2$d).</source>
 			</trans-unit>
+			<trans-unit id="parameters.error" xml:space="preserve">
+				<source>An error occurred parsing the connector parameters: %1$s (%2$d).</source>
+			</trans-unit>
 			<trans-unit id="no.result" xml:space="preserve">
 				<source>The connection test returned no result.</source>
 			</trans-unit>
