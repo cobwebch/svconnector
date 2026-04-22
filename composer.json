@@ -20,13 +20,13 @@
 	"require": {
 		"php": "^8.2 || ^8.3 || ^8.4 || ^8.5",
 		"ext-simplexml": "*",
-		"typo3/coding-standards": "*",
-		"typo3/cms-core": "^13.4 || ^14.0"
+		"typo3/cms-core": "^13.4 || ^14.3"
 	},
 	"require-dev": {
-		"ergebnis/composer-normalize": "^2.48",
-		"friendsofphp/php-cs-fixer": "^3.88",
-		"typo3/testing-framework": "^9.x-dev",
+		"ergebnis/composer-normalize": "^2.51",
+		"friendsofphp/php-cs-fixer": "^3.95",
+		"typo3/coding-standards": "*",
+		"typo3/testing-framework": "^9.5",
 		"phpstan/phpstan": "^2.1"
 	},
 	"replace": {

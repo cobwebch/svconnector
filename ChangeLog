@@ -1,3 +1,7 @@
+2026-04-22 Francois Suter (Idéative)  <typo3@ideative.ch>
+
+    * Release version 7.0.0
+
 2026-04-06 Francois Suter (Idéative)  <typo3@ideative.ch>
 
     * Catch JSON parsing error separately in test controller
