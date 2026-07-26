@@ -1,3 +1,8 @@
+2026-07-26 Francois Suter (Idéative)  <typo3@ideative.ch>
+
+    * Fix composer manifest for classic mode
+    * Release version 7.0.1
+
 2026-04-22 Francois Suter (Idéative)  <typo3@ideative.ch>
 
     * Release version 7.0.0
